@@ -23,7 +23,7 @@
     
     #container {
       transform-style: preserve-3d;
-      /*perspective: 1000px;*/
+      perspective: 1000px;
       position: absolute;
       left: 50%;
       top: 50%;
@@ -32,9 +32,6 @@
     .tri {
       width: 0;
       height: 0;
-      border-left: 32px solid transparent;
-      border-right: 32px solid transparent;
-      border-top: 32px solid rgba(0,0,0,0.4);
       position: absolute;
       left: 0;
       top: 0;
@@ -59,7 +56,7 @@
           
           console.log( 'loaded' );
           
-          var triangleSize = 32; // from the CSS above
+          var triangleSize = 512; // from the CSS above
           var overTwoN = 1 / ( 2 * triangleSize );
           var triangleInverseMatrix = new dot.Matrix3( -overTwoN, -overTwoN,        1,
                                                        0,         1 / triangleSize, 0,
@@ -134,27 +131,29 @@
             // } else {
             //   div.style.webkitTransform = div.style.transform = getTriangleTransform( dot( 100, 0, 0 ), dot( 0, 100, 0 ), dot( 0, 0, 0 ) ).getCSSTransform();
             // }
-            div.style.borderTop = {
-              0: '32px solid rgba(0,0,0,0.9)',
-              1: '32px solid rgba(255,0,0,0.9)',
-              2: '32px solid rgba(0,255,0,0.9)',
-              3: '32px solid rgba(0,0,255,0.9)',
-              4: '32px solid rgba(255,0,255,0.9)',
-              5: '32px solid rgba(255,255,0,0.9)',
-              6: '32px solid rgba(0,255,255,0.9)',
-              7: '32px solid rgba(128,0,255,0.9)',
-              8: '32px solid rgba(255,128,0,0.9)',
-              9: '32px solid rgba(0,255,128,0.9)',
-              10: '32px solid rgba(255,0,128,0.9)',
-              11: '32px solid rgba(128,255,0,0.9)',
-              12: '32px solid rgba(0,128,255,0.9)',
-              13: '32px solid rgba(128,0,0,0.9)',
-              14: '32px solid rgba(0,128,0,0.9)',
-              15: '32px solid rgba(0,0,128,0.9)',
-              16: '32px solid rgba(128,255,255,0.9)',
-              17: '32px solid rgba(255,128,255,0.9)',
-              18: '32px solid rgba(255,255,128,0.9)',
-              19: '32px solid rgba(128,128,128,0.9)'
+            div.style.borderLeft = triangleSize + 'px solid transparent';
+            div.style.borderRight = triangleSize + 'px solid transparent';
+            div.style.borderTop = triangleSize + 'px solid ' + {
+              0: 'rgba(0,0,0,0.9)',
+              1: 'rgba(255,0,0,0.9)',
+              2: 'rgba(0,255,0,0.9)',
+              3: 'rgba(0,0,255,0.9)',
+              4: 'rgba(255,0,255,0.9)',
+              5: 'rgba(255,255,0,0.9)',
+              6: 'rgba(0,255,255,0.9)',
+              7: 'rgba(128,0,255,0.9)',
+              8: 'rgba(255,128,0,0.9)',
+              9: 'rgba(0,255,128,0.9)',
+              10: 'rgba(255,0,128,0.9)',
+              11: 'rgba(128,255,0,0.9)',
+              12: 'rgba(0,128,255,0.9)',
+              13: 'rgba(128,0,0,0.9)',
+              14: 'rgba(0,128,0,0.9)',
+              15: 'rgba(0,0,128,0.9)',
+              16: 'rgba(128,255,255,0.9)',
+              17: 'rgba(255,128,255,0.9)',
+              18: 'rgba(255,255,128,0.9)',
+              19: 'rgba(128,128,128,0.9)'
             }[i];
             container.appendChild( div );
             triangles.push( div );
