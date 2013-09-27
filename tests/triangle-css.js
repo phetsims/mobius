@@ -115,8 +115,6 @@ function check() {
         icosahedronFaces = newFaces;
       }
       
-      console.log( icosahedronPoints );
-      
       scenery.Util.polyfillRequestAnimationFrame();
       
       var triangles = [];
@@ -173,7 +171,6 @@ function check() {
         
         var pts = [];
         var modelViewMatrix = dot.Matrix4.translation( 0, 0, -20 ).timesMatrix( dot.Matrix4.rotationY( rot ) );
-        console.log( modelViewMatrix.toString() );
         for( k = 0; k < icosahedronPoints.length; k++ ) {
           pts.push( modelViewMatrix.timesVector3( icosahedronPoints[k] ) );
         }
