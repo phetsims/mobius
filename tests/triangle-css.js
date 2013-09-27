@@ -168,11 +168,12 @@ function check() {
                                                          nearPlane, farPlane );
       
       var triangleTransformMatrix = new dot.Matrix4();
-      function draw() {
+      function updateTriangles() {
         var k;
         
         var pts = [];
         var modelViewMatrix = dot.Matrix4.translation( 0, 0, -20 ).timesMatrix( dot.Matrix4.rotationY( rot ) );
+        console.log( modelViewMatrix.toString() );
         for( k = 0; k < icosahedronPoints.length; k++ ) {
           pts.push( modelViewMatrix.timesVector3( icosahedronPoints[k] ) );
         }
@@ -180,6 +181,36 @@ function check() {
         for( k = 0; k < triangles.length; k++ ) {
           var faces = icosahedronFaces[k];
           triangles[k].style.webkitTransform = triangles[k].style.transform = ( setTriangleTransform( triangleTransformMatrix, pts[faces[0]], pts[faces[1]], pts[faces[2]] ) ).getCSSTransform();
+        }
+      }
+      updateTriangles();
+      
+      var sunDirection = dot( -1, 0.5, 2 ).normalized();
+      var moonDirection = dot( 2, -1, 1 ).normalized();
+      var sunWeight = 0.8;
+      var moonWeight = 0.6;
+      function draw() {
+        if ( window.containerUpdate ) {
+          container.style.webkitTransform = container.style.transform = ( dot.Matrix4.rotationY( rot ) ).getCSSTransform();
+        } else {
+          updateTriangles();
+        }
+        if ( window.colorFaces ) {
+          var reverseRotation = dot.Matrix4.rotationY( -rot ); // this is a fast way to get the inverse :)
+          for ( var fidx = 0; fidx < icosahedronFaces.length; fidx++ ) {
+            var face = icosahedronFaces[fidx];
+            
+            var normal = icosahedronPoints[face[0]].plus( icosahedronPoints[face[1]].plus( icosahedronPoints[face[2]] ) );
+            var transformedNormal = reverseRotation.timesTransposeVector3( normal ).normalized();
+            
+            var sunTotal = Math.max( 0, transformedNormal.dot( sunDirection ) ) * sunWeight;
+            var moonTotal = Math.max( 0, transformedNormal.dot( moonDirection ) ) * moonWeight;
+
+            var weight = Math.min( 1, sunTotal + moonTotal );
+            
+            var borderStyle = triangleSize + 'px solid rgb(' + Math.floor( weight * 255 ) + ',' + Math.floor( weight * 255 ) + ',' + Math.floor( weight * 255 ) + ')';
+            triangles[fidx].style.borderTop = borderStyle;
+          }
         }
       }
 
