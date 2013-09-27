@@ -11,9 +11,16 @@ function check() {
       console.log( 'loaded' );
       
       var overTwoN = 1 / ( 2 * triangleSize );
-      var triangleInverseMatrix = new dot.Matrix3( -overTwoN, -overTwoN,        1,
-                                                   0,         1 / triangleSize, 0,
-                                                   overTwoN,  -overTwoN,        0 );
+      // var triangleInverseMatrix = new dot.Matrix3( -overTwoN, -overTwoN,        1,
+      //                                              0,         1 / triangleSize, 0,
+      //                                              overTwoN,  -overTwoN,        0 );
+      // var triangleInverseMatrix = new dot.Matrix3( 0, triangleSize, 2 * triangleSize,
+      //                                              0, triangleSize, 0,
+      //                                              1, 1,            1 ).inverted();
+      var pad = window.padTriangles || 0;
+      var triangleInverseMatrix = new dot.Matrix3( pad, triangleSize,       2 * triangleSize - pad,
+                                                   pad, triangleSize - pad, pad,
+                                                   1,   1,                  1 ).inverted();
       
       // a,b,c {Vector3}
       var tmpMatrix3 = new dot.Matrix3();
