@@ -79,11 +79,6 @@ function check() {
       for ( var i = 0; i < icosahedronFaces.length; i++ ) {
         var div = document.createElement( 'div' );
         div.className = 'tri';
-        // if ( i ) {
-        //   div.style.webkitTransform = div.style.transform = getTriangleTransform( dot( 0, 0, 0 ), dot( 100, 0, 0 ), dot( 0, 100, 0 ) ).getCSSTransform();
-        // } else {
-        //   div.style.webkitTransform = div.style.transform = getTriangleTransform( dot( 100, 0, 0 ), dot( 0, 100, 0 ), dot( 0, 0, 0 ) ).getCSSTransform();
-        // }
         div.style.borderLeft = triangleSize + 'px solid transparent';
         div.style.borderRight = triangleSize + 'px solid transparent';
         div.style.borderTop = triangleSize + 'px solid ' + {
@@ -107,7 +102,7 @@ function check() {
           17: 'rgba(255,128,255,0.9)',
           18: 'rgba(255,255,128,0.9)',
           19: 'rgba(128,128,128,0.9)'
-        }[i];
+        }[i%20];
         container.appendChild( div );
         triangles.push( div );
       }
