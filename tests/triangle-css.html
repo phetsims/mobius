@@ -19,9 +19,16 @@
     body, html {
       padding: 0;
       margin: 0;
+    }
+    
+    #container {
       transform-style: preserve-3d;
       /*perspective: 1000px;*/
+      position: absolute;
+      left: 50%;
+      top: 50%;
     }
+    
     .tri {
       width: 0;
       height: 0;
@@ -117,6 +124,7 @@
           scenery.Util.polyfillRequestAnimationFrame();
           
           var triangles = [];
+          var container = document.getElementById( 'container' );
           
           for ( var i = 0; i < icosahedronFaces.length; i++ ) {
             var div = document.createElement( 'div' );
@@ -148,7 +156,7 @@
               18: '32px solid rgba(255,255,128,0.9)',
               19: '32px solid rgba(128,128,128,0.9)'
             }[i];
-            document.body.appendChild( div );
+            container.appendChild( div );
             triangles.push( div );
           }
           
@@ -177,7 +185,7 @@
             
             for( k = 0; k < triangles.length; k++ ) {
               var faces = icosahedronFaces[k];
-              triangles[k].style.webkitTransform = triangles[k].style.transform = dot.Matrix4.translation( 200, 200, 0 ).timesMatrix( getTriangleTransform( pts[faces[0]], pts[faces[1]], pts[faces[2]] ) ).getCSSTransform();
+              triangles[k].style.webkitTransform = triangles[k].style.transform = ( getTriangleTransform( pts[faces[0]], pts[faces[1]], pts[faces[2]] ) ).getCSSTransform();
             }
           }
 
