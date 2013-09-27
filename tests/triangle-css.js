@@ -16,14 +16,15 @@ function check() {
                                                    overTwoN,  -overTwoN,        0 );
       
       // a,b,c {Vector3}
-      window.getTriangleTransform = function( a, b, c ) {
+      var tmpMatrix3 = new dot.Matrix3();
+      window.setTriangleTransform = function( matrix4, a, b, c ) {
         // we solve for the 4x4 matrix that will transform (0,0) => a, (triangleSize,triangleSize) => b, (2*triangleSize,0) => c
         // we also want the affine matrix that is of a certain form for the ignored initial z indices (think (x,y,0,1) as input)
-        var m = new dot.Matrix3( a.x, b.x, c.x, a.y, b.y, c.y, a.z, b.z, c.z ).timesMatrix( triangleInverseMatrix );
-        return new dot.Matrix4( m.m00(), m.m01(), 0, m.m02(),
-                                m.m10(), m.m11(), 0, m.m12(),
-                                m.m20(), m.m21(), 1, m.m22(),
-                                0,       0,       0, 1 );
+        var m = tmpMatrix3.rowMajor( a.x, b.x, c.x, a.y, b.y, c.y, a.z, b.z, c.z ).multiplyMatrix( triangleInverseMatrix );
+        return matrix4.rowMajor( m.m00(), m.m01(), 0, m.m02(),
+                                 m.m10(), m.m11(), 0, m.m12(),
+                                 m.m20(), m.m21(), 1, m.m22(),
+                                 0,       0,       0, 1 );
       };
       
       var phi = ( 1 + Math.sqrt( 5 ) ) / 2;
@@ -121,6 +122,7 @@ function check() {
                                                          canvasWidth / canvasHeight,
                                                          nearPlane, farPlane );
       
+      var triangleTransformMatrix = new dot.Matrix4();
       function draw() {
         var k;
         
@@ -132,7 +134,7 @@ function check() {
         
         for( k = 0; k < triangles.length; k++ ) {
           var faces = icosahedronFaces[k];
-          triangles[k].style.webkitTransform = triangles[k].style.transform = ( getTriangleTransform( pts[faces[0]], pts[faces[1]], pts[faces[2]] ) ).getCSSTransform();
+          triangles[k].style.webkitTransform = triangles[k].style.transform = ( setTriangleTransform( triangleTransformMatrix, pts[faces[0]], pts[faces[1]], pts[faces[2]] ) ).getCSSTransform();
         }
       }
 
