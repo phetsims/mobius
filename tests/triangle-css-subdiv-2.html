@@ -24,6 +24,10 @@
     #container {
       transform-style: preserve-3d;
       -webkit-transform-style: preserve-3d;
+      perspective: 1000px;
+      -webkit-perspective: 1000px;
+      perspective-origin: center center;
+      -webkit-perspective-origin: center center;
       position: absolute;
       left: 50%;
       top: 50%;
@@ -47,13 +51,13 @@
   <h1>Icosahedron</h1>
   <div><a href="triangle-css.html">High Resolution (256), With Perspective</a></div>
   <div><a href="triangle-css-low-res.html">Low Resolution (4), With Perspective</a></div>
-  <div><strong>Low Resolution (4), No Perspective</strong></div>
+  <div><a href="triangle-css-low-res-no-persp.html">Low Resolution (4), No Perspective</a></div>
   <div><a href="triangle-css-subdiv-1.html">1 subdivision</a></div>
-  <div><a href="triangle-css-subdiv-2.html">2 subdivisions</a></div>
+  <div><strong>2 subdivisions</strong></div>
   
   <script type="text/javascript">
-    var triangleSize = 4;
-    var subdivisions = 0;
+    var triangleSize = 32;
+    var subdivisions = 2;
   </script>
   
   <script type="text/javascript" src="triangle-css.js"></script>

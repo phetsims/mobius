@@ -48,6 +48,7 @@ function check() {
       for ( var j = 0; j < icosahedronPoints.length; j++ ) {
         icosahedronPoints[j] = icosahedronPoints[j].times( 100 );
       }
+      var vertexMagnitude = icosahedronPoints[0].magnitude();
       
       var icosahedronFaces = [
         [4, 5, 0],
@@ -71,6 +72,50 @@ function check() {
         [7, 10, 11],
         [7, 11, 3]
       ];
+      
+      while ( subdivisions ) {
+        subdivisions--;
+        
+        // add new points
+        var n = icosahedronPoints.length;
+        var map = {};
+        for ( var ia = 0; ia < n; ia++ ) {
+          for ( var ib = ia + 1; ib < n; ib++ ) {
+            // guaranteed unique pairs, ia < ib
+            
+            if ( _.some( icosahedronFaces, function( face ) { return _.contains( face, ia ) && _.contains( face, ib ); } ) ) {
+              // adjacent vertices, create a new vertex in-between with the same magnitude
+              var idx = icosahedronPoints.length;
+              icosahedronPoints.push( icosahedronPoints[ia].plus( icosahedronPoints[ib] ).normalized().times( vertexMagnitude ) );
+              map[ia + '-' + ib] = idx; // store the index for later
+            }
+          }
+        }
+        
+        // replace with all new faces
+        var newFaces = [];
+        _.each( icosahedronFaces, function( face ) {
+          var a = face[0];
+          var b = face[1];
+          var c = face[2];
+          // TODO: optimize so we only do one access with the smallest first?
+          var ab = map[a + '-' + b] || map[b + '-' + a];
+          var ac = map[a + '-' + c] || map[c + '-' + a];
+          var bc = map[b + '-' + c] || map[c + '-' + b];
+          if ( ab === undefined || ac === undefined || bc === undefined ) { throw new Error(); }
+          
+          // three outer faces
+          newFaces.push( [a, ab, ac] );
+          newFaces.push( [b, bc, ab] );
+          newFaces.push( [c, ac, bc] );
+          
+          // one internal face
+          newFaces.push( [ab, bc, ac] );
+        } );
+        icosahedronFaces = newFaces;
+      }
+      
+      console.log( icosahedronPoints );
       
       scenery.Util.polyfillRequestAnimationFrame();
       
