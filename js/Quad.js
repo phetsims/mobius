@@ -9,8 +9,6 @@
 define( function( require ) {
   'use strict';
   
-  var assert = require( 'ASSERT/assert' )( 'mobius' );
-  
   var inherit = require( 'PHET_CORE/inherit' );
   var mobius = require( 'MOBIUS/mobius' );
   var GLNode = require( 'MOBIUS/GLNode' );

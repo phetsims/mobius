@@ -9,8 +9,6 @@
 define( function( require ) {
   'use strict';
   
-  var assert = require( 'ASSERT/assert' )( 'mobius' );
-  
   var mobius = require( 'MOBIUS/mobius' );
   var Transform4 = require( 'DOT/Transform4' );
   var Matrix4 = require( 'DOT/Matrix4' );

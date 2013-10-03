@@ -13,7 +13,8 @@
 define( function( require ) {
   'use strict';
   
-  var assert = require( 'ASSERT/assert' )( 'mobius' );
+  window.assert = window.assert || require( 'ASSERT/assert' )( 'basic' );
+  window.assertSlow = window.assertSlow || require( 'ASSERT/assert' )( 'slow', true );
   
   // object allocation tracking
   window.phetAllocation = require( 'PHET_CORE/phetAllocation' );
