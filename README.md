@@ -1,4 +1,4 @@
-Third Party Dependencies
+Third-Party Dependencies
 =============
 
 This repository uses third-party libraries.
