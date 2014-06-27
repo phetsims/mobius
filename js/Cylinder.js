@@ -8,13 +8,13 @@
 
 define( function( require ) {
   'use strict';
-  
+
   var inherit = require( 'PHET_CORE/inherit' );
   var mobius = require( 'MOBIUS/mobius' );
   var GLNode = require( 'MOBIUS/GLNode' );
-  
+
   var Float32Array = window.Float32Array || window.Array;
-  
+
   var Cylinder = mobius.Cylinder = function cylinder( gl, radius, length, radialStrips, axisStrips ) {
     GLNode.call( this );
 
@@ -26,7 +26,7 @@ define( function( require ) {
 
     this.setupBuffers();
   };
-  
+
   return inherit( GLNode, Cylinder, {
     // TODO: should we allow buffer parameters to change?
     setupBuffers: function() {

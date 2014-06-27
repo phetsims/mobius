@@ -1,16 +1,16 @@
 requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/js/main' ], function( mobius, scenery, kite, dot ) {
-  $( document ).ready( function () {
+  $( document ).ready( function() {
     var canvas = $( '#canvas' )[0];
 
     // stop text selection on the canvas
-    canvas.onselectstart = function () {
+    canvas.onselectstart = function() {
       return false;
     };
 
     if ( canvas.getContext ) {
 
       var shaderProgram;
-      
+
       var gl = mobius.Util.initWebGL( canvas );
 
       function initShaders() {
@@ -23,7 +23,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
         gl.linkProgram( shaderProgram );
 
         if ( !gl.getProgramParameter( shaderProgram, gl.LINK_STATUS ) ) {
-            alert( "Could not initialise shaders" );
+          alert( "Could not initialise shaders" );
         }
 
         gl.useProgram( shaderProgram );
@@ -39,7 +39,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
         shaderProgram.normalAttribute = gl.getAttribLocation( shaderProgram, "aNormal" );
         gl.enableVertexAttribArray( shaderProgram.normalAttribute );
       }
-      
+
       initShaders();
 
       gl.clearColor( 0.0, 0.0, 0.0, 1.0 );
@@ -50,11 +50,11 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
 
       function colorWrapper( red, green, blue, alpha ) {
         return {
-          preRender: function ( args ) {
+          preRender: function( args ) {
             gl.uniform4f( shaderProgram.atomColor, red, green, blue, alpha );
           },
 
-          postRender: function ( args ) {
+          postRender: function( args ) {
 
           }
         }
@@ -130,7 +130,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
         window.requestAnimationFrame( tick, canvas );
         var timeNow = new Date().getTime();
         if ( lastTime != 0 ) {
-            timeElapsed = timeNow - lastTime;
+          timeElapsed = timeNow - lastTime;
         }
         lastTime = timeNow;
 
@@ -140,16 +140,16 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
 
       var usePointerCursor = false;
 
-      var updateCursor = function ( x, y ) {
-          if ( usePointerCursor ) {
-              $( canvas ).css( "cursor", "pointer" );
-          }
-          else {
-              $( canvas ).css( "cursor", "auto" );
-          }
+      var updateCursor = function( x, y ) {
+        if ( usePointerCursor ) {
+          $( canvas ).css( "cursor", "pointer" );
+        }
+        else {
+          $( canvas ).css( "cursor", "auto" );
+        }
       };
 
-      var resizer = function () {
+      var resizer = function() {
         canvas.width = $( window ).width();
         canvas.height = $( window ).height();
         gl.viewportWidth = canvas.width;
@@ -160,50 +160,50 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
 
       tick();
 
-      var moveListener = function ( x, y ) {
+      var moveListener = function( x, y ) {
         updateCursor( x, y );
       };
 
-      var downListener = function ( x, y ) {
+      var downListener = function( x, y ) {
         updateCursor( x, y );
       };
 
-      var upListener = function ( x, y ) {
+      var upListener = function( x, y ) {
         updateCursor( x, y );
       };
 
-      var touchFromJQueryEvent = function ( evt ) {
+      var touchFromJQueryEvent = function( evt ) {
         return evt.originalEvent.targetTouches[0];
       };
 
-      $( canvas ).bind( "mousemove", function ( evt ) {
+      $( canvas ).bind( "mousemove", function( evt ) {
         evt.preventDefault();
         moveListener( evt.pageX, evt.pageY );
       } );
-      $( canvas ).bind( "mousedown", function ( evt ) {
+      $( canvas ).bind( "mousedown", function( evt ) {
         evt.preventDefault();
         downListener( evt.pageX, evt.pageY );
       } );
-      $( canvas ).bind( "mouseup", function ( evt ) {
+      $( canvas ).bind( "mouseup", function( evt ) {
         evt.preventDefault();
         upListener( evt.pageX, evt.pageY );
       } );
-      $( canvas ).bind( "touchmove", function ( evt ) {
+      $( canvas ).bind( "touchmove", function( evt ) {
         evt.preventDefault();
         var touch = touchFromJQueryEvent( evt );
         moveListener( touch.pageX, touch.pageY );
       } );
-      $( canvas ).bind( "touchstart", function ( evt ) {
+      $( canvas ).bind( "touchstart", function( evt ) {
         evt.preventDefault();
         var touch = touchFromJQueryEvent( evt );
         downListener( touch.pageX, touch.pageY );
       } );
-      $( canvas ).bind( "touchend", function ( evt ) {
+      $( canvas ).bind( "touchend", function( evt ) {
         evt.preventDefault();
         var touch = touchFromJQueryEvent( evt );
         upListener( touch.pageX, touch.pageY );
       } );
-      $( canvas ).bind( "touchcancel", function ( evt ) {
+      $( canvas ).bind( "touchcancel", function( evt ) {
         evt.preventDefault();
         var touch = touchFromJQueryEvent( evt );
         upListener( touch.pageX, touch.pageY );

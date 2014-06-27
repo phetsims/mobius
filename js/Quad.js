@@ -8,13 +8,13 @@
 
 define( function( require ) {
   'use strict';
-  
+
   var inherit = require( 'PHET_CORE/inherit' );
   var mobius = require( 'MOBIUS/mobius' );
   var GLNode = require( 'MOBIUS/GLNode' );
-  
+
   var Float32Array = window.Float32Array || window.Array;
-  
+
   var Quad = mobius.Quad = function Quad( gl, width, height, xOffset, yOffset ) {
     GLNode.call( this );
 
@@ -44,8 +44,8 @@ define( function( require ) {
 
       var positionData = [
         xOffset, yOffset, 0,
-        xOffset + width, yOffset, 0,
-        xOffset + width, yOffset + height, 0,
+          xOffset + width, yOffset, 0,
+          xOffset + width, yOffset + height, 0,
         xOffset, yOffset + height, 0
       ];
       var normalData = [

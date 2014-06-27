@@ -8,13 +8,13 @@
 
 define( function( require ) {
   'use strict';
-  
+
   var inherit = require( 'PHET_CORE/inherit' );
   var mobius = require( 'MOBIUS/mobius' );
   var GLNode = require( 'MOBIUS/GLNode' );
-  
+
   var Float32Array = window.Float32Array || window.Array;
-  
+
   var Sphere = mobius.Sphere = function Sphere( gl, radius, latitudeStrips, longitudeStrips ) {
     GLNode.call( this );
 

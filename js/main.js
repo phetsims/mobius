@@ -11,17 +11,16 @@
  */
 
 define( [
-    'MOBIUS/mobius',
-    
-    'MOBIUS/Cylinder',
-    'MOBIUS/GLNode',
-    'MOBIUS/Quad',
-    'MOBIUS/Sphere',
-    'MOBIUS/Util'
-  ], function(
-    mobius // note: we don't need any of the other parts, we just need to specify them as dependencies so they fill in the mobius namespace
+  'MOBIUS/mobius',
+
+  'MOBIUS/Cylinder',
+  'MOBIUS/GLNode',
+  'MOBIUS/Quad',
+  'MOBIUS/Sphere',
+  'MOBIUS/Util'
+], function( mobius // note: we don't need any of the other parts, we just need to specify them as dependencies so they fill in the mobius namespace
   ) {
-    'use strict';
-    
-    return mobius;
+  'use strict';
+
+  return mobius;
 } );
