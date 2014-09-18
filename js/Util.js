@@ -1,7 +1,7 @@
 // Copyright 2002-2014, University of Colorado
 
 /**
- * Experimental Sphere
+ * Utility functions
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -13,6 +13,24 @@ define( function( require ) {
   var mobius = require( 'MOBIUS/mobius' );
 
   mobius.Util = {
+    /*
+     * @param type should be: gl.VERTEX_SHADER or gl.FRAGMENT_SHADER
+     * @param source {String}, the shader source code.
+     */
+    createShader: function( gl, source, type ) {
+      var shader = gl.createShader( type );
+      gl.shaderSource( shader, source );
+      gl.compileShader( shader );
+
+      if( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) ) {
+        console.log( gl.getShaderInfoLog( shader ) );
+        console.log( source );
+        throw new Error( 'GLSL compile error: ' + gl.getShaderInfoLog( shader ) );
+      }
+
+      return shader;
+    },
+
     getShaderFromDOM: function( gl, id ) {
       var shaderScript = document.getElementById( id );
       if ( !shaderScript ) {

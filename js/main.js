@@ -14,9 +14,12 @@ define( [
   'MOBIUS/mobius',
 
   'MOBIUS/Cylinder',
+  'MOBIUS/Display',
   'MOBIUS/GLNode',
   'MOBIUS/Quad',
+  'MOBIUS/ShaderProgram',
   'MOBIUS/Sphere',
+  'MOBIUS/StageCenteringCanvasTransform',
   'MOBIUS/Util'
 ], function( mobius // note: we don't need any of the other parts, we just need to specify them as dependencies so they fill in the mobius namespace
   ) {
