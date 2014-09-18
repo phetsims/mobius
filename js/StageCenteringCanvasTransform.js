@@ -12,7 +12,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Matrix4 = require( 'DOT/Matrix4' );
   var Transform4 = require( 'DOT/Transform4' );
-  var Property = require( 'DOT/TemporaryProperty' );
+  var Property = require( 'AXON/Property' );
 
   var StageCenteringCanvasTransform = function( canvasSizeProperty, stageSize ) {
     this.canvasSizeProperty = canvasSizeProperty;
