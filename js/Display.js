@@ -34,7 +34,7 @@ define( function( require ) {
 
     this.currentProgram = null; // {MOBIUS/ShaderProgram}
 
-    this.gl.clearColor( 0.0, 0.0, 0.0, 1.0 );
+    this.gl.clearColor( 0.0, 0.0, 0.0, 0.0 );
 
     this.gl.enable( this.gl.DEPTH_TEST );
     this.gl.enable( this.gl.BLEND );
