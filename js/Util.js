@@ -67,6 +67,18 @@ define( function( require ) {
       return shader;
     },
 
+    toPowerOf2: function( n ) {
+      var result = 1;
+      while ( result < n ) {
+          result *= 2;
+      }
+      return result;
+    },
+
+    isPowerOf2: function( n ) {
+      return n === mobius.Util.toPowerOf2( n );
+    },
+
     initWebGL: function( canvas ) {
       // Initialize the global variable gl to null.
       var gl = null;
