@@ -22,7 +22,7 @@ define( function( require ) {
       gl.shaderSource( shader, source );
       gl.compileShader( shader );
 
-      if( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) ) {
+      if ( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) ) {
         console.log( gl.getShaderInfoLog( shader ) );
         console.log( source );
         throw new Error( 'GLSL compile error: ' + gl.getShaderInfoLog( shader ) );
@@ -70,7 +70,7 @@ define( function( require ) {
     toPowerOf2: function( n ) {
       var result = 1;
       while ( result < n ) {
-          result *= 2;
+        result *= 2;
       }
       return result;
     },

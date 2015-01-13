@@ -63,20 +63,20 @@ define( function( require ) {
 
     renderChildren: function( args ) {
       for ( var i = 0; i < this.children.length; i++ ) {
-        this.children[i].render( args );
+        this.children[ i ].render( args );
       }
     },
 
     preRender: function( args ) {
       // TODO: state control here!
       for ( var i = 0; i < this.wrappers.length; i++ ) {
-        this.wrappers[i].preRender( args );
+        this.wrappers[ i ].preRender( args );
       }
     },
 
     postRender: function( args ) {
       for ( var i = 0; i < this.wrappers.length; i++ ) {
-        this.wrappers[i].postRender( args );
+        this.wrappers[ i ].postRender( args );
       }
       // TODO: state control here!
     },

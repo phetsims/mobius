@@ -44,8 +44,8 @@ define( function( require ) {
 
       var positionData = [
         xOffset, yOffset, 0,
-          xOffset + width, yOffset, 0,
-          xOffset + width, yOffset + height, 0,
+        xOffset + width, yOffset, 0,
+        xOffset + width, yOffset + height, 0,
         xOffset, yOffset + height, 0
       ];
       var normalData = [
