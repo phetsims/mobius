@@ -6,9 +6,6 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-// flag is set so we can ensure that the config has executed. This prevents various Require.js dynamic loading timeouts and script errors
-window.loadedMobiusConfig = true;
-
 require.config( {
   // depends on all of Mobius, Scenery, Kite, and Dot
   deps: [ 'main', 'SCENERY/main', 'KITE/main', 'DOT/main', 'PHET_CORE/main' ],
