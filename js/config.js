@@ -11,19 +11,12 @@ require.config( {
   deps: [ 'main', 'SCENERY/main', 'KITE/main', 'DOT/main', 'PHET_CORE/main' ],
 
   paths: {
-    underscore: '../../sherpa/lodash-2.4.1',
-    jquery: '../../sherpa/jquery-2.1.0',
     MOBIUS: '.',
     SCENERY: '../../scenery/js',
     KITE: '../../kite/js',
     DOT: '../../dot/js',
     PHET_CORE: '../../phet-core/js',
     AXON: '../../axon/js'
-  },
-
-  shim: {
-    underscore: { exports: '_' },
-    jquery: { exports: '$' }
   },
 
   // optional cache buster to make browser refresh load all included scripts, can be disabled with ?cacheBuster=false
