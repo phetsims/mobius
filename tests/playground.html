@@ -19,12 +19,12 @@
 <body>
 <script>
   require( [ 'config' ], function() {
-    require( [ 'main', 'SCENERY/main', 'KITE/main', 'DOT/main', 'PHET_CORE/main' ], function( mobius, scenery, kite, dot, core ) {
+    require( [ 'main', 'SCENERY/main', 'KITE/main', 'DOT/main', 'PHET_CORE/main' ], function( mobius, scenery, kite, dot, phetCore ) {
       window.mobius = mobius;
       window.scenery = scenery;
       window.kite = kite;
       window.dot = dot;
-      window.core = core;
+      window.phetCore = phetCore;
 
       console.log( 'loaded' );
     } );
