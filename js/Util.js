@@ -9,7 +9,6 @@
 define( function( require ) {
   'use strict';
 
-  var inherit = require( 'PHET_CORE/inherit' );
   var mobius = require( 'MOBIUS/mobius' );
 
   mobius.Util = {
