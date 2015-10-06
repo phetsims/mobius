@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Module that includes all Mobius dependencies, so that requiring this module will return an object

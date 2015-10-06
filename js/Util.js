@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Utility functions
@@ -33,10 +33,10 @@ define( function( require ) {
     getShaderFromDOM: function( gl, id ) {
       var shaderScript = document.getElementById( id );
       if ( !shaderScript ) {
-        throw new Error( "shader DOM not found: for id=" + id );
+        throw new Error( 'shader DOM not found: for id=' + id );
       }
 
-      var str = "";
+      var str = '';
       var k = shaderScript.firstChild;
       while ( k ) {
         if ( k.nodeType === 3 ) {
@@ -46,14 +46,14 @@ define( function( require ) {
       }
 
       var shader;
-      if ( shaderScript.type === "x-shader/x-fragment" ) {
+      if ( shaderScript.type === 'x-shader/x-fragment' ) {
         shader = gl.createShader( gl.FRAGMENT_SHADER );
       }
-      else if ( shaderScript.type === "x-shader/x-vertex" ) {
+      else if ( shaderScript.type === 'x-shader/x-vertex' ) {
         shader = gl.createShader( gl.VERTEX_SHADER );
       }
       else {
-        throw new Error( "shader DOM type not recognized: " + shaderScript.type );
+        throw new Error( 'shader DOM type not recognized: ' + shaderScript.type );
       }
 
       gl.shaderSource( shader, str );
@@ -84,14 +84,16 @@ define( function( require ) {
 
       try {
         // Try to grab the standard context. If it fails, fallback to experimental.
-        gl = canvas.getContext( "webgl" ) || canvas.getContext( "experimental-webgl" );
+        gl = canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' );
       }
-      catch( e ) {}
+      catch( e ) {
+        // TODO: anything to do here?
+      }
 
       // If we don't have a GL context, give up now
       if ( !gl ) {
         // TODO: show a visual display
-        throw new Error( "Unable to initialize WebGL. Your browser may not support it." );
+        throw new Error( 'Unable to initialize WebGL. Your browser may not support it.' );
       }
 
       return gl;

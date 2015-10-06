@@ -1,4 +1,4 @@
-// Copyright 2002-2014, University of Colorado
+// Copyright 2002-2015, University of Colorado Boulder
 
 /**
  * Handles the stage to canvas transforms that allow scaling based on how large the canvas is to a fixed stage size.
@@ -7,7 +7,7 @@
  */
 
 define( function( require ) {
-  "use strict";
+  'use strict';
 
   var inherit = require( 'PHET_CORE/inherit' );
   var Matrix4 = require( 'DOT/Matrix4' );
