@@ -1,4 +1,4 @@
-// Copyright 2002-2015, University of Colorado Boulder
+// Copyright 2014-2015, University of Colorado Boulder
 
 /**
  * Handles the stage to canvas transforms that allow scaling based on how large the canvas is to a fixed stage size.
