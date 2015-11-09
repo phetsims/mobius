@@ -35,20 +35,20 @@ require( [ 'config' ], function() {
     var phi = ( 1 + Math.sqrt( 5 ) ) / 2;
 
     var icosahedronPoints = [
-      dot( 0, 1, phi ),   // 0
-      dot( 0, -1, phi ),  // 1
-      dot( 0, 1, -phi ),  // 2
-      dot( 0, -1, -phi ), // 3
+      dot.v3( 0, 1, phi ),   // 0
+      dot.v3( 0, -1, phi ),  // 1
+      dot.v3( 0, 1, -phi ),  // 2
+      dot.v3( 0, -1, -phi ), // 3
 
-      dot( 1, phi, 0 ),   // 4
-      dot( -1, phi, 0 ),  // 5
-      dot( 1, -phi, 0 ),  // 6
-      dot( -1, -phi, 0 ), // 7
+      dot.v3( 1, phi, 0 ),   // 4
+      dot.v3( -1, phi, 0 ),  // 5
+      dot.v3( 1, -phi, 0 ),  // 6
+      dot.v3( -1, -phi, 0 ), // 7
 
-      dot( phi, 0, 1 ),   // 8
-      dot( phi, 0, -1 ),  // 9
-      dot( -phi, 0, 1 ),  // 10
-      dot( -phi, 0, -1 )  // 11
+      dot.v3( phi, 0, 1 ),   // 8
+      dot.v3( phi, 0, -1 ),  // 9
+      dot.v3( -phi, 0, 1 ),  // 10
+      dot.v3( -phi, 0, -1 )  // 11
     ];
     for ( var j = 0; j < icosahedronPoints.length; j++ ) {
       icosahedronPoints[ j ] = icosahedronPoints[ j ].times( 100 );
@@ -189,8 +189,8 @@ require( [ 'config' ], function() {
 
     updateTriangles();
 
-    var sunDirection = dot( -1, 0.5, 2 ).normalized();
-    var moonDirection = dot( 2, -1, 1 ).normalized();
+    var sunDirection = dot.v3( -1, 0.5, 2 ).normalized();
+    var moonDirection = dot.v3( 2, -1, 1 ).normalized();
     var sunWeight = 0.8;
     var moonWeight = 0.6;
 
