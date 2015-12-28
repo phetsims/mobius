@@ -83,7 +83,7 @@ define( function( require ) {
 
     addChild: function( node ) {
       assert && assert( node !== null && node !== undefined );
-      if ( this.isChild( node ) ) {
+      if ( this.hasChild( node ) ) {
         return;
       }
       if ( node.parent !== null ) {
@@ -94,7 +94,7 @@ define( function( require ) {
     },
 
     removeChild: function( node ) {
-      assert && assert( this.isChild( node ) );
+      assert && assert( this.hasChild( node ) );
 
       node.parent = null;
       this.children.splice( this.children.indexOf( node ), 1 );
@@ -110,7 +110,7 @@ define( function( require ) {
       }
     },
 
-    isChild: function( potentialChild ) {
+    hasChild: function( potentialChild ) {
       assert && assert( (potentialChild.parent === this ) === (this.children.indexOf( potentialChild ) !== -1) );
       return potentialChild.parent === this;
     },
