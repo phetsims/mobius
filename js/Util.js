@@ -14,7 +14,7 @@ define( function( require ) {
   mobius.Util = {
     /*
      * @param type should be: gl.VERTEX_SHADER or gl.FRAGMENT_SHADER
-     * @param source {String}, the shader source code.
+     * @param source {string}, the shader source code.
      */
     createShader: function( gl, source, type ) {
       var shader = gl.createShader( type );
