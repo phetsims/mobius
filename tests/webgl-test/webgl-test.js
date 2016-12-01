@@ -1,3 +1,5 @@
+// Copyright 2016, University of Colorado Boulder
+
 requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/js/main' ], function( mobius, scenery, kite, dot ) {
   $( document ).ready( function() {
     var canvas = $( '#canvas' )[0];

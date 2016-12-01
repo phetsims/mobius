@@ -1,3 +1,5 @@
+// Copyright 2016, University of Colorado Boulder
+
 require( [ 'config' ], function() {
   require( [ 'main', 'SCENERY/main', 'KITE/main', 'DOT/main', 'PHET_CORE/main' ], function( mobius, scenery, kite, dot, phetCore ) {
     window.mobius = mobius;
