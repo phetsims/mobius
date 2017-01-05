@@ -1,6 +1,8 @@
 // Copyright 2016, University of Colorado Boulder
 
 requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/js/main' ], function( mobius, scenery, kite, dot ) {
+  'use strict';
+
   $( document ).ready( function() {
     var canvas = $( '#canvas' )[0];
 
@@ -16,8 +18,8 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
       var gl = mobius.Util.initWebGL( canvas );
 
       function initShaders() {
-        var fragmentShader = mobius.Util.getShaderFromDOM( gl, "shader-fs" );
-        var vertexShader = mobius.Util.getShaderFromDOM( gl, "shader-vs" );
+        var fragmentShader = mobius.Util.getShaderFromDOM( gl, 'shader-fs' );
+        var vertexShader = mobius.Util.getShaderFromDOM( gl, 'shader-vs' );
 
         shaderProgram = gl.createProgram();
         gl.attachShader( shaderProgram, vertexShader );
@@ -25,20 +27,20 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
         gl.linkProgram( shaderProgram );
 
         if ( !gl.getProgramParameter( shaderProgram, gl.LINK_STATUS ) ) {
-          alert( "Could not initialise shaders" );
+          alert( 'Could not initialise shaders' );
         }
 
         gl.useProgram( shaderProgram );
 
-        shaderProgram.vertexPositionAttribute = gl.getAttribLocation( shaderProgram, "aVertexPosition" );
+        shaderProgram.vertexPositionAttribute = gl.getAttribLocation( shaderProgram, 'aVertexPosition' );
         gl.enableVertexAttribArray( shaderProgram.vertexPositionAttribute );
 
-        shaderProgram.pMatrixUniform = gl.getUniformLocation( shaderProgram, "uPMatrix" );
-        shaderProgram.mvMatrixUniform = gl.getUniformLocation( shaderProgram, "uMVMatrix" );
-        shaderProgram.inverseTransposeMatrixUniform = gl.getUniformLocation( shaderProgram, "uInverseTransposeMatrix" );
-        shaderProgram.atomColor = gl.getUniformLocation( shaderProgram, "atomColor" );
+        shaderProgram.pMatrixUniform = gl.getUniformLocation( shaderProgram, 'uPMatrix' );
+        shaderProgram.mvMatrixUniform = gl.getUniformLocation( shaderProgram, 'uMVMatrix' );
+        shaderProgram.inverseTransposeMatrixUniform = gl.getUniformLocation( shaderProgram, 'uInverseTransposeMatrix' );
+        shaderProgram.atomColor = gl.getUniformLocation( shaderProgram, 'atomColor' );
 
-        shaderProgram.normalAttribute = gl.getAttribLocation( shaderProgram, "aNormal" );
+        shaderProgram.normalAttribute = gl.getAttribLocation( shaderProgram, 'aNormal' );
         gl.enableVertexAttribArray( shaderProgram.normalAttribute );
       }
 
@@ -59,7 +61,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
           postRender: function( args ) {
 
           }
-        }
+        };
       }
 
       var whiteColorWrapper = colorWrapper( 1, 1, 1, 1 );
@@ -96,7 +98,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
       scene.addChild( sphere3 );
       scene.addChild( cylinder );
 
-      var rot = 0;
+      // var rot = 0;
       var lastTime = 0;
       var timeElapsed = 0;
 
@@ -125,13 +127,13 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
       }
 
       function animate() {
-        rot += (Math.PI / 2 * timeElapsed) / 1000.0;
+        // rot += (Math.PI / 2 * timeElapsed) / 1000.0;
       }
 
       function tick() {
         window.requestAnimationFrame( tick, canvas );
         var timeNow = new Date().getTime();
-        if ( lastTime != 0 ) {
+        if ( lastTime !== 0 ) {
           timeElapsed = timeNow - lastTime;
         }
         lastTime = timeNow;
@@ -144,10 +146,10 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
 
       var updateCursor = function( x, y ) {
         if ( usePointerCursor ) {
-          $( canvas ).css( "cursor", "pointer" );
+          $( canvas ).css( 'cursor', 'pointer' );
         }
         else {
-          $( canvas ).css( "cursor", "auto" );
+          $( canvas ).css( 'cursor', 'auto' );
         }
       };
 
@@ -178,34 +180,34 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
         return evt.originalEvent.targetTouches[0];
       };
 
-      $( canvas ).bind( "mousemove", function( evt ) {
+      $( canvas ).bind( 'mousemove', function( evt ) {
         evt.preventDefault();
         moveListener( evt.pageX, evt.pageY );
       } );
-      $( canvas ).bind( "mousedown", function( evt ) {
+      $( canvas ).bind( 'mousedown', function( evt ) {
         evt.preventDefault();
         downListener( evt.pageX, evt.pageY );
       } );
-      $( canvas ).bind( "mouseup", function( evt ) {
+      $( canvas ).bind( 'mouseup', function( evt ) {
         evt.preventDefault();
         upListener( evt.pageX, evt.pageY );
       } );
-      $( canvas ).bind( "touchmove", function( evt ) {
+      $( canvas ).bind( 'touchmove', function( evt ) {
         evt.preventDefault();
         var touch = touchFromJQueryEvent( evt );
         moveListener( touch.pageX, touch.pageY );
       } );
-      $( canvas ).bind( "touchstart", function( evt ) {
+      $( canvas ).bind( 'touchstart', function( evt ) {
         evt.preventDefault();
         var touch = touchFromJQueryEvent( evt );
         downListener( touch.pageX, touch.pageY );
       } );
-      $( canvas ).bind( "touchend", function( evt ) {
+      $( canvas ).bind( 'touchend', function( evt ) {
         evt.preventDefault();
         var touch = touchFromJQueryEvent( evt );
         upListener( touch.pageX, touch.pageY );
       } );
-      $( canvas ).bind( "touchcancel", function( evt ) {
+      $( canvas ).bind( 'touchcancel', function( evt ) {
         evt.preventDefault();
         var touch = touchFromJQueryEvent( evt );
         upListener( touch.pageX, touch.pageY );

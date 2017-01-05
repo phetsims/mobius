@@ -19,9 +19,9 @@ define( function( require ) {
     this.stageSize = stageSize;
     this.transform = new Property( null ); // updated by the listener below
 
-    var that = this;
+    var self = this;
     canvasSizeProperty.link( function() {
-      that.updateTransform();
+      self.updateTransform();
     }, true );
   };
 

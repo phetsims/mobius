@@ -1,6 +1,8 @@
 // Copyright 2016, University of Colorado Boulder
 
 require( [ 'config' ], function() {
+  'use strict';
+
   require( [ 'main', 'SCENERY/main', 'KITE/main', 'DOT/main', 'PHET_CORE/main' ], function( mobius, scenery, kite, dot, phetCore ) {
     window.mobius = mobius;
     window.scenery = scenery;
@@ -10,7 +12,7 @@ require( [ 'config' ], function() {
 
     console.log( 'loaded' );
 
-    var overTwoN = 1 / ( 2 * triangleSize );
+    // var overTwoN = 1 / ( 2 * triangleSize );
     // var triangleInverseMatrix = dot.Matrix3.createFromPool( -overTwoN, -overTwoN,        1,
     //                                              0,         1 / triangleSize, 0,
     //                                              overTwoN,  -overTwoN,        0 );
@@ -168,9 +170,9 @@ require( [ 'config' ], function() {
     var nearPlane = 1;
     var farPlane = 1000;
     var fieldOfViewRadians = ( fieldOfViewDegrees / 180 * Math.PI );
-    var projectionMatrix = dot.Matrix4.gluPerspective( fieldOfViewRadians,
-      canvasWidth / canvasHeight,
-      nearPlane, farPlane );
+    // var projectionMatrix = dot.Matrix4.gluPerspective( fieldOfViewRadians,
+    //   canvasWidth / canvasHeight,
+    //   nearPlane, farPlane );
 
     var triangleTransformMatrix = new dot.Matrix4();
 
@@ -229,7 +231,7 @@ require( [ 'config' ], function() {
     function tick() {
       window.requestAnimationFrame( tick, document.body );
       var timeNow = new Date().getTime();
-      if ( lastTime != 0 ) {
+      if ( lastTime !== 0 ) {
         timeElapsed = timeNow - lastTime;
       }
       lastTime = timeNow;
