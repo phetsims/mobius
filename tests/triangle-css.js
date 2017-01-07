@@ -3,6 +3,8 @@
 require( [ 'config' ], function() {
   'use strict';
 
+  /* eslint-disable no-undef */
+
   require( [ 'main', 'SCENERY/main', 'KITE/main', 'DOT/main', 'PHET_CORE/main' ], function( mobius, scenery, kite, dot, phetCore ) {
     window.mobius = mobius;
     window.scenery = scenery;
@@ -164,12 +166,12 @@ require( [ 'config' ], function() {
     var lastTime = 0;
     var timeElapsed = 0;
 
-    var canvasWidth = 512;
-    var canvasHeight = 512;
-    var fieldOfViewDegrees = 45 / 2;
-    var nearPlane = 1;
-    var farPlane = 1000;
-    var fieldOfViewRadians = ( fieldOfViewDegrees / 180 * Math.PI );
+    // var canvasWidth = 512;
+    // var canvasHeight = 512;
+    // var fieldOfViewDegrees = 45 / 2;
+    // var nearPlane = 1;
+    // var farPlane = 1000;
+    // var fieldOfViewRadians = ( fieldOfViewDegrees / 180 * Math.PI );
     // var projectionMatrix = dot.Matrix4.gluPerspective( fieldOfViewRadians,
     //   canvasWidth / canvasHeight,
     //   nearPlane, farPlane );
@@ -242,4 +244,6 @@ require( [ 'config' ], function() {
 
     tick();
   } );
+
+  /* eslint-enable */
 } );
