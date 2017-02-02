@@ -17,7 +17,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
 
       var gl = mobius.Util.initWebGL( canvas );
 
-      function initShaders() {
+      var initShaders = function() {
         var fragmentShader = mobius.Util.getShaderFromDOM( gl, 'shader-fs' );
         var vertexShader = mobius.Util.getShaderFromDOM( gl, 'shader-vs' );
 
@@ -42,7 +42,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
 
         shaderProgram.normalAttribute = gl.getAttribLocation( shaderProgram, 'aNormal' );
         gl.enableVertexAttribArray( shaderProgram.normalAttribute );
-      }
+      };
 
       initShaders();
 
@@ -52,7 +52,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
       gl.enable( gl.BLEND );
       gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA );
 
-      function colorWrapper( red, green, blue, alpha ) {
+      var colorWrapper = function( red, green, blue, alpha ) {
         return {
           preRender: function( args ) {
             gl.uniform4f( shaderProgram.atomColor, red, green, blue, alpha );
@@ -62,7 +62,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
 
           }
         };
-      }
+      };
 
       var whiteColorWrapper = colorWrapper( 1, 1, 1, 1 );
       var centerColorWrapper = colorWrapper( 159 / 255.0, 102 / 255.0, 218 / 255.0, 1 );
@@ -102,7 +102,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
       var lastTime = 0;
       var timeElapsed = 0;
 
-      function draw() {
+      var draw = function() {
         // Only continue if WebGL is available and working
         if ( gl ) {
           gl.viewportWidth = canvas.width;
@@ -124,13 +124,13 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
 
           scene.render( args );
         }
-      }
+      };
 
-      function animate() {
+      var animate = function() {
         // rot += (Math.PI / 2 * timeElapsed) / 1000.0;
-      }
+      };
 
-      function tick() {
+      var tick = function() {
         window.requestAnimationFrame( tick, canvas );
         var timeNow = new Date().getTime();
         if ( lastTime !== 0 ) {
@@ -140,7 +140,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
 
         animate();
         draw();
-      }
+      };
 
       var usePointerCursor = false;
 
