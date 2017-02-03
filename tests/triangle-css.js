@@ -94,7 +94,7 @@ require( [ 'config' ], function() {
         for ( var ib = ia + 1; ib < n; ib++ ) {
           // guaranteed unique pairs, ia < ib
 
-          if ( _.some( icosahedronFaces, function( face ) { return _.contains( face, ia ) && _.contains( face, ib ); } ) ) {
+          if ( _.some( icosahedronFaces, function( face ) { return _.includes( face, ia ) && _.includes( face, ib ); } ) ) {
             // adjacent vertices, create a new vertex in-between with the same magnitude
             var idx = icosahedronPoints.length;
             icosahedronPoints.push( icosahedronPoints[ ia ].plus( icosahedronPoints[ ib ] ).normalized().times( vertexMagnitude ) );
