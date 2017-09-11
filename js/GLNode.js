@@ -9,9 +9,9 @@
 define( function( require ) {
   'use strict';
 
+  var Matrix4 = require( 'DOT/Matrix4' );
   var mobius = require( 'MOBIUS/mobius' );
   var Transform4 = require( 'DOT/Transform4' );
-  var Matrix4 = require( 'DOT/Matrix4' );
 
   var GLNode = mobius.GLNode = function GLNode( options ) {
     this.parent = null;

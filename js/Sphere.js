@@ -9,9 +9,9 @@
 define( function( require ) {
   'use strict';
 
+  var GLNode = require( 'MOBIUS/GLNode' );
   var inherit = require( 'PHET_CORE/inherit' );
   var mobius = require( 'MOBIUS/mobius' );
-  var GLNode = require( 'MOBIUS/GLNode' );
   var Vector3 = require( 'DOT/Vector3' );
 
   var Float32Array = window.Float32Array || window.Array;
