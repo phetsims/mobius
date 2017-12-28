@@ -14,167 +14,168 @@
   </style>
 </head>
 <body>
-  <canvas id="canvas" width="512" height="512"></canvas>
+<canvas id="canvas" width="512" height="512"></canvas>
 
-  <script type="text/javascript">
-    // polyfill requestAnimationFrame
-    (function () {
-      var lastTime = 0;
-      var vendors = [ 'ms', 'moz', 'webkit', 'o' ];
-      for ( var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x ) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
-      }
+<script type="text/javascript">
+  // polyfill requestAnimationFrame
+  ( function() {
+    var lastTime = 0;
+    var vendors = [ 'ms', 'moz', 'webkit', 'o' ];
+    for ( var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x ) {
+      window.requestAnimationFrame = window[ vendors[ x ] + 'RequestAnimationFrame' ];
+      window.cancelAnimationFrame = window[ vendors[ x ] + 'CancelAnimationFrame' ] || window[ vendors[ x ] + 'CancelRequestAnimationFrame' ];
+    }
 
-      if ( !window.requestAnimationFrame ) {
-        window.requestAnimationFrame = function(callback) {
-          var currTime = new Date().getTime();
-          var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-          var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-            timeToCall);
-          lastTime = currTime + timeToCall;
-          return id;
-        };
-      }
-
-      if ( !window.cancelAnimationFrame ) {
-        window.cancelAnimationFrame = function(id) {
-          clearTimeout(id);
-        };
-      }
-    })();
-
-    window.addEventListener( 'load', function() {
-      var canvas = document.getElementById( 'canvas' );
-
-      var resizer = function() {
-        var size = Math.min( window.innerWidth, window.innerHeight );
-        canvas.width = size;
-        canvas.height = size;
+    if ( !window.requestAnimationFrame ) {
+      window.requestAnimationFrame = function( callback ) {
+        var currTime = new Date().getTime();
+        var timeToCall = Math.max( 0, 16 - ( currTime - lastTime ) );
+        var id = window.setTimeout( function() {
+          callback( currTime + timeToCall );
+        }, timeToCall );
+        lastTime = currTime + timeToCall;
+        return id;
       };
-      window.addEventListener( 'resize', resizer );
-      resizer();
+    }
 
-      var gl = canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' );
+    if ( !window.cancelAnimationFrame ) {
+      window.cancelAnimationFrame = function( id ) {
+        clearTimeout( id );
+      };
+    }
+  } )();
 
-      function createShader ( source, type ) {
-        var shader = gl.createShader( type );
-        gl.shaderSource( shader, source );
-        gl.compileShader( shader );
+  window.addEventListener( 'load', function() {
+    var canvas = document.getElementById( 'canvas' );
 
-        if( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) ) {
-          console.log( gl.getShaderInfoLog( shader ) );
-          console.log( source );
-          throw new Error( 'GLSL compile error: ' + gl.getShaderInfoLog( shader ) );
-        }
+    var resizer = function() {
+      var size = Math.min( window.innerWidth, window.innerHeight );
+      canvas.width = size;
+      canvas.height = size;
+    };
+    window.addEventListener( 'resize', resizer );
+    resizer();
 
-        return shader;
+    var gl = canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' );
+
+    function createShader( source, type ) {
+      var shader = gl.createShader( type );
+      gl.shaderSource( shader, source );
+      gl.compileShader( shader );
+
+      if ( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) ) {
+        console.log( gl.getShaderInfoLog( shader ) );
+        console.log( source );
+        throw new Error( 'GLSL compile error: ' + gl.getShaderInfoLog( shader ) );
       }
 
-      var program = gl.createProgram();
+      return shader;
+    }
 
-      /*
-                      var ratio: Number = model.getVRatio( ox + halfstep, oy + halfstep );
+    var program = gl.createProgram();
 
-                if ( ratio > 0 ) {
-                    var c: Number = Math.floor( ((1 - ratio) * 255) );
-                    if ( c < 0 ) {
-                        c = 0;
-                    }
-                    red = 255;
-                    green = blue = c;
-                }
-                else {
-                    c = Math.floor( ((1 + ratio) * 255) );
-                    if ( c < 0 ) {
-                        c = 0;
-                    }
-                    blue = 255;
-                    green = red = c;
-                }
-      */
+    /*
+                    var ratio: Number = model.getVRatio( ox + halfstep, oy + halfstep );
 
-      var vertexShader = createShader(
-        'attribute vec3 vertex;\n' +
-        'varying vec2 texCoord;\n' +
-        'void main() {\n' +
-        '  texCoord = vertex.xy * 0.5 + 0.5;\n' +
-        '  gl_Position = vec4( vertex, 1 );\n' +
-        '}', gl.VERTEX_SHADER );
-      var fragmentShader = createShader(
-        'precision highp float;\n' +
-        'varying vec2 texCoord;\n' +
-        'uniform vec2 p1;\n' +
-        'uniform vec2 p2;\n' +
-        'uniform vec2 p3;\n' +
-        'uniform vec2 p4;\n' +
-        'void main() {\n' +
-        '  float ratio = 0.0' +
-          ' + 1.0 / distance( texCoord, p1 )' +
-          ' - 1.0 / distance( texCoord, p2 )' +
-          ' + 1.0 / distance( texCoord, p3 )' +
-          ' - 1.0 / distance( texCoord, p4 )' +
-          ';\n' +
-        '  float m = 1.0 - abs( ratio * 0.05 );\n' +
-        '  gl_FragColor = vec4( ratio > 0.0 ? vec3( 1.0, m, m ) : vec3( m, m, 1.0 ), 1.0 );\n' +
-        '}', gl.FRAGMENT_SHADER );
+              if ( ratio > 0 ) {
+                  var c: Number = Math.floor( ((1 - ratio) * 255) );
+                  if ( c < 0 ) {
+                      c = 0;
+                  }
+                  red = 255;
+                  green = blue = c;
+              }
+              else {
+                  c = Math.floor( ((1 + ratio) * 255) );
+                  if ( c < 0 ) {
+                      c = 0;
+                  }
+                  blue = 255;
+                  green = red = c;
+              }
+    */
 
-      gl.attachShader( program, vertexShader );
-      gl.attachShader( program, fragmentShader );
+    var vertexShader = createShader(
+      'attribute vec3 vertex;\n' +
+      'varying vec2 texCoord;\n' +
+      'void main() {\n' +
+      '  texCoord = vertex.xy * 0.5 + 0.5;\n' +
+      '  gl_Position = vec4( vertex, 1 );\n' +
+      '}', gl.VERTEX_SHADER );
+    var fragmentShader = createShader(
+      'precision highp float;\n' +
+      'varying vec2 texCoord;\n' +
+      'uniform vec2 p1;\n' +
+      'uniform vec2 p2;\n' +
+      'uniform vec2 p3;\n' +
+      'uniform vec2 p4;\n' +
+      'void main() {\n' +
+      '  float ratio = 0.0' +
+      ' + 1.0 / distance( texCoord, p1 )' +
+      ' - 1.0 / distance( texCoord, p2 )' +
+      ' + 1.0 / distance( texCoord, p3 )' +
+      ' - 1.0 / distance( texCoord, p4 )' +
+      ';\n' +
+      '  float m = 1.0 - abs( ratio * 0.05 );\n' +
+      '  gl_FragColor = vec4( ratio > 0.0 ? vec3( 1.0, m, m ) : vec3( m, m, 1.0 ), 1.0 );\n' +
+      '}', gl.FRAGMENT_SHADER );
 
-      gl.linkProgram( program );
+    gl.attachShader( program, vertexShader );
+    gl.attachShader( program, fragmentShader );
 
-      if( !gl.getProgramParameter( program, gl.LINK_STATUS ) ) {
-        console.log( gl.getProgramInfoLog( program ) );
-        throw new Error( 'GLSL link error: ' + gl.getProgramInfoLog( program ) );
-      }
+    gl.linkProgram( program );
 
-      gl.deleteShader( vertexShader );
-      gl.deleteShader( fragmentShader );
+    if ( !gl.getProgramParameter( program, gl.LINK_STATUS ) ) {
+      console.log( gl.getProgramInfoLog( program ) );
+      throw new Error( 'GLSL link error: ' + gl.getProgramInfoLog( program ) );
+    }
 
-      var aVertexLocation = gl.getAttribLocation( program, 'vertex' );
-      var p1Location = gl.getUniformLocation( program, 'p1' )
-      var p2Location = gl.getUniformLocation( program, 'p2' )
-      var p3Location = gl.getUniformLocation( program, 'p3' )
-      var p4Location = gl.getUniformLocation( program, 'p4' )
+    gl.deleteShader( vertexShader );
+    gl.deleteShader( fragmentShader );
 
-      gl.useProgram( program );
-      gl.enableVertexAttribArray( aVertexLocation );
+    var aVertexLocation = gl.getAttribLocation( program, 'vertex' );
+    var p1Location = gl.getUniformLocation( program, 'p1' )
+    var p2Location = gl.getUniformLocation( program, 'p2' )
+    var p3Location = gl.getUniformLocation( program, 'p3' )
+    var p4Location = gl.getUniformLocation( program, 'p4' )
 
-      var vertexBuffer = gl.createBuffer();
-      gl.bindBuffer( gl.ARRAY_BUFFER, vertexBuffer );
-      gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( [
-        -1, -1,
-        -1, +1,
-        +1, -1,
-        +1, +1
-      ] ), gl.STATIC_DRAW );
+    gl.useProgram( program );
+    gl.enableVertexAttribArray( aVertexLocation );
 
-      var moveX = 0;
-      var moveY = 1.0;
+    var vertexBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, vertexBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( [
+      -1, -1,
+      -1, +1,
+      +1, -1,
+      +1, +1
+    ] ), gl.STATIC_DRAW );
 
-      window.addEventListener( 'mousemove', function( evt ) {
-        moveX = evt.clientX / canvas.width;
-        moveY = 1 - evt.clientY / canvas.height;
-      } );
+    var moveX = 0;
+    var moveY = 1.0;
 
-      function render() {
-        gl.uniform2f( p1Location, 0.8, 0.3 );
-        gl.uniform2f( p2Location, 0.3, 0.2 );
-        gl.uniform2f( p3Location, 0.5, 0.8 );
-        gl.uniform2f( p4Location, moveX, moveY );
-
-        gl.bindBuffer( gl.ARRAY_BUFFER, vertexBuffer );
-        gl.vertexAttribPointer( aVertexLocation, 2, gl.FLOAT, false, 0, 0 );
-        gl.drawArrays( gl.TRIANGLE_STRIP, 0, 4 );
-      }
-
-      (function step() {
-        window.requestAnimationFrame( step );
-
-        render();
-      })();
+    window.addEventListener( 'mousemove', function( evt ) {
+      moveX = evt.clientX / canvas.width;
+      moveY = 1 - evt.clientY / canvas.height;
     } );
-  </script>
+
+    function render() {
+      gl.uniform2f( p1Location, 0.8, 0.3 );
+      gl.uniform2f( p2Location, 0.3, 0.2 );
+      gl.uniform2f( p3Location, 0.5, 0.8 );
+      gl.uniform2f( p4Location, moveX, moveY );
+
+      gl.bindBuffer( gl.ARRAY_BUFFER, vertexBuffer );
+      gl.vertexAttribPointer( aVertexLocation, 2, gl.FLOAT, false, 0, 0 );
+      gl.drawArrays( gl.TRIANGLE_STRIP, 0, 4 );
+    }
+
+    ( function step() {
+      window.requestAnimationFrame( step );
+
+      render();
+    } )();
+  } );
+</script>
 </body>
 </html>
