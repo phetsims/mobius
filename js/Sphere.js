@@ -147,7 +147,7 @@ define( function( require ) {
       epsilon = epsilon === undefined ? 0.00001 : epsilon;
 
       // center is the origin for now, but leaving in computations so that we can change that in the future. optimize away if needed
-      var center = new Vector3();
+      var center = new Vector3( 0, 0, 0 );
 
       var rayDir = ray.direction;
       var pos = ray.position;
