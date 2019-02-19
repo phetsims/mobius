@@ -59,7 +59,7 @@ require( [ 'config' ], function() {
     for ( var j = 0; j < icosahedronPoints.length; j++ ) {
       icosahedronPoints[ j ] = icosahedronPoints[ j ].times( 100 );
     }
-    var vertexMagnitude = icosahedronPoints[ 0 ].magnitude();
+    var vertexMagnitude = icosahedronPoints[ 0 ].magnitude;
 
     var icosahedronFaces = [
       [ 4, 5, 0 ],
