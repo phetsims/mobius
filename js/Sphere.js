@@ -155,7 +155,7 @@ define( function( require ) {
 
       // basically, we can use the quadratic equation to solve for both possible hit points (both +- roots are the hit points)
       var tmp = rayDir.dot( centerToRay );
-      var centerToRayDistSq = centerToRay.magnitudeSquared();
+      var centerToRayDistSq = centerToRay.magnitudeSquared;
       var det = 4 * tmp * tmp - 4 * ( centerToRayDistSq - this.radius * this.radius );
       if ( det < epsilon ) {
         // ray misses sphere entirely
