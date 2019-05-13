@@ -1,7 +1,7 @@
 mobius
 ======
 
-Prototype 3D scene graph
+3D utilities for PhET simulations
 
 Third-Party Dependencies
 =============

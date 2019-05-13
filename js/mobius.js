@@ -13,8 +13,8 @@
 define( function( require ) {
   'use strict';
 
-  // will be filled in by other modules
-  return {
-    assert: assert
-  };
+  // modules
+  var Namespace = require( 'PHET_CORE/Namespace' );
+
+  return new Namespace( 'mobius' );
 } );

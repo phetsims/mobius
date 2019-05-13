@@ -9,7 +9,16 @@
   "devDependencies": {
     "grunt": "~1.0.0"
   },
+  "phet": {
+    "requirejsNamespace": "MOBIUS",
+    "preload": [
+      "../sherpa/lib/three-r104.js"
+    ]
+  },
   "eslintConfig": {
-    "extends": "../chipper/eslint/sim_eslintrc.js"
+    "extends": "../chipper/eslint/sim_eslintrc.js",
+    "globals": {
+      "THREE": false
+    }
   }
 }
