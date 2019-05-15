@@ -33,6 +33,30 @@ define( function( require ) {
      */
     threeToVector( vector ) {
       return new Vector3( vector.x, vector.y, vector.z );
+    },
+
+    // TODO: doc
+    frontVertices( bounds2, z ) {
+      return [
+        bounds2.minX, bounds2.maxY, z,
+        bounds2.minX, bounds2.minY, z,
+        bounds2.maxX, bounds2.maxY, z,
+        bounds2.minX, bounds2.minY, z,
+        bounds2.maxX, bounds2.minY, z,
+        bounds2.maxX, bounds2.maxY, z
+      ];
+    },
+
+    // TODO: doc
+    topVertices( bounds2, y ) {
+      return [
+        bounds2.minX, y, bounds2.maxY,
+        bounds2.maxX, y, bounds2.maxY,
+        bounds2.minX, y, bounds2.minY,
+        bounds2.minX, y, bounds2.minY,
+        bounds2.maxX, y, bounds2.maxY,
+        bounds2.maxX, y, bounds2.minY
+      ];
     }
   };
 
