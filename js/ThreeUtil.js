@@ -35,7 +35,14 @@ define( function( require ) {
       return new Vector3( vector.x, vector.y, vector.z );
     },
 
-    // TODO: doc
+    /**
+     * Returns an array of [ x, y, z, ... ] vertices for a quad pointed towards the camera.
+     * @public
+     *
+     * @param {Bounds2} bounds2 - x,y
+     * @param {number} z
+     * @returns {Array.<number>}
+     */
     frontVertices( bounds2, z ) {
       return [
         bounds2.minX, bounds2.maxY, z,
@@ -47,7 +54,14 @@ define( function( require ) {
       ];
     },
 
-    // TODO: doc
+    /**
+     * Returns an array of [ x, y, z, ... ] vertices for a quad pointed up.
+     * @public
+     *
+     * @param {Bounds2} bounds2 - x,z
+     * @param {number} y
+     * @returns {Array.<number>}
+     */
     topVertices( bounds2, y ) {
       return [
         bounds2.minX, y, bounds2.maxY,
@@ -56,6 +70,44 @@ define( function( require ) {
         bounds2.minX, y, bounds2.minY,
         bounds2.maxX, y, bounds2.maxY,
         bounds2.maxX, y, bounds2.minY
+      ];
+    },
+
+    /**
+     * Returns an array of [ x, y, z, ... ] vertices for a quad pointed towards the right.
+     * @public
+     *
+     * @param {Bounds2} bounds2 - z,y
+     * @param {number} x
+     * @returns {Array.<number>}
+     */
+    rightVertices( bounds2, x ) {
+      return [
+        x, bounds2.minY, bounds2.maxX,
+        x, bounds2.minY, bounds2.minX,
+        x, bounds2.maxY, bounds2.maxX,
+        x, bounds2.minY, bounds2.minX,
+        x, bounds2.maxY, bounds2.minX,
+        x, bounds2.maxY, bounds2.maxX
+      ];
+    },
+
+    /**
+     * Returns an array of [ x, y, z, ... ] vertices for a quad pointed towards the left.
+     * @public
+     *
+     * @param {Bounds2} bounds2 - z,y
+     * @param {number} x
+     * @returns {Array.<number>}
+     */
+    leftVertices( bounds2, x ) {
+      return [
+        x, bounds2.minY, bounds2.maxX,
+        x, bounds2.maxY, bounds2.maxX,
+        x, bounds2.minY, bounds2.minX,
+        x, bounds2.minY, bounds2.minX,
+        x, bounds2.maxY, bounds2.maxX,
+        x, bounds2.maxY, bounds2.minX
       ];
     }
   };
