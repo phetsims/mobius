@@ -159,7 +159,7 @@ define( function( require ) {
 
     /*
      * @private
-     * @param {Vector3} screenPoint
+     * @param {Vector2} screenPoint
      * @returns {THREE.Raycaster}
      */
     getRaycasterFromScreenPoint( screenPoint ) {
@@ -187,7 +187,7 @@ define( function( require ) {
     /*
      * @private
      *
-     * @param {Vector3} screenPoint
+     * @param {Vector2} screenPoint
      * @returns {Ray3}
      */
     getRayFromScreenPoint( screenPoint ) {
