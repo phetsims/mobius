@@ -19,6 +19,7 @@ define( function( require ) {
   const Ray3 = require( 'DOT/Ray3' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const ThreeUtil = require( 'MOBIUS/ThreeUtil' );
+  const Vector2 = require( 'DOT/Vector2' );
   const Vector3 = require( 'DOT/Vector3' );
 
   class MobiusSceneNode extends Node {
@@ -173,15 +174,30 @@ define( function( require ) {
       return raycaster;
     }
 
-    /*
-     * Global => NDC
+    /**
+     * Projects a 3d point in the global coordinate frame to one within the 2d global coordinate frame.
      * @public
      *
-     * @param {THREE.Vector3} globalPoint
-     * @returns {THREE.Vector3}
+     * @param {Vector3} point
+     * @returns {Vector2}
      */
-    convertScreenPointFromGlobalPoint( globalPoint ) {
-      globalPoint.project( this.threeCamera );
+    projectPoint( point ) {
+      const threePoint = ThreeUtil.vectorToThree( point );
+      threePoint.project( this.threeCamera ); // global to NDC
+
+      // Potential fix for https://github.com/phetsims/molecule-shapes/issues/145.
+      // The THREE.Vector3.project( THREE.Camera ) is giving is nonsense near startup. Longer-term could identify.
+      if ( !isFinite( threePoint.x ) ) {
+        threePoint.x = 0;
+      }
+      if ( !isFinite( threePoint.y ) ) {
+        threePoint.y = 0;
+      }
+
+      return new Vector2(
+        ( threePoint.x + 1 ) * this.screenWidth / 2,
+        ( -threePoint.y + 1 ) * this.screenHeight / 2
+      );
     }
 
     /*
