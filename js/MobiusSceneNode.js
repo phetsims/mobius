@@ -61,6 +61,7 @@ define( function( require ) {
       // @public {THREE.Renderer}
       this.threeRenderer = new THREE.WebGLRenderer( {
         antialias: true,
+        alpha: true,
         preserveDrawingBuffer: phet.chipper.queryParameters.preserveDrawingBuffer
       } );
       this.threeRenderer.setPixelRatio( window.devicePixelRatio || 1 );

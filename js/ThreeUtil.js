@@ -36,6 +36,17 @@ define( function( require ) {
     },
 
     /**
+     * Converts a Color to a THREE.Color
+     * @public
+     *
+     * @param {Color} color
+     * @returns {THREE.Color}
+     */
+    colorToThree( color ) {
+      return new THREE.Color( color.toNumber() );
+    },
+
+    /**
      * Returns an array of [ x, y, z, ... ] vertices for a quad pointed towards the camera.
      * @public
      *
