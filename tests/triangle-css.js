@@ -21,26 +21,26 @@ require( [ 'config' ], function() {
     // var triangleInverseMatrix = dot.Matrix3.createFromPool( 0, triangleSize, 2 * triangleSize,
     //                                              0, triangleSize, 0,
     //                                              1, 1,            1 ).inverted();
-    var pad = window.padTriangles || 0;
-    var triangleInverseMatrix = dot.Matrix3.createFromPool( pad, triangleSize, 2 * triangleSize - pad,
+    const pad = window.padTriangles || 0;
+    const triangleInverseMatrix = dot.Matrix3.createFromPool( pad, triangleSize, 2 * triangleSize - pad,
       pad, triangleSize - pad, pad,
       1, 1, 1 ).inverted();
 
     // a,b,c {Vector3}
-    var tmpMatrix3 = dot.Matrix3.createFromPool();
+    const tmpMatrix3 = dot.Matrix3.createFromPool();
     window.setTriangleTransform = function( matrix4, a, b, c ) {
       // we solve for the 4x4 matrix that will transform (0,0) => a, (triangleSize,triangleSize) => b, (2*triangleSize,0) => c
       // we also want the affine matrix that is of a certain form for the ignored initial z indices (think (x,y,0,1) as input)
-      var m = tmpMatrix3.rowMajor( a.x, b.x, c.x, a.y, b.y, c.y, a.z, b.z, c.z ).multiplyMatrix( triangleInverseMatrix );
+      const m = tmpMatrix3.rowMajor( a.x, b.x, c.x, a.y, b.y, c.y, a.z, b.z, c.z ).multiplyMatrix( triangleInverseMatrix );
       return matrix4.rowMajor( m.m00(), m.m01(), 0, m.m02(),
         m.m10(), m.m11(), 0, m.m12(),
         m.m20(), m.m21(), 1, m.m22(),
         0, 0, 0, 1 );
     };
 
-    var phi = ( 1 + Math.sqrt( 5 ) ) / 2;
+    const phi = ( 1 + Math.sqrt( 5 ) ) / 2;
 
-    var icosahedronPoints = [
+    const icosahedronPoints = [
       dot.v3( 0, 1, phi ),   // 0
       dot.v3( 0, -1, phi ),  // 1
       dot.v3( 0, 1, -phi ),  // 2
@@ -56,12 +56,12 @@ require( [ 'config' ], function() {
       dot.v3( -phi, 0, 1 ),  // 10
       dot.v3( -phi, 0, -1 )  // 11
     ];
-    for ( var j = 0; j < icosahedronPoints.length; j++ ) {
+    for ( let j = 0; j < icosahedronPoints.length; j++ ) {
       icosahedronPoints[ j ] = icosahedronPoints[ j ].times( 100 );
     }
-    var vertexMagnitude = icosahedronPoints[ 0 ].magnitude;
+    const vertexMagnitude = icosahedronPoints[ 0 ].magnitude;
 
-    var icosahedronFaces = [
+    let icosahedronFaces = [
       [ 4, 5, 0 ],
       [ 5, 4, 2 ],
       [ 4, 0, 8 ],
@@ -88,7 +88,7 @@ require( [ 'config' ], function() {
       subdivisions--;
 
       // add new points
-      var n = icosahedronPoints.length;
+      const n = icosahedronPoints.length;
       var map = {};
       for ( var ia = 0; ia < n; ia++ ) {
         for ( var ib = ia + 1; ib < n; ib++ ) {
@@ -96,7 +96,7 @@ require( [ 'config' ], function() {
 
           if ( _.some( icosahedronFaces, function( face ) { return _.includes( face, ia ) && _.includes( face, ib ); } ) ) {
             // adjacent vertices, create a new vertex in-between with the same magnitude
-            var idx = icosahedronPoints.length;
+            const idx = icosahedronPoints.length;
             icosahedronPoints.push( icosahedronPoints[ ia ].plus( icosahedronPoints[ ib ] ).normalized().times( vertexMagnitude ) );
             map[ ia + '-' + ib ] = idx; // store the index for later
           }
@@ -106,13 +106,13 @@ require( [ 'config' ], function() {
       // replace with all new faces
       var newFaces = [];
       _.each( icosahedronFaces, function( face ) {
-        var a = face[ 0 ];
-        var b = face[ 1 ];
-        var c = face[ 2 ];
+        const a = face[ 0 ];
+        const b = face[ 1 ];
+        const c = face[ 2 ];
         // TODO: optimize so we only do one access with the smallest first?
-        var ab = map[ a + '-' + b ] || map[ b + '-' + a ];
-        var ac = map[ a + '-' + c ] || map[ c + '-' + a ];
-        var bc = map[ b + '-' + c ] || map[ c + '-' + b ];
+        const ab = map[ a + '-' + b ] || map[ b + '-' + a ];
+        const ac = map[ a + '-' + c ] || map[ c + '-' + a ];
+        const bc = map[ b + '-' + c ] || map[ c + '-' + b ];
         if ( ab === undefined || ac === undefined || bc === undefined ) { throw new Error(); }
 
         // three outer faces
@@ -128,11 +128,11 @@ require( [ 'config' ], function() {
 
     scenery.Util.polyfillRequestAnimationFrame();
 
-    var triangles = [];
-    var container = document.getElementById( 'container' );
+    const triangles = [];
+    const container = document.getElementById( 'container' );
 
-    for ( var i = 0; i < icosahedronFaces.length; i++ ) {
-      var div = document.createElement( 'div' );
+    for ( let i = 0; i < icosahedronFaces.length; i++ ) {
+      const div = document.createElement( 'div' );
       div.className = 'tri';
       div.style.borderLeft = triangleSize + 'px solid transparent';
       div.style.borderRight = triangleSize + 'px solid transparent';
@@ -162,9 +162,9 @@ require( [ 'config' ], function() {
       triangles.push( div );
     }
 
-    var rot = 0;
-    var lastTime = 0;
-    var timeElapsed = 0;
+    let rot = 0;
+    let lastTime = 0;
+    let timeElapsed = 0;
 
     // var canvasWidth = 512;
     // var canvasHeight = 512;
@@ -176,29 +176,29 @@ require( [ 'config' ], function() {
     //   canvasWidth / canvasHeight,
     //   nearPlane, farPlane );
 
-    var triangleTransformMatrix = new dot.Matrix4();
+    const triangleTransformMatrix = new dot.Matrix4();
 
     function updateTriangles() {
-      var k;
+      let k;
 
-      var pts = [];
-      var modelViewMatrix = dot.Matrix4.translation( 0, 0, -20 ).timesMatrix( dot.Matrix4.rotationY( rot ) );
+      const pts = [];
+      const modelViewMatrix = dot.Matrix4.translation( 0, 0, -20 ).timesMatrix( dot.Matrix4.rotationY( rot ) );
       for ( k = 0; k < icosahedronPoints.length; k++ ) {
         pts.push( modelViewMatrix.timesVector3( icosahedronPoints[ k ] ) );
       }
 
       for ( k = 0; k < triangles.length; k++ ) {
-        var faces = icosahedronFaces[ k ];
+        const faces = icosahedronFaces[ k ];
         triangles[ k ].style.webkitTransform = triangles[ k ].style.transform = ( setTriangleTransform( triangleTransformMatrix, pts[ faces[ 0 ] ], pts[ faces[ 1 ] ], pts[ faces[ 2 ] ] ) ).getCSSTransform();
       }
     }
 
     updateTriangles();
 
-    var sunDirection = dot.v3( -1, 0.5, 2 ).normalized();
-    var moonDirection = dot.v3( 2, -1, 1 ).normalized();
-    var sunWeight = 0.8;
-    var moonWeight = 0.6;
+    const sunDirection = dot.v3( -1, 0.5, 2 ).normalized();
+    const moonDirection = dot.v3( 2, -1, 1 ).normalized();
+    const sunWeight = 0.8;
+    const moonWeight = 0.6;
 
     function draw() {
       if ( window.containerUpdate ) {
@@ -208,19 +208,19 @@ require( [ 'config' ], function() {
         updateTriangles();
       }
       if ( window.colorFaces ) {
-        var reverseRotation = dot.Matrix4.rotationY( -rot ); // this is a fast way to get the inverse :)
-        for ( var fidx = 0; fidx < icosahedronFaces.length; fidx++ ) {
-          var face = icosahedronFaces[ fidx ];
+        const reverseRotation = dot.Matrix4.rotationY( -rot ); // this is a fast way to get the inverse :)
+        for ( let fidx = 0; fidx < icosahedronFaces.length; fidx++ ) {
+          const face = icosahedronFaces[ fidx ];
 
-          var normal = icosahedronPoints[ face[ 0 ] ].plus( icosahedronPoints[ face[ 1 ] ].plus( icosahedronPoints[ face[ 2 ] ] ) );
-          var transformedNormal = reverseRotation.timesTransposeVector3( normal ).normalized();
+          const normal = icosahedronPoints[ face[ 0 ] ].plus( icosahedronPoints[ face[ 1 ] ].plus( icosahedronPoints[ face[ 2 ] ] ) );
+          const transformedNormal = reverseRotation.timesTransposeVector3( normal ).normalized();
 
-          var sunTotal = Math.max( 0, transformedNormal.dot( sunDirection ) ) * sunWeight;
-          var moonTotal = Math.max( 0, transformedNormal.dot( moonDirection ) ) * moonWeight;
+          const sunTotal = Math.max( 0, transformedNormal.dot( sunDirection ) ) * sunWeight;
+          const moonTotal = Math.max( 0, transformedNormal.dot( moonDirection ) ) * moonWeight;
 
-          var weight = Math.min( 1, sunTotal + moonTotal );
+          const weight = Math.min( 1, sunTotal + moonTotal );
 
-          var borderStyle = triangleSize + 'px solid rgb(' + Math.floor( weight * 255 ) + ',' + Math.floor( weight * 255 ) + ',' + Math.floor( weight * 255 ) + ')';
+          const borderStyle = triangleSize + 'px solid rgb(' + Math.floor( weight * 255 ) + ',' + Math.floor( weight * 255 ) + ',' + Math.floor( weight * 255 ) + ')';
           triangles[ fidx ].style.borderTop = borderStyle;
         }
       }
@@ -232,7 +232,7 @@ require( [ 'config' ], function() {
 
     function tick() {
       window.requestAnimationFrame( tick, document.body );
-      var timeNow = new Date().getTime();
+      const timeNow = new Date().getTime();
       if ( lastTime !== 0 ) {
         timeElapsed = timeNow - lastTime;
       }

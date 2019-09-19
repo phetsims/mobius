@@ -4,7 +4,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
   'use strict';
 
   $( document ).ready( function() {
-    var canvas = $( '#canvas' )[0];
+    const canvas = $( '#canvas' )[0];
 
     // stop text selection on the canvas
     canvas.onselectstart = function() {
@@ -13,13 +13,13 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
 
     if ( canvas.getContext ) {
 
-      var shaderProgram;
+      let shaderProgram;
 
-      var gl = mobius.Util.initWebGL( canvas );
+      const gl = mobius.Util.initWebGL( canvas );
 
-      var initShaders = function() {
-        var fragmentShader = mobius.Util.getShaderFromDOM( gl, 'shader-fs' );
-        var vertexShader = mobius.Util.getShaderFromDOM( gl, 'shader-vs' );
+      const initShaders = function() {
+        const fragmentShader = mobius.Util.getShaderFromDOM( gl, 'shader-fs' );
+        const vertexShader = mobius.Util.getShaderFromDOM( gl, 'shader-vs' );
 
         shaderProgram = gl.createProgram();
         gl.attachShader( shaderProgram, vertexShader );
@@ -52,7 +52,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
       gl.enable( gl.BLEND );
       gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA );
 
-      var colorWrapper = function( red, green, blue, alpha ) {
+      const colorWrapper = function( red, green, blue, alpha ) {
         return {
           preRender: function( args ) {
             gl.uniform4f( shaderProgram.atomColor, red, green, blue, alpha );
@@ -64,31 +64,31 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
         };
       };
 
-      var whiteColorWrapper = colorWrapper( 1, 1, 1, 1 );
-      var centerColorWrapper = colorWrapper( 159 / 255.0, 102 / 255.0, 218 / 255.0, 1 );
+      const whiteColorWrapper = colorWrapper( 1, 1, 1, 1 );
+      const centerColorWrapper = colorWrapper( 159 / 255.0, 102 / 255.0, 218 / 255.0, 1 );
 
-      var defaultAtomRadius = 0.4;
-      var defaultBondRadius = defaultAtomRadius / 4;
+      const defaultAtomRadius = 0.4;
+      const defaultBondRadius = defaultAtomRadius / 4;
 
-      var scene = new mobius.GLNode();
+      const scene = new mobius.GLNode();
       scene.transform.append( dot.Matrix4.translation( 0, 0, -40 ) );
       scene.transform.append( dot.Matrix4.scaling( 5, 5, 5 ) );
 
-      var sphere1 = new mobius.Sphere( gl, defaultAtomRadius, 25, 25 );
+      const sphere1 = new mobius.Sphere( gl, defaultAtomRadius, 25, 25 );
       sphere1.wrappers.push( centerColorWrapper );
 
-      var bondDistance = 2;
-      var bondSq2 = bondDistance / Math.sqrt( 2 );
+      const bondDistance = 2;
+      const bondSq2 = bondDistance / Math.sqrt( 2 );
 
-      var sphere2 = new mobius.Sphere( gl, defaultAtomRadius, 25, 25 );
+      const sphere2 = new mobius.Sphere( gl, defaultAtomRadius, 25, 25 );
       sphere2.transform.append( dot.Matrix4.translation( -bondSq2, bondSq2, 0 ) );
       sphere2.wrappers.push( whiteColorWrapper );
 
-      var sphere3 = new mobius.Sphere( gl, defaultAtomRadius, 25, 25 );
+      const sphere3 = new mobius.Sphere( gl, defaultAtomRadius, 25, 25 );
       sphere3.transform.append( dot.Matrix4.translation( bondSq2, -bondSq2, 0 ) );
       sphere3.wrappers.push( whiteColorWrapper );
 
-      var cylinder = new mobius.Cylinder( gl, defaultBondRadius, bondDistance * 2, 16, 1 );
+      const cylinder = new mobius.Cylinder( gl, defaultBondRadius, bondDistance * 2, 16, 1 );
       cylinder.transform.append( dot.Matrix4.rotationZ( Math.PI / 4 ) );
       cylinder.transform.append( dot.Matrix4.rotationX( Math.PI / 2 ) );
       cylinder.wrappers.push( whiteColorWrapper );
@@ -99,10 +99,10 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
       scene.addChild( cylinder );
 
       // var rot = 0;
-      var lastTime = 0;
-      var timeElapsed = 0;
+      let lastTime = 0;
+      let timeElapsed = 0;
 
-      var draw = function() {
+      const draw = function() {
         // Only continue if WebGL is available and working
         if ( gl ) {
           gl.viewportWidth = canvas.width;
@@ -111,10 +111,10 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
           gl.viewport( 0, 0, gl.viewportWidth, gl.viewportHeight );
           gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
 
-          var projectionMatrix = dot.Matrix4.gluPerspective( 25.0 / 180.0 * Math.PI, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0 );
+          const projectionMatrix = dot.Matrix4.gluPerspective( 25.0 / 180.0 * Math.PI, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0 );
           gl.uniformMatrix4fv( shaderProgram.pMatrixUniform, false, projectionMatrix.entries );
 
-          var args = new mobius.GLNode.RenderState();
+          const args = new mobius.GLNode.RenderState();
           args.transformAttribute = shaderProgram.mvMatrixUniform;
           args.inverseTransposeAttribute = shaderProgram.inverseTransposeMatrixUniform;
           args.positionAttribute = shaderProgram.vertexPositionAttribute;
@@ -126,13 +126,13 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
         }
       };
 
-      var animate = function() {
+      const animate = function() {
         // rot += (Math.PI / 2 * timeElapsed) / 1000.0;
       };
 
       var tick = function() {
         window.requestAnimationFrame( tick, canvas );
-        var timeNow = new Date().getTime();
+        const timeNow = new Date().getTime();
         if ( lastTime !== 0 ) {
           timeElapsed = timeNow - lastTime;
         }
@@ -142,9 +142,9 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
         draw();
       };
 
-      var usePointerCursor = false;
+      const usePointerCursor = false;
 
-      var updateCursor = function( x, y ) {
+      const updateCursor = function( x, y ) {
         if ( usePointerCursor ) {
           $( canvas ).css( 'cursor', 'pointer' );
         }
@@ -153,7 +153,7 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
         }
       };
 
-      var resizer = function() {
+      const resizer = function() {
         canvas.width = $( window ).width();
         canvas.height = $( window ).height();
         gl.viewportWidth = canvas.width;
@@ -164,19 +164,19 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
 
       tick();
 
-      var moveListener = function( x, y ) {
+      const moveListener = function( x, y ) {
         updateCursor( x, y );
       };
 
-      var downListener = function( x, y ) {
+      const downListener = function( x, y ) {
         updateCursor( x, y );
       };
 
-      var upListener = function( x, y ) {
+      const upListener = function( x, y ) {
         updateCursor( x, y );
       };
 
-      var touchFromJQueryEvent = function( evt ) {
+      const touchFromJQueryEvent = function( evt ) {
         return evt.originalEvent.targetTouches[0];
       };
 
@@ -194,22 +194,22 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
       } );
       $( canvas ).bind( 'touchmove', function( evt ) {
         evt.preventDefault();
-        var touch = touchFromJQueryEvent( evt );
+        const touch = touchFromJQueryEvent( evt );
         moveListener( touch.pageX, touch.pageY );
       } );
       $( canvas ).bind( 'touchstart', function( evt ) {
         evt.preventDefault();
-        var touch = touchFromJQueryEvent( evt );
+        const touch = touchFromJQueryEvent( evt );
         downListener( touch.pageX, touch.pageY );
       } );
       $( canvas ).bind( 'touchend', function( evt ) {
         evt.preventDefault();
-        var touch = touchFromJQueryEvent( evt );
+        const touch = touchFromJQueryEvent( evt );
         upListener( touch.pageX, touch.pageY );
       } );
       $( canvas ).bind( 'touchcancel', function( evt ) {
         evt.preventDefault();
-        var touch = touchFromJQueryEvent( evt );
+        const touch = touchFromJQueryEvent( evt );
         upListener( touch.pageX, touch.pageY );
       } );
       resizer();
