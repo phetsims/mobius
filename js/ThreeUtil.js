@@ -120,6 +120,18 @@ define( require => {
         x, bounds2.maxY, bounds2.maxX,
         x, bounds2.maxY, bounds2.minX
       ];
+    },
+
+    /**
+     * Returns a THREE.Texture for a given HTMLImageElement.
+     * @public
+     *
+     * @param {HTMLImageElement} image
+     * @returns {THREE.Texture}
+     */
+    imageToTexture( image ) {
+      // TODO: Should we statically create a TextureLoader?
+      return new THREE.TextureLoader().load( image.src );
     }
   };
 
