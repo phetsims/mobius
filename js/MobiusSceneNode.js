@@ -30,9 +30,15 @@ define( require => {
     constructor( layoutBounds, options ) {
 
       options = _.extend( {
-        // TODO: cleanup
+        // {Property.<Color>}
         backgroundProperty: new Property( Color.BLACK ),
+
+        // {Vector3} - The initial camera position
         cameraPosition: new Vector3( 0, -1.25, 40 )
+
+        // upper-left pixels, positioned or transformed pixels, or full scenery-transformed?
+
+        // FOV auto-control on layout?
       }, options );
 
       super();
@@ -48,9 +54,9 @@ define( require => {
       // updated in layout
       this.activeScale = 1;
 
-      // @private {number}
-      this.screenWidth = 0; // @public
-      this.screenHeight = 0; // @public
+      // @public {number}
+      this.screenWidth = 0;
+      this.screenHeight = 0;
 
       // @public {THREE.Scene}
       this.threeScene = new THREE.Scene();
@@ -82,7 +88,7 @@ define( require => {
       } );
 
       options.backgroundProperty.link( color => {
-        this.threeRenderer.setClearColor( color.toNumber(), 1 );
+        this.threeRenderer.setClearColor( color.toNumber(), color.alpha );
       } );
 
       this.threeCamera.position.copy( ThreeUtil.vectorToThree( options.cameraPosition ) ); // sets the camera's position
@@ -96,8 +102,12 @@ define( require => {
         pickable: false
       } );
       this.domNode.invalidateDOM();
-      // Scenery override for transformation
-      this.domNode.updateCSSTransform = function() {};
+
+      /**
+          // Apply CSS needed for future CSS transforms to work properly.
+    scenery.Util.prepareForTransform( this.domElement, this.forceAcceleration );
+        scenery.Util.applyPreparedTransform( this.getTransformMatrix(), this.domElement, this.forceAcceleration );
+        */
 
       // support Scenery/Joist 0.2 screenshot (takes extra work to output)
       this.domNode.renderToCanvasSelf = wrapper => {
@@ -232,16 +242,7 @@ define( require => {
         return 1;
       }
 
-      // It's a bit tricky, since if we are vertically-constrained, we don't need to adjust the camera's FOV (since the
-      // width of the scene will scale proportionally to the scale we display our contents at). It's only when our view
-      // is horizontally-constrained where we have to account for the changed aspect ratio, and adjust the FOV so that
-      // the molecule shows up at a scale of "sy / sx" compared to the normal case. Note that sx === sy is where our
-      // layout bounds fit perfectly in the window, so we don't really have a constraint.
-      // Most of the complexity here is that threeCamera.fov is in degrees, and our ideal vertically-constrained FOV is
-      // 50 (so there's conversion factors in place).
-      const c = Math.tan( 25 * Math.PI / 180 ); // constant that will output the factor to use to maintain our 50 degree FOV
-      const adaptiveScale = Math.atan( c * sy / sx ) * 2 * 180 / Math.PI; // apply correction scales to maintain correct FOV
-      this.threeCamera.fov = sx > sy ? 50 : adaptiveScale;
+      this.threeCamera.fov = MobiusSceneNode.computeIsometricFOV( 50, canvasWidth, canvasHeight, this.layoutBounds.width, this.layoutBounds.height );
       this.activeScale = sy > sx ? sx : sy;
 
       // aspect ratio
@@ -274,23 +275,29 @@ define( require => {
       this.threeRenderer.autoClear = false;
     }
 
-    // /**
-    //  * @public
-    //  *
-    //  * @param {THREE.Scene} threeScene
-    //  */
-    // addLightsToScene: function( threeScene ) {
-    //   const ambientLight = new THREE.AmbientLight( 0x191919 ); // closest to 0.1 like the original shader
-    //   threeScene.add( ambientLight );
+    /**
+     * It's a bit tricky, since if we are vertically-constrained, we don't need to adjust the camera's FOV (since the
+     * width of the scene will scale proportionally to the scale we display our contents at). It's only when our view
+     * is horizontally-constrained where we have to account for the changed aspect ratio, and adjust the FOV so that
+     * the molecule shows up at a scale of "sy / sx" compared to the normal case. Note that sx === sy is where our
+     * layout bounds fit perfectly in the window, so we don't really have a constraint.
+     * Most of the complexity here is that threeCamera.fov is in degrees, and our ideal vertically-constrained FOV is
+     * 50 (so there's conversion factors in place).
+     * @public
+     *
+     * @param {number} fov
+     * @param {number} canvasWidth
+     * @param {number} canvasHeight
+     * @param {number} layoutWidth
+     * @param {number} layoutHeight
+     * @returns {number}
+     */
+    static computeIsometricFOV( fov, canvasWidth, canvasHeight, layoutWidth, layoutHeight ) {
+      const sx = canvasWidth / layoutWidth;
+      const sy = canvasHeight / layoutHeight;
 
-    //   const sunLight = new THREE.DirectionalLight( 0xffffff, 0.8 * 0.9 );
-    //   sunLight.position.set( -1.0, 0.5, 2.0 );
-    //   threeScene.add( sunLight );
-
-    //   const moonLight = new THREE.DirectionalLight( 0xffffff, 0.6 * 0.9 );
-    //   moonLight.position.set( 2.0, -1.0, 1.0 );
-    //   threeScene.add( moonLight );
-    // }
+      return sx > sy ? fov : Math.atan( Math.tan( fov * Math.PI / 360 ) * sy / sx ) * 360 / Math.PI;
+    }
   }
 
   return mobius.register( 'MobiusSceneNode', MobiusSceneNode );
