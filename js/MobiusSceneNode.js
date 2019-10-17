@@ -13,6 +13,7 @@ define( require => {
   const Color = require( 'SCENERY/util/Color' );
   const ContextLossFailureDialog = require( 'SCENERY_PHET/ContextLossFailureDialog' );
   const DOM = require( 'SCENERY/nodes/DOM' );
+  const merge = require( 'PHET_CORE/merge' );
   const mobius = require( 'MOBIUS/mobius' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Property = require( 'AXON/Property' );
@@ -29,7 +30,7 @@ define( require => {
      */
     constructor( layoutBounds, options ) {
 
-      options = _.extend( {
+      options = merge( {
         // {Property.<Color>}
         backgroundProperty: new Property( Color.BLACK ),
 
