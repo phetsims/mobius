@@ -1,7 +1,7 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * Base view for all "show a single molecule in the center" screens
+ * Encapsulates the main three.js primitives needed for a stage (scene/camera/renderer).
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -12,58 +12,45 @@ define( require => {
   const Bounds2 = require( 'DOT/Bounds2' );
   const Color = require( 'SCENERY/util/Color' );
   const ContextLossFailureDialog = require( 'SCENERY_PHET/ContextLossFailureDialog' );
-  const DOM = require( 'SCENERY/nodes/DOM' );
   const merge = require( 'PHET_CORE/merge' );
   const mobius = require( 'MOBIUS/mobius' );
-  const Node = require( 'SCENERY/nodes/Node' );
   const Property = require( 'AXON/Property' );
   const Ray3 = require( 'DOT/Ray3' );
-  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const ThreeUtil = require( 'MOBIUS/ThreeUtil' );
   const Vector2 = require( 'DOT/Vector2' );
   const Vector3 = require( 'DOT/Vector3' );
 
-  class MobiusSceneNode extends Node {
+  class ThreeStage {
     /**
-     * @param {Bounds2} layoutBounds
      * @param {Object} [options]
      */
-    constructor( layoutBounds, options ) {
+    constructor( options ) {
 
       options = merge( {
         // {Property.<Color>}
         backgroundProperty: new Property( Color.BLACK ),
 
         // {Vector3} - The initial camera position
-        cameraPosition: new Vector3( 0, -1.25, 40 )
-
-        // upper-left pixels, positioned or transformed pixels, or full scenery-transformed?
-
-        // FOV auto-control on layout?
+        cameraPosition: new Vector3( 0, 0, 10 )
       }, options );
-
-      super();
-
-      // @private {Bounds2}
-      this.layoutBounds = layoutBounds;
-
-      // @private {Node} - our target for drags that don't hit other UI components
-      this.backgroundEventTarget = Rectangle.bounds( this.layoutBounds, {} );
-      this.addChild( this.backgroundEventTarget );
 
       // @public {number} - scale applied to interaction that isn't directly tied to screen coordinates (rotation),
       // updated in layout
       this.activeScale = 1;
 
-      // @public {number}
-      this.screenWidth = 0;
-      this.screenHeight = 0;
+      // @private {number}
+      this.canvasWidth = 0;
+      this.canvasHeight = 0;
 
       // @public {THREE.Scene}
       this.threeScene = new THREE.Scene();
 
       // @public {THREE.Camera} - will set the projection parameters on layout
       this.threeCamera = new THREE.PerspectiveCamera();
+
+      // near/far clipping planes
+      this.threeCamera.near = 1;
+      this.threeCamera.far = 100;
 
       // @public {THREE.Renderer}
       this.threeRenderer = new THREE.WebGLRenderer( {
@@ -93,71 +80,47 @@ define( require => {
       } );
 
       this.threeCamera.position.copy( ThreeUtil.vectorToThree( options.cameraPosition ) ); // sets the camera's position
+    }
 
-      // @private add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
-      this.domNode = new DOM( this.threeRenderer.domElement, {
-        preventTransform: true, // Scenery override for transformation
-        invalidateDOM: function() { // don't do bounds detection, it's too expensive. We're not pickable anyways
-          this.invalidateSelf( new Bounds2( 0, 0, 0, 0 ) );
-        },
-        pickable: false
+    /**
+     * Returns a Canvas containing the displayed content in this scene.
+     * @public
+     *
+     * @returns {HTMLCanvasElement}
+     */
+    renderToCanvas() {
+      // This WebGL workaround is so we can avoid the preserveDrawingBuffer setting that would impact performance.
+      // We render to a framebuffer and extract the pixel data directly, since we can't create another renderer and
+      // share the view (three.js constraint).
+
+      // set up a framebuffer (target is three.js terminology) to render into
+      const target = new THREE.WebGLRenderTarget( this.canvasWidth, this.canvasHeight, {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.NearestFilter,
+        format: THREE.RGBAFormat
       } );
-      this.domNode.invalidateDOM();
+      // render our screen content into the framebuffer
+      this.render( target );
 
-      /**
-          // Apply CSS needed for future CSS transforms to work properly.
-    scenery.Util.prepareForTransform( this.domElement, this.forceAcceleration );
-        scenery.Util.applyPreparedTransform( this.getTransformMatrix(), this.domElement, this.forceAcceleration );
-        */
+      // set up a buffer for pixel data, in the exact typed formats we will need
+      const buffer = new window.ArrayBuffer( this.canvasWidth * this.canvasHeight * 4 );
+      const imageDataBuffer = new window.Uint8ClampedArray( buffer );
+      const pixels = new window.Uint8Array( buffer );
 
-      // support Scenery/Joist 0.2 screenshot (takes extra work to output)
-      this.domNode.renderToCanvasSelf = wrapper => {
-        const effectiveWidth = Math.ceil( this.screenWidth );
-        const effectiveHeight = Math.ceil( this.screenHeight );
+      // read the pixel data into the buffer
+      const gl = this.threeRenderer.getContext();
+      gl.readPixels( 0, 0, this.canvasWidth, this.canvasHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels );
 
-        // This WebGL workaround is so we can avoid the preserveDrawingBuffer setting that would impact performance.
-        // We render to a framebuffer and extract the pixel data directly, since we can't create another renderer and
-        // share the view (three.js constraint).
+      // create a Canvas with the correct size, and fill it with the pixel data
+      const canvas = document.createElement( 'canvas' );
+      canvas.width = this.canvasWidth;
+      canvas.height = this.canvasHeight;
+      const context = canvas.getContext( '2d' );
+      const imageData = context.createImageData( this.canvasWidth, this.canvasHeight );
+      imageData.data.set( imageDataBuffer );
+      context.putImageData( imageData, 0, 0 );
 
-        // set up a framebuffer (target is three.js terminology) to render into
-        const target = new THREE.WebGLRenderTarget( effectiveWidth, effectiveHeight, {
-          minFilter: THREE.LinearFilter,
-          magFilter: THREE.NearestFilter,
-          format: THREE.RGBAFormat
-        } );
-        // render our screen content into the framebuffer
-        this.render( target );
-
-        // set up a buffer for pixel data, in the exact typed formats we will need
-        const buffer = new window.ArrayBuffer( effectiveWidth * effectiveHeight * 4 );
-        const imageDataBuffer = new window.Uint8ClampedArray( buffer );
-        const pixels = new window.Uint8Array( buffer );
-
-        // read the pixel data into the buffer
-        const gl = this.threeRenderer.getContext();
-        gl.readPixels( 0, 0, effectiveWidth, effectiveHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels );
-
-        // create a Canvas with the correct size, and fill it with the pixel data
-        const canvas = document.createElement( 'canvas' );
-        canvas.width = effectiveWidth;
-        canvas.height = effectiveHeight;
-        const tmpContext = canvas.getContext( '2d' );
-        const imageData = tmpContext.createImageData( effectiveWidth, effectiveHeight );
-        imageData.data.set( imageDataBuffer );
-        tmpContext.putImageData( imageData, 0, 0 );
-
-        const context = wrapper.context;
-        context.save();
-
-        context.setTransform( 1, 0, 0, -1, 0, effectiveHeight ); // no need to take pixel scaling into account
-
-        context.drawImage( canvas, 0, 0 );
-        context.restore();
-      };
-
-      this.addChild( this.domNode );
-
-      this.mutate( options );
+      return canvas;
     }
 
     /**
@@ -170,15 +133,17 @@ define( require => {
       this.contextLossDialog.show();
     }
 
-    /*
+    /**
+     * Returns a three.js Raycaster meant for ray operations.
      * @private
+     *
      * @param {Vector2} screenPoint
      * @returns {THREE.Raycaster}
      */
     getRaycasterFromScreenPoint( screenPoint ) {
       // normalized device coordinates
-      const ndcX = 2 * screenPoint.x / this.screenWidth - 1;
-      const ndcY = 2 * ( 1 - ( screenPoint.y / this.screenHeight ) ) - 1;
+      const ndcX = 2 * screenPoint.x / this.canvasWidth - 1;
+      const ndcY = 2 * ( 1 - ( screenPoint.y / this.canvasHeight ) ) - 1;
 
       const mousePoint = new THREE.Vector3( ndcX, ndcY, 0 );
       const raycaster = new THREE.Raycaster();
@@ -207,12 +172,14 @@ define( require => {
       }
 
       return new Vector2(
-        ( threePoint.x + 1 ) * this.screenWidth / 2,
-        ( -threePoint.y + 1 ) * this.screenHeight / 2
+        ( threePoint.x + 1 ) * this.canvasWidth / 2,
+        ( -threePoint.y + 1 ) * this.canvasHeight / 2
       );
     }
 
-    /*
+    /**
+     * Given a screen point, returns a 3D ray representing the camera's position and direction that point would be in the
+     * 3D scene.
      * @private
      *
      * @param {Vector2} screenPoint
@@ -223,43 +190,45 @@ define( require => {
       return new Ray3( ThreeUtil.threeToVector( threeRay.origin ), ThreeUtil.threeToVector( threeRay.direction ).normalize() );
     }
 
+    setDimensions( width, height ) {
+      assert && assert( typeof width === 'number' && width % 1 === 0 );
+      assert && assert( typeof height === 'number' && height % 1 === 0 );
+
+      this.canvasWidth = width;
+      this.canvasHeight = height;
+
+      this.threeCamera.updateProjectionMatrix();
+      this.threeRenderer.setSize( this.canvasWidth, this.canvasHeight );
+    }
+
     /**
      * @override
      * @protected
      */
     layout( width, height ) {
-      this.backgroundEventTarget.setRectBounds( this.globalToLocalBounds( new Bounds2( 0, 0, width, height ) ) );
+      this.canvasWidth = Math.ceil( width );
+      this.canvasHeight = Math.ceil( height );
 
-      this.screenWidth = width;
-      this.screenHeight = height;
-
-      const canvasWidth = Math.ceil( width );
-      const canvasHeight = Math.ceil( height );
+      this.backgroundEventTarget.setRectBounds( this.globalToLocalBounds( new Bounds2( 0, 0, this.canvasWidth, this.canvasHeight ) ) );
 
       // field of view (FOV) computation for the isometric view scaling we use
-      const sx = canvasWidth / this.layoutBounds.width;
-      const sy = canvasHeight / this.layoutBounds.height;
+      const sx = this.canvasWidth / this.layoutBounds.width;
+      const sy = this.canvasHeight / this.layoutBounds.height;
       if ( sx === 0 || sy === 0 ) {
         return 1;
       }
 
-      this.threeCamera.fov = MobiusSceneNode.computeIsometricFOV( 50, canvasWidth, canvasHeight, this.layoutBounds.width, this.layoutBounds.height );
+      this.threeCamera.fov = ThreeStage.computeIsometricFOV( 50, this.canvasWidth, this.canvasHeight, this.layoutBounds.width, this.layoutBounds.height );
       this.activeScale = sy > sx ? sx : sy;
 
       // aspect ratio
-      this.threeCamera.aspect = canvasWidth / canvasHeight;
-
-      // near clipping plane
-      this.threeCamera.near = 1;
-
-      // far clipping plane
-      this.threeCamera.far = 100;
+      this.threeCamera.aspect = this.canvasWidth / this.canvasHeight;
 
       // three.js requires this to be called after changing the parameters
       this.threeCamera.updateProjectionMatrix();
 
       // update the size of the renderer
-      this.threeRenderer.setSize( Math.ceil( width ), Math.ceil( height ) );
+      this.threeRenderer.setSize( this.canvasWidth, this.canvasHeight );
 
       this.domNode.invalidateDOM();
     }
@@ -301,5 +270,5 @@ define( require => {
     }
   }
 
-  return mobius.register( 'MobiusSceneNode', MobiusSceneNode );
+  return mobius.register( 'ThreeStage', ThreeStage );
 } );
