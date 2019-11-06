@@ -8,7 +8,7 @@
 
 require.config( {
   // depends on all of Mobius, Scenery, Kite, and Dot
-  deps: [ 'main', 'SCENERY/main', 'KITE/main', 'DOT/main', 'PHET_CORE/main' ],
+  deps: [ 'main', 'SCENERY/main', 'KITE/main', 'DOT/main', 'PHET_CORE/main', 'UTTERANCE_QUEUE/main' ],
 
   paths: {
     MOBIUS: '.',
@@ -16,7 +16,8 @@ require.config( {
     KITE: '../../kite/js',
     DOT: '../../dot/js',
     PHET_CORE: '../../phet-core/js',
-    AXON: '../../axon/js'
+    AXON: '../../axon/js',
+    UTTERANCE_QUEUE: '../../utterance-queue/js'
   },
 
   // optional cache bust to make browser refresh load all included scripts, can be disabled with ?cacheBust=false
