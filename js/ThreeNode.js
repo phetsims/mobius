@@ -65,7 +65,7 @@ define( require => {
         preventTransform: true, // Scenery override for transformation
         pickable: false
       } );
-      this.domNode.calculateDOMBounds = () => { return new Bounds2( 0, 0, 0, 0 ); };
+      this.domNode.calculateDOMBounds = () => new Bounds2( 0, 0, 0, 0 );
       this.domNode.invalidateDOM();
 
       const forceAcceleration = false;
