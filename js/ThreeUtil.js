@@ -9,8 +9,17 @@ define( require => {
   'use strict';
 
   // modules
+  const FontAwesomeNode = require( 'SUN/FontAwesomeNode' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
   const mobius = require( 'MOBIUS/mobius' );
+  const openPopup = require( 'PHET_CORE/openPopup' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const Util = require( 'SCENERY/util/Util' );
   const Vector3 = require( 'DOT/Vector3' );
+
+  // strings
+  const webglWarningBodyString = require( 'string!SCENERY_PHET/webglWarning.body' );
 
   const ThreeUtil = {
     /**
@@ -132,6 +141,52 @@ define( require => {
     imageToTexture( image ) {
       // TODO: Should we statically create a TextureLoader?
       return new THREE.TextureLoader().load( image.src );
+    },
+
+    /**
+     * Checks if webgl is enabled by the browser.
+     * @public
+     *
+     * @returns {boolean}
+     */
+    isWebGLEnabled() {
+      return !phet.chipper.queryParameters.webgl || !Util.isWebGLSupported;
+    },
+
+    /**
+     * Shows a warning with a link to more information about PhET simulation webgl compatibility.
+     * @public
+     *
+     * @param screenView
+     * @returns {ScreenView}
+     */
+    showWebGLWarning( screenView ) {
+      const warningNode = new HBox( {
+        children: [
+          new FontAwesomeNode( 'warning_sign', {
+            fill: '#E87600', // "safety orange", according to Wikipedia
+            scale: 0.8
+          } ),
+          new Text( webglWarningBodyString, {
+            font: new PhetFont( 16 ),
+            fill: '#000',
+            maxWidth: 600
+          } )
+        ],
+        spacing: 12,
+        align: 'center',
+        cursor: 'pointer',
+        center: screenView.layoutBounds.center
+      } );
+      screenView.addChild( warningNode );
+
+      warningNode.mouseArea = warningNode.touchArea = warningNode.localBounds;
+
+      warningNode.addInputListener( {
+        up: function() {
+          openPopup( 'http://phet.colorado.edu/webgl-disabled-page?simLocale=' + phet.joist.sim.locale );
+        }
+      } );
     }
   };
 
