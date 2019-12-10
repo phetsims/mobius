@@ -150,7 +150,7 @@ define( require => {
      * @returns {boolean}
      */
     isWebGLEnabled() {
-      return !phet.chipper.queryParameters.webgl || !Util.isWebGLSupported;
+      return phet.chipper.queryParameters.webgl && Util.isWebGLSupported;
     },
 
     /**
