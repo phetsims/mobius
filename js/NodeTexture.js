@@ -28,7 +28,6 @@ define( require => {
       } );
       display.updateDisplay();
 
-      // TODO: don't use this level of hack
       const canvas = display._rootBackbone.blocks[ 0 ].canvas;
 
       super( canvas );

@@ -127,8 +127,6 @@ define( require => {
       this.stage.setDimensions( roundedBounds.width, roundedBounds.height );
       this.offsetProperty.value = roundedBounds.leftTop;
 
-      // TODO: activeScale setter?
-
       // three.js requires this to be called after changing the parameters
       this.stage.threeCamera.updateProjectionMatrix();
 

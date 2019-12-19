@@ -21,6 +21,9 @@ define( require => {
   // strings
   const webglWarningBodyString = require( 'string!SCENERY_PHET/webglWarning.body' );
 
+  // {THREE.TextureLoader|null} - "singleton" for the texture loader
+  let textureLoader = null;
+
   const ThreeUtil = {
     /**
      * Converts a Vector3 to a THREE.Vector3
@@ -132,6 +135,19 @@ define( require => {
     },
 
     /**
+     * Returns a THREE.TextureLoader instance (using a singleton so we don't create more than we need).
+     * @public
+     *
+     * @returns {THREE.TextureLoader}
+     */
+    get textureLoader() {
+      if ( !textureLoader ) {
+        textureLoader = new THREE.TextureLoader();
+      }
+      return textureLoader;
+    },
+
+    /**
      * Returns a THREE.Texture for a given HTMLImageElement.
      * @public
      *
@@ -139,8 +155,7 @@ define( require => {
      * @returns {THREE.Texture}
      */
     imageToTexture( image ) {
-      // TODO: Should we statically create a TextureLoader?
-      return new THREE.TextureLoader().load( image.src );
+      return ThreeUtil.textureLoader.load( image.src );
     },
 
     /**
