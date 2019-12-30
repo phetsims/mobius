@@ -18,7 +18,7 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const ThreeStage = require( 'MOBIUS/ThreeStage' );
-  const Util = require( 'SCENERY/util/Util' );
+  const Utils = require( 'SCENERY/util/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
   const Vector2Property = require( 'DOT/Vector2Property' );
 
@@ -70,10 +70,10 @@ define( require => {
 
       const forceAcceleration = false;
       const offsetMatrix = new Matrix3();
-      Util.prepareForTransform( this.stage.threeRenderer.domElement, forceAcceleration );
+      Utils.prepareForTransform( this.stage.threeRenderer.domElement, forceAcceleration );
       this.offsetProperty.link( offset => {
         offsetMatrix.setToTranslation( offset.x, offset.y );
-        Util.applyPreparedTransform( offsetMatrix, this.stage.threeRenderer.domElement, forceAcceleration );
+        Utils.applyPreparedTransform( offsetMatrix, this.stage.threeRenderer.domElement, forceAcceleration );
       } );
 
       // support Scenery/Joist 0.2 screenshot (takes extra work to output)

@@ -15,7 +15,7 @@ define( require => {
   const openPopup = require( 'PHET_CORE/openPopup' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Text = require( 'SCENERY/nodes/Text' );
-  const Util = require( 'SCENERY/util/Util' );
+  const Utils = require( 'SCENERY/util/Utils' );
   const Vector3 = require( 'DOT/Vector3' );
 
   // strings
@@ -165,7 +165,7 @@ define( require => {
      * @returns {boolean}
      */
     isWebGLEnabled() {
-      return phet.chipper.queryParameters.webgl && Util.isWebGLSupported;
+      return phet.chipper.queryParameters.webgl && Utils.isWebGLSupported;
     },
 
     /**

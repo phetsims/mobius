@@ -15,11 +15,11 @@ requirejs( [ 'main', '../../scenery/js/main', '../../kite/js/main', '../../dot/j
 
       let shaderProgram;
 
-      const gl = mobius.Util.initWebGL( canvas );
+      const gl = mobius.Utils.initWebGL( canvas );
 
       const initShaders = function() {
-        const fragmentShader = mobius.Util.getShaderFromDOM( gl, 'shader-fs' );
-        const vertexShader = mobius.Util.getShaderFromDOM( gl, 'shader-vs' );
+        const fragmentShader = mobius.Utils.getShaderFromDOM( gl, 'shader-fs' );
+        const vertexShader = mobius.Utils.getShaderFromDOM( gl, 'shader-vs' );
 
         shaderProgram = gl.createProgram();
         gl.attachShader( shaderProgram, vertexShader );

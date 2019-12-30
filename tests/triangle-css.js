@@ -126,7 +126,7 @@ require( [ 'config' ], function() {
       icosahedronFaces = newFaces;
     }
 
-    scenery.Util.polyfillRequestAnimationFrame();
+    scenery.Utils.polyfillRequestAnimationFrame();
 
     const triangles = [];
     const container = document.getElementById( 'container' );

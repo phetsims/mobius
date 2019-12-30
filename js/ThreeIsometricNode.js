@@ -61,8 +61,8 @@ define( require => {
 
       /**
           // Apply CSS needed for future CSS transforms to work properly.
-    scenery.Util.prepareForTransform( this.domElement, this.forceAcceleration );
-        scenery.Util.applyPreparedTransform( this.getTransformMatrix(), this.domElement, this.forceAcceleration );
+    scenery.Utils.prepareForTransform( this.domElement, this.forceAcceleration );
+        scenery.Utils.applyPreparedTransform( this.getTransformMatrix(), this.domElement, this.forceAcceleration );
         */
 
       // support Scenery/Joist 0.2 screenshot (takes extra work to output)
