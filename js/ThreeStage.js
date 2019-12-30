@@ -16,7 +16,7 @@ define( require => {
   const mobius = require( 'MOBIUS/mobius' );
   const Property = require( 'AXON/Property' );
   const Ray3 = require( 'DOT/Ray3' );
-  const ThreeUtil = require( 'MOBIUS/ThreeUtil' );
+  const ThreeUtils = require( 'MOBIUS/ThreeUtils' );
   const Vector2 = require( 'DOT/Vector2' );
   const Vector3 = require( 'DOT/Vector3' );
 
@@ -79,7 +79,7 @@ define( require => {
         this.threeRenderer.setClearColor( color.toNumber(), color.alpha );
       } );
 
-      this.threeCamera.position.copy( ThreeUtil.vectorToThree( options.cameraPosition ) ); // sets the camera's position
+      this.threeCamera.position.copy( ThreeUtils.vectorToThree( options.cameraPosition ) ); // sets the camera's position
     }
 
     /**
@@ -159,7 +159,7 @@ define( require => {
      * @returns {Vector2}
      */
     projectPoint( point ) {
-      const threePoint = ThreeUtil.vectorToThree( point );
+      const threePoint = ThreeUtils.vectorToThree( point );
       threePoint.project( this.threeCamera ); // global to NDC
 
       // Potential fix for https://github.com/phetsims/molecule-shapes/issues/145.
@@ -187,7 +187,7 @@ define( require => {
      */
     getRayFromScreenPoint( screenPoint ) {
       const threeRay = this.getRaycasterFromScreenPoint( screenPoint ).ray;
-      return new Ray3( ThreeUtil.threeToVector( threeRay.origin ), ThreeUtil.threeToVector( threeRay.direction ).normalize() );
+      return new Ray3( ThreeUtils.threeToVector( threeRay.origin ), ThreeUtils.threeToVector( threeRay.direction ).normalize() );
     }
 
     setDimensions( width, height ) {

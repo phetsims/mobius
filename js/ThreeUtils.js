@@ -24,7 +24,7 @@ define( require => {
   // {THREE.TextureLoader|null} - "singleton" for the texture loader
   let textureLoader = null;
 
-  const ThreeUtil = {
+  const ThreeUtils = {
     /**
      * Converts a Vector3 to a THREE.Vector3
      * @public
@@ -155,7 +155,7 @@ define( require => {
      * @returns {THREE.Texture}
      */
     imageToTexture( image ) {
-      return ThreeUtil.textureLoader.load( image.src );
+      return ThreeUtils.textureLoader.load( image.src );
     },
 
     /**
@@ -205,5 +205,5 @@ define( require => {
     }
   };
 
-  return mobius.register( 'ThreeUtil', ThreeUtil );
+  return mobius.register( 'ThreeUtils', ThreeUtils );
 } );
