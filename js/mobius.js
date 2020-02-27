@@ -10,11 +10,6 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-define( require => {
-  'use strict';
+import Namespace from '../../phet-core/js/Namespace.js';
 
-  // modules
-  const Namespace = require( 'PHET_CORE/Namespace' );
-
-  return new Namespace( 'mobius' );
-} );
+export default new Namespace( 'mobius' );

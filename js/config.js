@@ -1,3 +1,4 @@
+
 // Copyright 2013-2019, University of Colorado Boulder
 
 /**
@@ -7,8 +8,8 @@
  */
 
 require.config( {
-  // depends on all of Mobius, Scenery, Kite, and Dot
-  deps: [ 'main', 'SCENERY/main', 'KITE/main', 'DOT/main', 'PHET_CORE/main', 'UTTERANCE_QUEUE/main' ],
+// depends on all of Mobius, Scenery, Kite, and Dot
+  deps: [ 'main', '/scenery/js/main', '/kite/js/main', '/dot/js/main', '/phet-core/js/main', '/utterance-queue/js/main' ],
 
   paths: {
     MOBIUS: '.',
@@ -20,6 +21,6 @@ require.config( {
     UTTERANCE_QUEUE: '../../utterance-queue/js'
   },
 
-  // optional cache bust to make browser refresh load all included scripts, can be disabled with ?cacheBust=false
+// optional cache bust to make browser refresh load all included scripts, can be disabled with ?cacheBust=false
   urlArgs: phet.chipper.getCacheBustArgs()
 } );
