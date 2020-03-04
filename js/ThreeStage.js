@@ -243,6 +243,15 @@ class ThreeStage {
   }
 
   /**
+   * Releases references.
+   * @public
+   */
+  dispose() {
+    this.threeRenderer.dispose();
+    this.threeScene.dispose();
+  }
+
+  /**
    * It's a bit tricky, since if we are vertically-constrained, we don't need to adjust the camera's FOV (since the
    * width of the scene will scale proportionally to the scale we display our contents at). It's only when our view
    * is horizontally-constrained where we have to account for the changed aspect ratio, and adjust the FOV so that

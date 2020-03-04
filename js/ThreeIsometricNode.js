@@ -145,6 +145,17 @@ class ThreeIsometricNode extends Node {
   render( target ) {
     this.stage.render( target );
   }
+
+  /**
+   * Releases references.
+   * @public
+   * @override
+   */
+  dispose() {
+    super.dispose();
+
+    this.stage.dispose();
+  }
 }
 
 mobius.register( 'ThreeIsometricNode', ThreeIsometricNode );
