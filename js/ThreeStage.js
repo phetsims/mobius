@@ -96,6 +96,7 @@ class ThreeStage {
       magFilter: THREE.NearestFilter,
       format: THREE.RGBAFormat
     } );
+
     // render our screen content into the framebuffer
     this.render( target );
 
@@ -238,7 +239,8 @@ class ThreeStage {
    */
   render( target ) {
     // render the 3D scene first
-    this.threeRenderer.render( this.threeScene, this.threeCamera, target );
+    this.threeRenderer.setRenderTarget( target || null );
+    this.threeRenderer.render( this.threeScene, this.threeCamera );
     this.threeRenderer.autoClear = false;
   }
 
