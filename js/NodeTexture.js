@@ -16,7 +16,8 @@ class NodeTexture extends THREE.Texture {
    */
   constructor( node, width, height ) {
     const scene = new Node( {
-      renderer: 'canvas'
+      renderer: 'canvas',
+      preventFit: true
     } );
     scene.addChild( node );
     const display = new Display( scene, {
@@ -34,6 +35,10 @@ class NodeTexture extends THREE.Texture {
 
     // @private {Node}
     this._scene = scene;
+
+    // @public {number}
+    this._width = width;
+    this._height = height;
 
     this.needsUpdate = true;
   }
