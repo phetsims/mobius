@@ -75,7 +75,7 @@ class ThreeNode extends Node {
 
     // support Scenery/Joist 0.2 screenshot (takes extra work to output)
     this.domNode.renderToCanvasSelf = wrapper => {
-      const canvas = this.stage.renderToCanvas();
+      const canvas = this.stage.renderToCanvas( 3 );
 
       const context = wrapper.context;
       context.save();

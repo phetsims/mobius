@@ -9,6 +9,7 @@
 import Property from '../../axon/js/Property.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
 import Ray3 from '../../dot/js/Ray3.js';
+import Utils from '../../dot/js/Utils.js';
 import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
 import merge from '../../phet-core/js/merge.js';
@@ -83,15 +84,21 @@ class ThreeStage {
    * Returns a Canvas containing the displayed content in this scene.
    * @public
    *
+   * @param {number} [supersampleMultiplier]
    * @returns {HTMLCanvasElement}
    */
-  renderToCanvas() {
+  renderToCanvas( supersampleMultiplier = 1 ) {
+    assert && assert( Utils.isInteger( supersampleMultiplier ) );
+
+    const width = this.canvasWidth * supersampleMultiplier;
+    const height = this.canvasHeight * supersampleMultiplier;
+
     // This WebGL workaround is so we can avoid the preserveDrawingBuffer setting that would impact performance.
     // We render to a framebuffer and extract the pixel data directly, since we can't create another renderer and
     // share the view (three.js constraint).
 
     // set up a framebuffer (target is three.js terminology) to render into
-    const target = new THREE.WebGLRenderTarget( this.canvasWidth, this.canvasHeight, {
+    const target = new THREE.WebGLRenderTarget( width, height, {
       minFilter: THREE.LinearFilter,
       magFilter: THREE.NearestFilter,
       format: THREE.RGBAFormat
@@ -101,13 +108,48 @@ class ThreeStage {
     this.render( target );
 
     // set up a buffer for pixel data, in the exact typed formats we will need
-    const buffer = new window.ArrayBuffer( this.canvasWidth * this.canvasHeight * 4 );
-    const imageDataBuffer = new window.Uint8ClampedArray( buffer );
+    const buffer = new window.ArrayBuffer( width * height * 4 );
     const pixels = new window.Uint8Array( buffer );
 
     // read the pixel data into the buffer
     const gl = this.threeRenderer.getContext();
-    gl.readPixels( 0, 0, this.canvasWidth, this.canvasHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels );
+    gl.readPixels( 0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels );
+
+    let imageDataBuffer;
+    if ( supersampleMultiplier === 1 ) {
+      imageDataBuffer = new window.Uint8ClampedArray( buffer );
+    }
+    else {
+      imageDataBuffer = new window.Uint8ClampedArray( this.canvasWidth * this.canvasHeight * 4 );
+
+      _.range( 0, this.canvasWidth ).forEach( x => {
+        _.range( 0, this.canvasHeight ).forEach( y => {
+          const outputIndex = ( x + y * this.canvasWidth ) * 4;
+
+          const colors = [];
+
+          _.range( 0, supersampleMultiplier ).forEach( i => {
+            _.range( 0, supersampleMultiplier ).forEach( j => {
+              const inputIndex = ( x * supersampleMultiplier + i + ( y * supersampleMultiplier + j ) * width ) * 4;
+
+              colors.push( new Color(
+                pixels[ inputIndex ],
+                pixels[ inputIndex + 1 ],
+                pixels[ inputIndex + 2 ],
+                pixels[ inputIndex + 3 ] / 255
+              ) );
+            } );
+          } );
+
+          const supersampledColor = Color.supersampleBlend( colors );
+
+          imageDataBuffer[ outputIndex ] = supersampledColor.r;
+          imageDataBuffer[ outputIndex + 1 ] = supersampledColor.g;
+          imageDataBuffer[ outputIndex + 2 ] = supersampledColor.b;
+          imageDataBuffer[ outputIndex + 3 ] = Math.floor( supersampledColor.a * 255 );
+        } );
+      } );
+    }
 
     // create a Canvas with the correct size, and fill it with the pixel data
     const canvas = document.createElement( 'canvas' );
