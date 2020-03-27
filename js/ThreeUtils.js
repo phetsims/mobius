@@ -7,6 +7,7 @@
  */
 
 import Vector3 from '../../dot/js/Vector3.js';
+import SimLauncher from '../../joist/js/SimLauncher.js';
 import openPopup from '../../phet-core/js/openPopup.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
 import sceneryPhetStrings from '../../scenery-phet/js/scenery-phet-strings.js';
@@ -149,10 +150,16 @@ const ThreeUtils = {
    * @public
    *
    * @param {HTMLImageElement} image
+   * @param {boolean} [waitForLoad]
    * @returns {THREE.Texture}
    */
-  imageToTexture( image ) {
-    return ThreeUtils.textureLoader.load( image.src );
+  imageToTexture( image, waitForLoad ) {
+    if ( waitForLoad ) {
+      return ThreeUtils.textureLoader.load( image.src, SimLauncher.createLock() );
+    }
+    else {
+      return ThreeUtils.textureLoader.load( image.src );
+    }
   },
 
   /**
