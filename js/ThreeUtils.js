@@ -10,7 +10,7 @@ import Vector3 from '../../dot/js/Vector3.js';
 import SimLauncher from '../../joist/js/SimLauncher.js';
 import openPopup from '../../phet-core/js/openPopup.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
-import sceneryPhetStrings from '../../scenery-phet/js/scenery-phet-strings.js';
+import sceneryPhetStrings from '../../scenery-phet/js/sceneryPhetStrings.js';
 import HBox from '../../scenery/js/nodes/HBox.js';
 import Text from '../../scenery/js/nodes/Text.js';
 import Utils from '../../scenery/js/util/Utils.js';
