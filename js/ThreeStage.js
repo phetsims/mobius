@@ -230,6 +230,11 @@ class ThreeStage {
     return new Ray3( ThreeUtils.threeToVector( threeRay.origin ), ThreeUtils.threeToVector( threeRay.direction ).normalize() );
   }
 
+  /**
+   * @public
+   * @param {number} width
+   * @param {width} height
+   */
   setDimensions( width, height ) {
     assert && assert( typeof width === 'number' && width % 1 === 0 );
     assert && assert( typeof height === 'number' && height % 1 === 0 );
