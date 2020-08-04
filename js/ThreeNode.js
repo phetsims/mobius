@@ -57,7 +57,7 @@ class ThreeNode extends Node {
     this.backgroundEventTarget = new Rectangle( 0, 0, width, height );
     this.addChild( this.backgroundEventTarget );
 
-    // @private add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
+    // @private {DOM} - add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
     this.domNode = new DOM( this.stage.threeRenderer.domElement, {
       preventTransform: true, // Scenery override for transformation
       pickable: false
@@ -136,7 +136,7 @@ class ThreeNode extends Node {
    * Renders the simulation to a specific rendering target
    * @public
    *
-   * @param {THREE.WebGLRenderTarget|undefined} - undefined for the default target
+   * @param {THREE.WebGLRenderTarget|undefined} target - undefined for the default target
    */
   render( target ) {
     this.stage.render( target );

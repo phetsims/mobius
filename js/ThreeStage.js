@@ -257,6 +257,9 @@ class ThreeStage {
   /**
    * @override
    * @protected
+   *
+   * @param {number} width
+   * @param {number} height
    */
   layout( width, height ) {
     this.canvasWidth = Math.ceil( width );
@@ -290,7 +293,7 @@ class ThreeStage {
    * Renders the simulation to a specific rendering target
    * @public
    *
-   * @param {THREE.WebGLRenderTarget|undefined} - undefined for the default target
+   * @param {THREE.WebGLRenderTarget|undefined} target - undefined for the default target
    */
   render( target ) {
     // render the 3D scene first
