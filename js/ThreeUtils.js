@@ -176,8 +176,7 @@ const ThreeUtils = {
    * Shows a warning with a link to more information about PhET simulation webgl compatibility.
    * @public
    *
-   * @param screenView
-   * @returns {ScreenView}
+   * @param {ScreenView} screenView
    */
   showWebGLWarning( screenView ) {
     const warningNode = new HBox( {

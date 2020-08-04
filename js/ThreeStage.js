@@ -73,9 +73,15 @@ class ThreeStage {
       }
     } );
 
-    options.backgroundProperty.link( color => {
+
+    // @public {Property.<Color>}
+    this.backgroundProperty = options.backgroundProperty;
+
+    // @private {function}
+    this.colorListener = color => {
       this.threeRenderer.setClearColor( color.toNumber(), color.alpha );
-    } );
+    };
+    this.backgroundProperty.link( this.colorListener );
 
     this.threeCamera.position.copy( ThreeUtils.vectorToThree( options.cameraPosition ) ); // sets the camera's position
   }
@@ -159,6 +165,8 @@ class ThreeStage {
     const imageData = context.createImageData( this.canvasWidth, this.canvasHeight );
     imageData.data.set( imageDataBuffer );
     context.putImageData( imageData, 0, 0 );
+
+    target.dispose();
 
     return canvas;
   }
@@ -298,6 +306,7 @@ class ThreeStage {
   dispose() {
     this.threeRenderer.dispose();
     this.threeScene.dispose();
+    this.backgroundProperty.unlink( this.colorListener );
   }
 
   /**

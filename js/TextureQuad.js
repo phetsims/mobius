@@ -1,6 +1,9 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
 /**
+ * Creates a quad for a given texture with a specific width and height, in the 3d space
+ * with x: [0,width] and y: [0,height].
+ *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
@@ -23,11 +26,30 @@ class TextureQuad extends THREE.Mesh {
       0, 0, 1
     );
 
-    super( quadGeometry, new THREE.MeshBasicMaterial( {
+    const basicMaterial = new THREE.MeshBasicMaterial( {
       transparent: true,
       depthTest: false,
       map: texture
-    } ) );
+    } );
+
+    super( quadGeometry, basicMaterial );
+
+    // @private {Quad}
+    this.quadGeometry = quadGeometry;
+
+    // @private {Material}
+    this.basicMaterial = basicMaterial;
+  }
+
+  /**
+   * Releases references
+   * @public
+   */
+  dispose() {
+    this.quadGeometry.dispose();
+    this.basicMaterial.dispose();
+
+    super.dispose && super.dispose();
   }
 }
 

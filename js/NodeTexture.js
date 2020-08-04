@@ -1,6 +1,8 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
 /**
+ * Allows turning a Node into an updatable three.js texture.
+ *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
@@ -40,6 +42,7 @@ class NodeTexture extends THREE.Texture {
     this._width = width;
     this._height = height;
 
+    // tells three.js that the texture needs an update
     this.needsUpdate = true;
   }
 
