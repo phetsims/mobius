@@ -46,14 +46,14 @@ class ThreeIsometricNode extends Node {
     this.backgroundEventTarget = new Rectangle( {} );
     this.addChild( this.backgroundEventTarget );
 
-    // @private add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
+    // @private {DOM} - add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
     this.domNode = new DOM( this.stage.threeRenderer.domElement, {
       preventTransform: true, // Scenery override for transformation
-      invalidateDOM: function() { // don't do bounds detection, it's too expensive. We're not pickable anyways
-        this.invalidateSelf( new Bounds2( 0, 0, 0, 0 ) );
-      },
       pickable: false
     } );
+
+    // don't do bounds detection, it's too expensive. We're not pickable anyways
+    this.domNode.invalidateDOM = () => this.domNode.invalidateSelf( new Bounds2( 0, 0, 0, 0 ) );
     this.domNode.invalidateDOM();
 
     /**
@@ -140,7 +140,7 @@ class ThreeIsometricNode extends Node {
    * Renders the simulation to a specific rendering target
    * @public
    *
-   * @param {THREE.WebGLRenderTarget|undefined} - undefined for the default target
+   * @param {THREE.WebGLRenderTarget|undefined} target - undefined for the default target
    */
   render( target ) {
     this.stage.render( target );

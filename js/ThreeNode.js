@@ -62,7 +62,9 @@ class ThreeNode extends Node {
       preventTransform: true, // Scenery override for transformation
       pickable: false
     } );
-    this.domNode.calculateDOMBounds = () => new Bounds2( 0, 0, 0, 0 );
+
+    // don't do bounds detection, it's too expensive. We're not pickable anyways
+    this.domNode.invalidateDOM = () => this.domNode.invalidateSelf( new Bounds2( 0, 0, 0, 0 ) );
     this.domNode.invalidateDOM();
 
     const forceAcceleration = false;
