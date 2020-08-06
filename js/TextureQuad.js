@@ -7,16 +7,18 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import mobius from './mobius.js';
+import merge from '../../phet-core/js/merge.js';
 import Quad from './Quad.js';
+import mobius from './mobius.js';
 
 class TextureQuad extends THREE.Mesh {
   /**
    * @param {THREE.Texture} texture
    * @param {number} width
    * @param {number} height
+   * @param {Object} [materialOptions]
    */
-  constructor( texture, width, height ) {
+  constructor( texture, width, height, materialOptions ) {
 
     const quadGeometry = new Quad(
       0, 0, 0,
@@ -26,11 +28,11 @@ class TextureQuad extends THREE.Mesh {
       0, 0, 1
     );
 
-    const basicMaterial = new THREE.MeshBasicMaterial( {
+    const basicMaterial = new THREE.MeshBasicMaterial( merge( {
       transparent: true,
       depthTest: false,
       map: texture
-    } );
+    }, materialOptions ) );
 
     super( quadGeometry, basicMaterial );
 
