@@ -58,8 +58,8 @@ class ThreeIsometricNode extends Node {
 
     /**
      // Apply CSS needed for future CSS transforms to work properly.
-     scenery.Utils.prepareForTransform( this.domElement, this.forceAcceleration );
-     scenery.Utils.applyPreparedTransform( this.getTransformMatrix(), this.domElement, this.forceAcceleration );
+     scenery.Utils.prepareForTransform( this.domElement );
+     scenery.Utils.applyPreparedTransform( this.getTransformMatrix(), this.domElement );
      */
 
     // support Scenery/Joist 0.2 screenshot (takes extra work to output)

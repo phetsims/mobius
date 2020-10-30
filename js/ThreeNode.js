@@ -67,12 +67,11 @@ class ThreeNode extends Node {
     this.domNode.invalidateDOM = () => this.domNode.invalidateSelf( new Bounds2( 0, 0, 0, 0 ) );
     this.domNode.invalidateDOM();
 
-    const forceAcceleration = false;
     const offsetMatrix = new Matrix3();
-    Utils.prepareForTransform( this.stage.threeRenderer.domElement, forceAcceleration );
+    Utils.prepareForTransform( this.stage.threeRenderer.domElement );
     this.offsetProperty.link( offset => {
       offsetMatrix.setToTranslation( offset.x, offset.y );
-      Utils.applyPreparedTransform( offsetMatrix, this.stage.threeRenderer.domElement, forceAcceleration );
+      Utils.applyPreparedTransform( offsetMatrix, this.stage.threeRenderer.domElement );
     } );
 
     // support Scenery/Joist 0.2 screenshot (takes extra work to output)
