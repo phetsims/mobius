@@ -9,7 +9,6 @@
 import Property from '../../axon/js/Property.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
 import Ray3 from '../../dot/js/Ray3.js';
-import Utils from '../../dot/js/Utils.js';
 import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
 import merge from '../../phet-core/js/merge.js';
@@ -94,7 +93,7 @@ class ThreeStage {
    * @returns {HTMLCanvasElement}
    */
   renderToCanvas( supersampleMultiplier = 1 ) {
-    assert && assert( Utils.isInteger( supersampleMultiplier ) );
+    assert && assert( Number.isInteger( supersampleMultiplier ) );
 
     const width = this.canvasWidth * supersampleMultiplier;
     const height = this.canvasHeight * supersampleMultiplier;
