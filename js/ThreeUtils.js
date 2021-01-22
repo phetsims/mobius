@@ -7,7 +7,7 @@
  */
 
 import Vector3 from '../../dot/js/Vector3.js';
-import simLauncher from '../../joist/js/simLauncher.js';
+import asyncLoader from '../../phet-core/js/asyncLoader.js';
 import openPopup from '../../phet-core/js/openPopup.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
 import sceneryPhetStrings from '../../scenery-phet/js/sceneryPhetStrings.js';
@@ -155,7 +155,7 @@ const ThreeUtils = {
    */
   imageToTexture( image, waitForLoad ) {
     if ( waitForLoad ) {
-      return ThreeUtils.textureLoader.load( image.src, simLauncher.createLock() );
+      return ThreeUtils.textureLoader.load( image.src, asyncLoader.createLock() );
     }
     else {
       return ThreeUtils.textureLoader.load( image.src );
