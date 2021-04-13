@@ -254,6 +254,24 @@ class ThreeStage {
   }
 
   /**
+   * @public
+   *
+   * @returns {number}
+   */
+  get width() {
+    return this.canvasWidth;
+  }
+
+  /**
+   * @public
+   *
+   * @returns {number}
+   */
+  get height() {
+    return this.canvasHeight;
+  }
+
+  /**
    * @override
    * @protected
    *

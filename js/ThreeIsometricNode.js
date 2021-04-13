@@ -6,13 +6,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import Property from '../../axon/js/Property.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
+import Matrix3 from '../../dot/js/Matrix3.js';
 import merge from '../../phet-core/js/merge.js';
 import DOM from '../../scenery/js/nodes/DOM.js';
 import Node from '../../scenery/js/nodes/Node.js';
 import Rectangle from '../../scenery/js/nodes/Rectangle.js';
-import mobius from './mobius.js';
 import ThreeStage from './ThreeStage.js';
+import mobius from './mobius.js';
 
 class ThreeIsometricNode extends Node {
   /**
@@ -22,6 +24,9 @@ class ThreeIsometricNode extends Node {
   constructor( layoutBounds, options ) {
 
     options = merge( {
+      // {Property.<Matrix3>}
+      parentMatrixProperty: new Property( Matrix3.IDENTITY ),
+
       fov: 50
       // positioned or transformed pixels, or full scenery-transformed?
       // can use https://threejs.org/docs/#api/en/cameras/PerspectiveCamera.setViewOffset to handle sub-pixel stuff?
@@ -41,6 +46,9 @@ class ThreeIsometricNode extends Node {
 
     // @private {Bounds2}
     this.layoutBounds = layoutBounds;
+
+    // @private {Property.<Matrix3>}
+    this.parentMatrixProperty = options.parentMatrixProperty;
 
     // @public {Node} - our target for drags that don't hit other UI components
     this.backgroundEventTarget = new Rectangle( {} );
@@ -77,6 +85,23 @@ class ThreeIsometricNode extends Node {
 
     this.addChild( this.domNode );
 
+    // @private {function}
+    this.zoomListener = matrix => {
+      const screenWidth = this.stage.width;
+      const screenHeight = this.stage.height;
+
+      if ( screenWidth && screenHeight ) {
+        const globalBounds = new Bounds2( 0, 0, screenWidth, screenHeight ).transformed( matrix );
+
+        this.stage.threeCamera.setViewOffset( globalBounds.width, globalBounds.height, -globalBounds.left, -globalBounds.top, screenWidth, screenHeight );
+
+        // three.js requires this to be called after changing the parameters
+        this.stage.threeCamera.updateProjectionMatrix();
+      }
+    };
+
+    this.parentMatrixProperty.lazyLink( this.zoomListener );
+
     this.mutate( options );
   }
 
@@ -96,11 +121,11 @@ class ThreeIsometricNode extends Node {
    * 3D scene.
    * @private
    *
-   * @param {Vector2} screenPoint
+   * @param {Vector2} globalScreenPoint
    * @returns {Ray3}
    */
-  getRayFromScreenPoint( screenPoint ) {
-    return this.stage.getRayFromScreenPoint( screenPoint );
+  getRayFromScreenPoint( globalScreenPoint ) {
+    return this.stage.getRayFromScreenPoint( globalScreenPoint );
   }
 
   /**
@@ -152,6 +177,8 @@ class ThreeIsometricNode extends Node {
    * @override
    */
   dispose() {
+    this.parentMatrixProperty.lazyLink( this.zoomListener );
+
     super.dispose();
 
     this.stage.dispose();
