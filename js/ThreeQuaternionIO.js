@@ -7,6 +7,7 @@
  */
 
 import IOType from '../../tandem/js/types/IOType.js';
+import NumberIO from '../../tandem/js/types/NumberIO.js';
 import mobius from './mobius.js';
 
 const ThreeQuaternionIO = new IOType( 'ThreeQuaternionIO', {
@@ -19,6 +20,12 @@ const ThreeQuaternionIO = new IOType( 'ThreeQuaternionIO', {
       z: quaternion.z,
       w: quaternion.w
     };
+  },
+  stateSchema: {
+    x: NumberIO,
+    y: NumberIO,
+    z: NumberIO,
+    w: NumberIO
   },
   fromStateObject: obj => {
     return new THREE.Quaternion( obj.x, obj.y, obj.z, obj.w );
