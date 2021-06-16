@@ -14,8 +14,8 @@ import Vector3 from '../../dot/js/Vector3.js';
 import merge from '../../phet-core/js/merge.js';
 import ContextLossFailureDialog from '../../scenery-phet/js/ContextLossFailureDialog.js';
 import Color from '../../scenery/js/util/Color.js';
-import mobius from './mobius.js';
 import ThreeUtils from './ThreeUtils.js';
+import mobius from './mobius.js';
 
 class ThreeStage {
   /**
@@ -249,8 +249,87 @@ class ThreeStage {
     this.canvasWidth = width;
     this.canvasHeight = height;
 
-    this.threeCamera.updateProjectionMatrix();
+    this.threeCamera.updateProjectionMatrix(); // TODO: What is this doing?
     this.threeRenderer.setSize( this.canvasWidth, this.canvasHeight );
+  }
+
+  /**
+   * Adjusts the camera's view offsets so that it displays the camera's main output within the specified cameraBounds.
+   * This is a generalization of the isometric FOV computation, as it also supports other combinations such as properly
+   * handling pan/zoom. See https://github.com/phetsims/density/issues/50
+   * @public
+   *
+   * @param {Bounds2} cameraBounds
+   */
+  adjustViewOffset( cameraBounds ) {
+    assert && assert( Math.abs( this.threeCamera.aspect - cameraBounds.width / cameraBounds.height ) < 1e-5, 'Camera aspect should match cameraBounds' );
+
+    // We essentially reverse some of the computation being done by PerspectiveCamera's updateProjectionMatrix(), so
+    // that we can do computations within that coordinate frame. The specific code needed to handle this is in
+    // https://github.com/mrdoob/three.js/blob/d39d82999f0ac5cdd1b4eb9f4aba3f9626f32ab6/src/cameras/PerspectiveCamera.js#L179-L196
+
+    // What we essentially want to do is take our "layout bounds + fov + zoom" combination to determine what the bounds
+    // of this ends up being in the projection frustum's near plane.
+    // https://stackoverflow.com/questions/58615238/opengl-perspective-projection-how-to-define-left-and-right is
+    // supremely helpful to visualize this. Then we'd want to adjust the bounds in the near plane with a linear
+    // relationship. In the normal global coordinate space, we have "cameraBounds" => (0,0,canvasWidth,canvasHeight).
+    // The center of cameraBounds gets mapped to (0,0) in the near plane (since it's where the camera is pointing),
+    // and cameraBounds maps to a centered rectangle determined by (-halfWidth,-halfHeight,halfWidth,halfHeight).
+    // We then want to map our actual canvas (0,0,canvasWidth,canvasHeight) into the near plane, and THEN we compute
+    // what threeCamera.setViewOffset call will adjust the near plane coordinates to what we need (since there isn't
+    // a more direct way).
+    // Additionally, note that the "top" is positive in the near-plane coordinate frame, whereas it's negative in
+    // Scenery/global coordinates.
+
+    // Get the basic half width/height of the projection on the near-clip plane. We'll be adjusting in this coordinate
+    // frame below. These determine the original rectangle of our ideal camera's space in the near-plane coordinates.
+    const halfHeight = this.threeCamera.near * Math.tan( ( Math.PI / 360 ) * this.threeCamera.fov ) / this.threeCamera.zoom;
+    const halfWidth = this.threeCamera.aspect * halfHeight;
+
+    // Our Canvas's bounds, adjusted so that the origin is the cameraBounds center.
+    const implicitBounds = new Bounds2( 0, 0, this.canvasWidth, this.canvasHeight ).shifted( cameraBounds.center.negated() );
+
+    // Derivation for adjusted width/height from PerspectiveCamera projection setup
+    // width *= view.width / fullWidth
+    // newWidth = 2 * halfWidth * this.canvasWidth / adjustedFullWidth
+    // adjustedFullWidth * newWidth = 2 * halfWidth * this.canvasWidth;
+    // adjustedFullWidth = 2 * halfWidth * this.canvasWidth / newWidth;
+    // newWidth = 2 * halfWidth * this.canvasWidth / cameraBounds.width;
+    // adjustedFullWidth = 2 * halfWidth * this.canvasWidth / ( 2 * halfWidth * this.canvasWidth / cameraBounds.width );
+    // adjustedFullWidth = cameraBounds.width;
+    const adjustedFullWidth = cameraBounds.width;
+    const adjustedFullHeight = cameraBounds.height;
+
+    const oldLeft = -halfWidth;
+    const oldTop = halfHeight;
+
+    // -0.5 * cameraBounds.width ==> [left] -halfWidth
+    const newLeft = implicitBounds.left * halfWidth / ( 0.5 * cameraBounds.width );
+
+    // -0.5 * cameraBounds.height ==> [top] halfHeight
+    const newTop = -implicitBounds.top * halfHeight / ( 0.5 * cameraBounds.height );
+
+    // Derivation from PerspectiveCamera projection setup
+    // left += view.offsetX * width / fullWidth;
+    // newLeft = oldLeft + offsetX * ( 2 * halfWidth ) / adjustedFullWidth
+    // newLeft - oldLeft = offsetX * ( 2 * halfWidth ) / adjustedFullWidth
+    // ( newLeft - oldLeft ) * adjustedFullWidth / ( 2 * halfWidth ) = offsetX
+    const offsetX = ( newLeft - oldLeft ) * adjustedFullWidth / ( 2 * halfWidth );
+
+    // Derivation from PerspectiveCamera projection setup
+    // top -= offsetY * height / adjustedFullHeight;
+    // newTop = oldTop - offsetY * ( 2 * halfHeight ) / adjustedFullHeight;
+    // offsetY * ( 2 * halfHeight ) / adjustedFullHeight = oldTop - newTop;
+    // offsetY = ( oldTop - newTop ) * adjustedFullHeight / ( 2 * halfHeight );
+    const offsetY = ( oldTop - newTop ) * adjustedFullHeight / ( 2 * halfHeight );
+
+    this.threeCamera.setViewOffset( adjustedFullWidth, adjustedFullHeight, offsetX, offsetY, this.canvasWidth, this.canvasHeight );
+
+    // The setViewOffset call weirdly mucks with with the aspect ratio, so we need to fix it afterward.
+    this.threeCamera.aspect = cameraBounds.width / cameraBounds.height;
+
+    // This forces a recomputation, as we've changed the inputs.
+    this.threeCamera.updateProjectionMatrix();
   }
 
   /**
@@ -269,41 +348,6 @@ class ThreeStage {
    */
   get height() {
     return this.canvasHeight;
-  }
-
-  /**
-   * @override
-   * @protected
-   *
-   * @param {number} width
-   * @param {number} height
-   */
-  layout( width, height ) {
-    this.canvasWidth = Math.ceil( width );
-    this.canvasHeight = Math.ceil( height );
-
-    this.backgroundEventTarget.setRectBounds( this.globalToLocalBounds( new Bounds2( 0, 0, this.canvasWidth, this.canvasHeight ) ) );
-
-    // field of view (FOV) computation for the isometric view scaling we use
-    const sx = this.canvasWidth / this.layoutBounds.width;
-    const sy = this.canvasHeight / this.layoutBounds.height;
-    if ( sx === 0 || sy === 0 ) {
-      return 1;
-    }
-
-    this.threeCamera.fov = ThreeStage.computeIsometricFOV( 50, this.canvasWidth, this.canvasHeight, this.layoutBounds.width, this.layoutBounds.height );
-    this.activeScale = sy > sx ? sx : sy;
-
-    // aspect ratio
-    this.threeCamera.aspect = this.canvasWidth / this.canvasHeight;
-
-    // three.js requires this to be called after changing the parameters
-    this.threeCamera.updateProjectionMatrix();
-
-    // update the size of the renderer
-    this.threeRenderer.setSize( this.canvasWidth, this.canvasHeight );
-
-    this.domNode.invalidateDOM();
   }
 
   /**
@@ -333,7 +377,7 @@ class ThreeStage {
    * It's a bit tricky, since if we are vertically-constrained, we don't need to adjust the camera's FOV (since the
    * width of the scene will scale proportionally to the scale we display our contents at). It's only when our view
    * is horizontally-constrained where we have to account for the changed aspect ratio, and adjust the FOV so that
-   * the molecule shows up at a scale of "sy / sx" compared to the normal case. Note that sx === sy is where our
+   * the content shows up at a scale of "sy / sx" compared to the normal case. Note that sx === sy is where our
    * layout bounds fit perfectly in the window, so we don't really have a constraint.
    * Most of the complexity here is that threeCamera.fov is in degrees, and our ideal vertically-constrained FOV is
    * 50 (so there's conversion factors in place).

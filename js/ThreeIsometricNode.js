@@ -38,14 +38,14 @@ class ThreeIsometricNode extends Node {
 
     super();
 
+    // @private {Bounds2}
+    this.layoutBounds = layoutBounds;
+
     // @public {ThreeStage}
     this.stage = new ThreeStage( options );
 
-    // @private {number}
-    this.fov = options.fov;
-
-    // @private {Bounds2}
-    this.layoutBounds = layoutBounds;
+    this.stage.threeCamera.fov = options.fov;
+    this.stage.threeCamera.aspect = this.layoutBounds.width / this.layoutBounds.height;
 
     // @private {Property.<Matrix3>}
     this.parentMatrixProperty = options.parentMatrixProperty;
@@ -64,12 +64,6 @@ class ThreeIsometricNode extends Node {
     this.domNode.invalidateDOM = () => this.domNode.invalidateSelf( new Bounds2( 0, 0, 0, 0 ) );
     this.domNode.invalidateDOM();
 
-    /**
-     // Apply CSS needed for future CSS transforms to work properly.
-     scenery.Utils.prepareForTransform( this.domElement );
-     scenery.Utils.applyPreparedTransform( this.getTransformMatrix(), this.domElement );
-     */
-
     // support Scenery/Joist 0.2 screenshot (takes extra work to output)
     this.domNode.renderToCanvasSelf = wrapper => {
       const canvas = this.stage.renderToCanvas( 3 );
@@ -85,22 +79,20 @@ class ThreeIsometricNode extends Node {
 
     this.addChild( this.domNode );
 
-    // @private {function}
-    this.zoomListener = matrix => {
+    // @public {function} - Ideally should be called whenever the parent/screenView matrix is changed, or any camera
+    // change (including zoom or fov).
+    this.viewOffsetListener = () => {
       const screenWidth = this.stage.width;
       const screenHeight = this.stage.height;
 
       if ( screenWidth && screenHeight ) {
-        const globalBounds = new Bounds2( 0, 0, screenWidth, screenHeight ).transformed( matrix );
+        assert && assert( screenWidth === window.innerWidth );
+        assert && assert( screenHeight === window.innerHeight );
 
-        this.stage.threeCamera.setViewOffset( globalBounds.width, globalBounds.height, -globalBounds.left, -globalBounds.top, screenWidth, screenHeight );
-
-        // three.js requires this to be called after changing the parameters
-        this.stage.threeCamera.updateProjectionMatrix();
+        this.stage.adjustViewOffset( this.parentToGlobalBounds( new Bounds2( 0, 0, this.layoutBounds.width, this.layoutBounds.height ) ) );
       }
     };
-
-    this.parentMatrixProperty.lazyLink( this.zoomListener );
+    this.parentMatrixProperty.lazyLink( this.viewOffsetListener );
 
     this.mutate( options );
   }
@@ -135,8 +127,14 @@ class ThreeIsometricNode extends Node {
    * @param {number} height
    */
   layout( width, height ) {
-    width = Math.ceil( width );
-    height = Math.ceil( height );
+    // We need to lay out things for window dimensions so we don't overly resize, see
+    // https://github.com/phetsims/density/issues/50. For this we'll actually take up the full window, and adjust things
+    // using adjustViewOffset to handle both the isometric scaling AND pan/zoom. This is necessary so that the navbar
+    // doesn't throw off layout. This may come with a bit of performance cost, since we do typically have some of the
+    // canvas hidden by the navigation bar, but the lack of resizes on any pan/zoom presumably makes up for it in
+    // usability.
+    width = window.innerWidth;
+    height = window.innerHeight;
 
     this.stage.setDimensions( width, height );
 
@@ -149,14 +147,9 @@ class ThreeIsometricNode extends Node {
       return 1;
     }
 
-    this.stage.threeCamera.fov = ThreeStage.computeIsometricFOV( this.fov, width, height, this.layoutBounds.width, this.layoutBounds.height );
     this.stage.activeScale = sy > sx ? sx : sy;
 
-    // aspect ratio
-    this.stage.threeCamera.aspect = width / height;
-
-    // three.js requires this to be called after changing the parameters
-    this.stage.threeCamera.updateProjectionMatrix();
+    this.viewOffsetListener();
 
     this.domNode.invalidateDOM();
   }
@@ -177,7 +170,7 @@ class ThreeIsometricNode extends Node {
    * @override
    */
   dispose() {
-    this.parentMatrixProperty.lazyLink( this.zoomListener );
+    this.parentMatrixProperty.lazyLink( this.viewOffsetListener );
 
     super.dispose();
 
