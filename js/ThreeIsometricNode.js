@@ -13,6 +13,7 @@ import merge from '../../phet-core/js/merge.js';
 import DOM from '../../scenery/js/nodes/DOM.js';
 import Node from '../../scenery/js/nodes/Node.js';
 import Rectangle from '../../scenery/js/nodes/Rectangle.js';
+import Utils from '../../scenery/js/util/Utils.js';
 import ThreeStage from './ThreeStage.js';
 import mobius from './mobius.js';
 
@@ -66,12 +67,12 @@ class ThreeIsometricNode extends Node {
 
     // support Scenery/Joist 0.2 screenshot (takes extra work to output)
     this.domNode.renderToCanvasSelf = wrapper => {
-      const canvas = this.stage.renderToCanvas( 3 );
-
       const context = wrapper.context;
+      const canvas = this.stage.renderToCanvas( 3, Utils.backingScale( context ) );
+
       context.save();
 
-      context.setTransform( 1, 0, 0, -1, 0, this.stage.canvasHeight ); // no need to take pixel scaling into account
+      context.setTransform( 1, 0, 0, -1, 0, canvas.height ); // no need to take pixel scaling into account
 
       context.drawImage( canvas, 0, 0 );
       context.restore();

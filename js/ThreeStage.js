@@ -90,13 +90,17 @@ class ThreeStage {
    * @public
    *
    * @param {number} [supersampleMultiplier]
+   * @param {number} [backingMultiplier]
    * @returns {HTMLCanvasElement}
    */
-  renderToCanvas( supersampleMultiplier = 1 ) {
+  renderToCanvas( supersampleMultiplier = 1, backingMultiplier = 1 ) {
     assert && assert( Number.isInteger( supersampleMultiplier ) );
 
-    const width = this.canvasWidth * supersampleMultiplier;
-    const height = this.canvasHeight * supersampleMultiplier;
+    const canvasWidth = this.canvasWidth * backingMultiplier;
+    const canvasHeight = this.canvasHeight * backingMultiplier;
+
+    const width = canvasWidth * supersampleMultiplier;
+    const height = canvasHeight * supersampleMultiplier;
 
     // This WebGL workaround is so we can avoid the preserveDrawingBuffer setting that would impact performance.
     // We render to a framebuffer and extract the pixel data directly, since we can't create another renderer and
@@ -125,11 +129,11 @@ class ThreeStage {
       imageDataBuffer = new window.Uint8ClampedArray( buffer );
     }
     else {
-      imageDataBuffer = new window.Uint8ClampedArray( this.canvasWidth * this.canvasHeight * 4 );
+      imageDataBuffer = new window.Uint8ClampedArray( canvasWidth * canvasHeight * 4 );
 
-      _.range( 0, this.canvasWidth ).forEach( x => {
-        _.range( 0, this.canvasHeight ).forEach( y => {
-          const outputIndex = ( x + y * this.canvasWidth ) * 4;
+      _.range( 0, canvasWidth ).forEach( x => {
+        _.range( 0, canvasHeight ).forEach( y => {
+          const outputIndex = ( x + y * canvasWidth ) * 4;
 
           const colors = [];
 
@@ -158,10 +162,10 @@ class ThreeStage {
 
     // create a Canvas with the correct size, and fill it with the pixel data
     const canvas = document.createElement( 'canvas' );
-    canvas.width = this.canvasWidth;
-    canvas.height = this.canvasHeight;
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
     const context = canvas.getContext( '2d' );
-    const imageData = context.createImageData( this.canvasWidth, this.canvasHeight );
+    const imageData = context.createImageData( canvasWidth, canvasHeight );
     imageData.data.set( imageDataBuffer );
     context.putImageData( imageData, 0, 0 );
 
