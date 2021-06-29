@@ -144,15 +144,14 @@ class ThreeIsometricNode extends Node {
     // field of view (FOV) computation for the isometric view scaling we use
     const sx = width / this.layoutBounds.width;
     const sy = height / this.layoutBounds.height;
-    if ( sx === 0 || sy === 0 ) {
-      return 1;
+    if ( sx !== 0 && sy !== 0 ) {
+
+      this.stage.activeScale = sy > sx ? sx : sy;
+
+      this.viewOffsetListener();
+
+      this.domNode.invalidateDOM();
     }
-
-    this.stage.activeScale = sy > sx ? sx : sy;
-
-    this.viewOffsetListener();
-
-    this.domNode.invalidateDOM();
   }
 
   /**
