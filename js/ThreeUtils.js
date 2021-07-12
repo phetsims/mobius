@@ -12,9 +12,10 @@ import openPopup from '../../phet-core/js/openPopup.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
 import sceneryPhetStrings from '../../scenery-phet/js/sceneryPhetStrings.js';
 import HBox from '../../scenery/js/nodes/HBox.js';
+import Path from '../../scenery/js/nodes/Path.js';
 import Text from '../../scenery/js/nodes/Text.js';
 import Utils from '../../scenery/js/util/Utils.js';
-import FontAwesomeNode from '../../sun/js/FontAwesomeNode.js';
+import exclamationTriangleSolidShape from '../../sherpa/js/fontawesome-5/exclamationTriangleSolidShape.js';
 import mobius from './mobius.js';
 
 const webglWarningBodyString = sceneryPhetStrings.webglWarning.body;
@@ -181,9 +182,9 @@ const ThreeUtils = {
   showWebGLWarning( screenView ) {
     const warningNode = new HBox( {
       children: [
-        new FontAwesomeNode( 'warning_sign', {
+        new Path( exclamationTriangleSolidShape, {
           fill: '#E87600', // "safety orange", according to Wikipedia
-          scale: 0.8
+          scale: 0.06
         } ),
         new Text( webglWarningBodyString, {
           font: new PhetFont( 16 ),
