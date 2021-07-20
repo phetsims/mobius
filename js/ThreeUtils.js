@@ -23,6 +23,8 @@ const webglWarningBodyString = sceneryPhetStrings.webglWarning.body;
 // {THREE.TextureLoader|null} - "singleton" for the texture loader
 let textureLoader = null;
 
+const scratchFloatArray = new Float32Array( 128 );
+
 const ThreeUtils = {
   /**
    * Converts a Vector3 to a THREE.Vector3
@@ -63,17 +65,10 @@ const ThreeUtils = {
    *
    * @param {Bounds2} bounds2 - x,y
    * @param {number} z
-   * @returns {Array.<number>}
+   * @returns {Float32Array}
    */
   frontVertices( bounds2, z ) {
-    return [
-      bounds2.minX, bounds2.maxY, z,
-      bounds2.minX, bounds2.minY, z,
-      bounds2.maxX, bounds2.maxY, z,
-      bounds2.minX, bounds2.minY, z,
-      bounds2.maxX, bounds2.minY, z,
-      bounds2.maxX, bounds2.maxY, z
-    ];
+    return scratchFloatArray.slice( 0, ThreeUtils.writeFrontVertices( scratchFloatArray, 0, bounds2, z ) );
   },
 
   /**
@@ -82,17 +77,10 @@ const ThreeUtils = {
    *
    * @param {Bounds2} bounds2 - x,z
    * @param {number} y
-   * @returns {Array.<number>}
+   * @returns {Float32Array}
    */
   topVertices( bounds2, y ) {
-    return [
-      bounds2.minX, y, bounds2.maxY,
-      bounds2.maxX, y, bounds2.maxY,
-      bounds2.minX, y, bounds2.minY,
-      bounds2.minX, y, bounds2.minY,
-      bounds2.maxX, y, bounds2.maxY,
-      bounds2.maxX, y, bounds2.minY
-    ];
+    return scratchFloatArray.slice( 0, ThreeUtils.writeTopVertices( scratchFloatArray, 0, bounds2, y ) );
   },
 
   /**
@@ -101,17 +89,10 @@ const ThreeUtils = {
    *
    * @param {Bounds2} bounds2 - z,y
    * @param {number} x
-   * @returns {Array.<number>}
+   * @returns {Float32Array}
    */
   rightVertices( bounds2, x ) {
-    return [
-      x, bounds2.minY, bounds2.maxX,
-      x, bounds2.minY, bounds2.minX,
-      x, bounds2.maxY, bounds2.maxX,
-      x, bounds2.minY, bounds2.minX,
-      x, bounds2.maxY, bounds2.minX,
-      x, bounds2.maxY, bounds2.maxX
-    ];
+    return scratchFloatArray.slice( 0, ThreeUtils.writeRightVertices( scratchFloatArray, 0, bounds2, x ) );
   },
 
   /**
@@ -120,17 +101,174 @@ const ThreeUtils = {
    *
    * @param {Bounds2} bounds2 - z,y
    * @param {number} x
-   * @returns {Array.<number>}
+   * @returns {Float32Array}
    */
   leftVertices( bounds2, x ) {
-    return [
+    return scratchFloatArray.slice( 0, ThreeUtils.writeLeftVertices( scratchFloatArray, 0, bounds2, x ) );
+  },
+
+  /**
+   * Writes a single triangle into a buffer, returning the new index location. Assumes vertices in counterclockwise
+   * order.
+   * @public
+   *
+   * Writes 9 entries into the array.
+   *
+   * @param {Float32Array|Float64Array} array
+   * @param {number} index
+   * @param {number} x0
+   * @param {number} y0
+   * @param {number} z0
+   * @param {number} x1
+   * @param {number} y1
+   * @param {number} z1
+   * @param {number} x2
+   * @param {number} y2
+   * @param {number} z2
+   * @returns {number} - The index for the next write
+   */
+  writeTriangle( array, index, x0, y0, z0, x1, y1, z1, x2, y2, z2 ) {
+    array[ index + 0 ] = x0;
+    array[ index + 1 ] = y0;
+    array[ index + 2 ] = z0;
+    array[ index + 3 ] = x1;
+    array[ index + 4 ] = y1;
+    array[ index + 5 ] = z1;
+    array[ index + 6 ] = x2;
+    array[ index + 7 ] = y2;
+    array[ index + 8 ] = z2;
+
+    return index + 9;
+  },
+
+  /**
+   * Writes a single quad into a buffer, returning the new index location. Assumes verties in counterclockwise order.
+   * @public
+   *
+   * Writes 18 entries into the array.
+   *
+   * @param {Float32Array|Float64Array} array
+   * @param {number} index
+   * @param {number} x0
+   * @param {number} y0
+   * @param {number} z0
+   * @param {number} x1
+   * @param {number} y1
+   * @param {number} z1
+   * @param {number} x2
+   * @param {number} y2
+   * @param {number} z2
+   * @param {number} z3
+   * @param {number} y3
+   * @param {number} z3
+   * @returns {number}
+   */
+  writeQuad( array, index, x0, y0, z0, x1, y1, z1, x2, y2, z2, x3, y3, z3 ) {
+    index = ThreeUtils.writeTriangle(
+      array, index,
+      x0, y0, z0,
+      x1, y1, z1,
+      x2, y2, z2
+    );
+    index = ThreeUtils.writeTriangle(
+      array, index,
+      x0, y0, z0,
+      x2, y2, z2,
+      x3, y3, z3
+    );
+    return index;
+  },
+
+  /**
+   * Writes a single front-facing quad into a buffer, returning the new index location. Assumes verties in
+   * counterclockwise order.
+   * @public
+   *
+   * Writes 18 entries into the array.
+   *
+   * @param {Float32Array|Float64Array} array
+   * @param {number} index
+   * @param {Bounds2} bounds2 - x,y
+   * @param {number} z
+   * @returns {Array.<number>}
+   */
+  writeFrontVertices( array, index, bounds2, z ) {
+    return ThreeUtils.writeQuad(
+      array, index,
+      bounds2.minX, bounds2.maxY, z,
+      bounds2.minX, bounds2.minY, z,
+      bounds2.maxX, bounds2.minY, z,
+      bounds2.maxX, bounds2.maxY, z
+    );
+  },
+
+  /**
+   * Writes a single up-facing quad into a buffer, returning the new index location. Assumes verties in
+   * counterclockwise order.
+   * @public
+   *
+   * Writes 18 entries into the array.
+   *
+   * @param {Float32Array|Float64Array} array
+   * @param {number} index
+   * @param {Bounds2} bounds2 - x,z
+   * @param {number} y
+   * @returns {Array.<number>}
+   */
+  writeTopVertices( array, index, bounds2, y ) {
+    return ThreeUtils.writeQuad(
+      array, index,
+      bounds2.minX, y, bounds2.maxY,
+      bounds2.maxX, y, bounds2.maxY,
+      bounds2.maxX, y, bounds2.minY,
+      bounds2.minX, y, bounds2.minY
+    );
+  },
+
+  /**
+   * Writes a single right-facing quad into a buffer, returning the new index location. Assumes verties in
+   * counterclockwise order.
+   * @public
+   *
+   * Writes 18 entries into the array.
+   *
+   * @param {Float32Array|Float64Array} array
+   * @param {number} index
+   * @param {Bounds2} bounds2 - z,y
+   * @param {number} x
+   * @returns {Array.<number>}
+   */
+  writeRightVertices( array, index, bounds2, x ) {
+    return ThreeUtils.writeQuad(
+      array, index,
+      x, bounds2.minY, bounds2.maxX,
+      x, bounds2.minY, bounds2.minX,
+      x, bounds2.maxY, bounds2.minX,
+      x, bounds2.maxY, bounds2.maxX
+    );
+  },
+
+  /**
+   * Writes a single left-facing quad into a buffer, returning the new index location. Assumes verties in
+   * counterclockwise order.
+   * @public
+   *
+   * Writes 18 entries into the array.
+   *
+   * @param {Float32Array|Float64Array} array
+   * @param {number} index
+   * @param {Bounds2} bounds2 - z,y
+   * @param {number} x
+   * @returns {Array.<number>}
+   */
+  writeLeftVertices( array, index, bounds2, x ) {
+    return ThreeUtils.writeQuad(
+      array, index,
       x, bounds2.minY, bounds2.maxX,
       x, bounds2.maxY, bounds2.maxX,
-      x, bounds2.minY, bounds2.minX,
-      x, bounds2.minY, bounds2.minX,
-      x, bounds2.maxY, bounds2.maxX,
-      x, bounds2.maxY, bounds2.minX
-    ];
+      x, bounds2.maxY, bounds2.minX,
+      x, bounds2.minY, bounds2.minX
+    );
   },
 
   /**
