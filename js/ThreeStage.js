@@ -135,6 +135,8 @@ class ThreeStage {
     else {
       imageDataBuffer = new window.Uint8ClampedArray( canvasWidth * canvasHeight * 4 );
 
+      const squaredSupersampleInverse = 1 / ( supersampleMultiplier * supersampleMultiplier );
+
       for ( let x = 0; x < canvasWidth; x++ ) {
         const xBlock = x * supersampleMultiplier;
         for ( let y = 0; y < canvasHeight; y++ ) {
@@ -146,21 +148,17 @@ class ThreeStage {
           let linearPremultipliedGreen = 0;
           let linearPremultipliedBlue = 0;
           let linearAlpha = 0;
-          let count = 0;
 
           for ( let i = 0; i < supersampleMultiplier; i++ ) {
             for ( let j = 0; j < supersampleMultiplier; j++ ) {
               const inputIndex = ( xBlock + i + ( yBlock + j ) * width ) * 4;
 
-              const alpha = Math.pow( pixels[ inputIndex + 3 ] / 255, GAMMA );
+              const alpha = Math.pow( pixels[ inputIndex + 3 ], GAMMA );
 
-              // NOTE: Seems possible to get rid of the divisions of /255 by handling the associated math below, outside
-              // of this hot loop
-              linearPremultipliedRed += Math.pow( pixels[ inputIndex + 0 ] / 255, GAMMA ) * alpha;
-              linearPremultipliedGreen += Math.pow( pixels[ inputIndex + 1 ] / 255, GAMMA ) * alpha;
-              linearPremultipliedBlue += Math.pow( pixels[ inputIndex + 2 ] / 255, GAMMA ) * alpha;
+              linearPremultipliedRed += Math.pow( pixels[ inputIndex + 0 ], GAMMA ) * alpha;
+              linearPremultipliedGreen += Math.pow( pixels[ inputIndex + 1 ], GAMMA ) * alpha;
+              linearPremultipliedBlue += Math.pow( pixels[ inputIndex + 2 ], GAMMA ) * alpha;
               linearAlpha += alpha;
-              count++;
             }
           }
 
@@ -171,10 +169,10 @@ class ThreeStage {
             imageDataBuffer[ outputIndex + 3 ] = 0;
           }
           else {
-            imageDataBuffer[ outputIndex + 0 ] = Math.floor( Math.pow( linearPremultipliedRed / linearAlpha, INVERSE_GAMMA ) * 255 );
-            imageDataBuffer[ outputIndex + 1 ] = Math.floor( Math.pow( linearPremultipliedGreen / linearAlpha, INVERSE_GAMMA ) * 255 );
-            imageDataBuffer[ outputIndex + 2 ] = Math.floor( Math.pow( linearPremultipliedBlue / linearAlpha, INVERSE_GAMMA ) * 255 );
-            imageDataBuffer[ outputIndex + 3 ] = Math.floor( Math.pow( linearAlpha / count, INVERSE_GAMMA ) * 255 );
+            imageDataBuffer[ outputIndex + 0 ] = Math.floor( Math.pow( linearPremultipliedRed / linearAlpha, INVERSE_GAMMA ) );
+            imageDataBuffer[ outputIndex + 1 ] = Math.floor( Math.pow( linearPremultipliedGreen / linearAlpha, INVERSE_GAMMA ) );
+            imageDataBuffer[ outputIndex + 2 ] = Math.floor( Math.pow( linearPremultipliedBlue / linearAlpha, INVERSE_GAMMA ) );
+            imageDataBuffer[ outputIndex + 3 ] = Math.floor( Math.pow( linearAlpha * squaredSupersampleInverse, INVERSE_GAMMA ) );
           }
         }
       }
