@@ -17,6 +17,10 @@ import Color from '../../scenery/js/util/Color.js';
 import ThreeUtils from './ThreeUtils.js';
 import mobius from './mobius.js';
 
+// hard-coded gamma (assuming the exponential part of the sRGB curve as a simplification)
+const GAMMA = 2.2;
+const INVERSE_GAMMA = 1 / GAMMA;
+
 class ThreeStage {
   /**
    * @param {Object} [options]
@@ -131,33 +135,49 @@ class ThreeStage {
     else {
       imageDataBuffer = new window.Uint8ClampedArray( canvasWidth * canvasHeight * 4 );
 
-      _.range( 0, canvasWidth ).forEach( x => {
-        _.range( 0, canvasHeight ).forEach( y => {
+      for ( let x = 0; x < canvasWidth; x++ ) {
+        const xBlock = x * supersampleMultiplier;
+        for ( let y = 0; y < canvasHeight; y++ ) {
+          const yBlock = y * supersampleMultiplier;
           const outputIndex = ( x + y * canvasWidth ) * 4;
 
-          const colors = [];
+          // Optimized version of Color.supersampleBlend, inlined
+          let linearPremultipliedRed = 0;
+          let linearPremultipliedGreen = 0;
+          let linearPremultipliedBlue = 0;
+          let linearAlpha = 0;
+          let count = 0;
 
-          _.range( 0, supersampleMultiplier ).forEach( i => {
-            _.range( 0, supersampleMultiplier ).forEach( j => {
-              const inputIndex = ( x * supersampleMultiplier + i + ( y * supersampleMultiplier + j ) * width ) * 4;
+          for ( let i = 0; i < supersampleMultiplier; i++ ) {
+            for ( let j = 0; j < supersampleMultiplier; j++ ) {
+              const inputIndex = ( xBlock + i + ( yBlock + j ) * width ) * 4;
 
-              colors.push( new Color(
-                pixels[ inputIndex ],
-                pixels[ inputIndex + 1 ],
-                pixels[ inputIndex + 2 ],
-                pixels[ inputIndex + 3 ] / 255
-              ) );
-            } );
-          } );
+              const alpha = Math.pow( pixels[ inputIndex + 3 ] / 255, GAMMA );
 
-          const supersampledColor = Color.supersampleBlend( colors );
+              // NOTE: Seems possible to get rid of the divisions of /255 by handling the associated math below, outside
+              // of this hot loop
+              linearPremultipliedRed += Math.pow( pixels[ inputIndex + 0 ] / 255, GAMMA ) * alpha;
+              linearPremultipliedGreen += Math.pow( pixels[ inputIndex + 1 ] / 255, GAMMA ) * alpha;
+              linearPremultipliedBlue += Math.pow( pixels[ inputIndex + 2 ] / 255, GAMMA ) * alpha;
+              linearAlpha += alpha;
+              count++;
+            }
+          }
 
-          imageDataBuffer[ outputIndex ] = supersampledColor.r;
-          imageDataBuffer[ outputIndex + 1 ] = supersampledColor.g;
-          imageDataBuffer[ outputIndex + 2 ] = supersampledColor.b;
-          imageDataBuffer[ outputIndex + 3 ] = Math.floor( supersampledColor.a * 255 );
-        } );
-      } );
+          if ( linearAlpha === 0 ) {
+            imageDataBuffer[ outputIndex + 0 ] = 0;
+            imageDataBuffer[ outputIndex + 1 ] = 0;
+            imageDataBuffer[ outputIndex + 2 ] = 0;
+            imageDataBuffer[ outputIndex + 3 ] = 0;
+          }
+          else {
+            imageDataBuffer[ outputIndex + 0 ] = Math.floor( Math.pow( linearPremultipliedRed / linearAlpha, INVERSE_GAMMA ) * 255 );
+            imageDataBuffer[ outputIndex + 1 ] = Math.floor( Math.pow( linearPremultipliedGreen / linearAlpha, INVERSE_GAMMA ) * 255 );
+            imageDataBuffer[ outputIndex + 2 ] = Math.floor( Math.pow( linearPremultipliedBlue / linearAlpha, INVERSE_GAMMA ) * 255 );
+            imageDataBuffer[ outputIndex + 3 ] = Math.floor( Math.pow( linearAlpha / count, INVERSE_GAMMA ) * 255 );
+          }
+        }
+      }
     }
 
     // create a Canvas with the correct size, and fill it with the pixel data
