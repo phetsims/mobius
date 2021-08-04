@@ -104,8 +104,8 @@ class ThreeStage {
   renderToCanvas( supersampleMultiplier = 1, backingMultiplier = 1 ) {
     assert && assert( Number.isInteger( supersampleMultiplier ) );
 
-    const canvasWidth = this.canvasWidth * backingMultiplier;
-    const canvasHeight = this.canvasHeight * backingMultiplier;
+    const canvasWidth = Math.ceil( this.canvasWidth * backingMultiplier );
+    const canvasHeight = Math.ceil( this.canvasHeight * backingMultiplier );
 
     const width = canvasWidth * supersampleMultiplier;
     const height = canvasHeight * supersampleMultiplier;
