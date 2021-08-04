@@ -7,6 +7,7 @@
  */
 
 import Property from '../../axon/js/Property.js';
+import TinyEmitter from '../../axon/js/TinyEmitter.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
 import Ray3 from '../../dot/js/Ray3.js';
 import Vector2 from '../../dot/js/Vector2.js';
@@ -87,6 +88,9 @@ class ThreeStage {
     this.backgroundProperty.link( this.colorListener );
 
     this.threeCamera.position.copy( ThreeUtils.vectorToThree( options.cameraPosition ) ); // sets the camera's position
+
+    // @public {TinyEmitter}
+    this.dimensionsChangedEmitter = new TinyEmitter();
   }
 
   /**
@@ -273,6 +277,8 @@ class ThreeStage {
 
     this.threeCamera.updateProjectionMatrix(); // TODO: What is this doing?
     this.threeRenderer.setSize( this.canvasWidth, this.canvasHeight );
+
+    this.dimensionsChangedEmitter.emit();
   }
 
   /**

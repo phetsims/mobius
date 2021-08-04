@@ -190,7 +190,7 @@ const ThreeUtils = {
    * @param {number} index
    * @param {Bounds2} bounds2 - x,y
    * @param {number} z
-   * @returns {Array.<number>}
+   * @returns {number}
    */
   writeFrontVertices( array, index, bounds2, z ) {
     return ThreeUtils.writeQuad(
@@ -213,7 +213,7 @@ const ThreeUtils = {
    * @param {number} index
    * @param {Bounds2} bounds2 - x,z
    * @param {number} y
-   * @returns {Array.<number>}
+   * @returns {number}
    */
   writeTopVertices( array, index, bounds2, y ) {
     return ThreeUtils.writeQuad(
@@ -236,7 +236,7 @@ const ThreeUtils = {
    * @param {number} index
    * @param {Bounds2} bounds2 - z,y
    * @param {number} x
-   * @returns {Array.<number>}
+   * @returns {number}
    */
   writeRightVertices( array, index, bounds2, x ) {
     return ThreeUtils.writeQuad(
@@ -259,7 +259,7 @@ const ThreeUtils = {
    * @param {number} index
    * @param {Bounds2} bounds2 - z,y
    * @param {number} x
-   * @returns {Array.<number>}
+   * @returns {number}
    */
   writeLeftVertices( array, index, bounds2, x ) {
     return ThreeUtils.writeQuad(
