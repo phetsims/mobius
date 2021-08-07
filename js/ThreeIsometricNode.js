@@ -87,9 +87,6 @@ class ThreeIsometricNode extends Node {
       const screenHeight = this.stage.height;
 
       if ( screenWidth && screenHeight ) {
-        assert && assert( screenWidth === window.innerWidth );
-        assert && assert( screenHeight === window.innerHeight );
-
         this.stage.adjustViewOffset( this.parentToGlobalBounds( new Bounds2( 0, 0, this.layoutBounds.width, this.layoutBounds.height ) ) );
       }
     };
