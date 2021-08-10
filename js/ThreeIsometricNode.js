@@ -109,7 +109,7 @@ class ThreeIsometricNode extends Node {
   /**
    * Given a screen point, returns a 3D ray representing the camera's position and direction that point would be in the
    * 3D scene.
-   * @private
+   * @public
    *
    * @param {Vector2} globalScreenPoint
    * @returns {Ray3}
