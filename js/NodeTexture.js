@@ -24,7 +24,8 @@ class NodeTexture extends THREE.Texture {
     scene.addChild( node );
     const display = new Display( scene, {
       width: width,
-      height: height
+      height: height,
+      accessibility: false
     } );
     display.updateDisplay();
 
