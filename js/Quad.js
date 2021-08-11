@@ -77,9 +77,9 @@ class Quad extends THREE.BufferGeometry {
 
     normal( nx, ny, nx );
 
-    this.addAttribute( 'position', new THREE.BufferAttribute( positionArray, 3 ) );
-    this.addAttribute( 'normal', new THREE.BufferAttribute( normalArray, 3 ) );
-    this.addAttribute( 'uv', new THREE.BufferAttribute( uvArray, 2 ) );
+    this.setAttribute( 'position', new THREE.BufferAttribute( positionArray, 3 ) );
+    this.setAttribute( 'normal', new THREE.BufferAttribute( normalArray, 3 ) );
+    this.setAttribute( 'uv', new THREE.BufferAttribute( uvArray, 2 ) );
   }
 }
 

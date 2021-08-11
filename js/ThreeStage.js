@@ -67,7 +67,7 @@ class ThreeStage {
     this.contextLossDialog = null;
 
     // In the event of a context loss, we'll just show a dialog. See https://github.com/phetsims/molecule-shapes/issues/100
-    this.threeRenderer.context.canvas.addEventListener( 'webglcontextlost', event => {
+    this.threeRenderer.getContext().canvas.addEventListener( 'webglcontextlost', event => {
       event.preventDefault();
 
       this.showContextLossDialog();
@@ -397,7 +397,6 @@ class ThreeStage {
    */
   dispose() {
     this.threeRenderer.dispose();
-    this.threeScene.dispose();
     this.backgroundProperty.unlink( this.colorListener );
   }
 

@@ -12,7 +12,7 @@
   "phet": {
     "requirejsNamespace": "MOBIUS",
     "preload": [
-      "../sherpa/lib/three-r104.js"
+      "../sherpa/lib/three-r131.js"
     ]
   },
   "eslintConfig": {
