@@ -14,6 +14,7 @@ import DOM from '../../scenery/js/nodes/DOM.js';
 import Node from '../../scenery/js/nodes/Node.js';
 import Rectangle from '../../scenery/js/nodes/Rectangle.js';
 import Utils from '../../scenery/js/util/Utils.js';
+import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeStage from './ThreeStage.js';
 import mobius from './mobius.js';
 
@@ -68,7 +69,7 @@ class ThreeIsometricNode extends Node {
     // support Scenery/Joist 0.2 screenshot (takes extra work to output)
     this.domNode.renderToCanvasSelf = wrapper => {
       const context = wrapper.context;
-      const canvas = this.stage.renderToCanvas( 3, Utils.backingScale( context ) );
+      const canvas = this.stage.renderToCanvas( MobiusQueryParameters.mobiusCanvasSupersampling, Utils.backingScale( context ) );
 
       context.save();
 

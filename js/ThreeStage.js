@@ -15,6 +15,7 @@ import Vector3 from '../../dot/js/Vector3.js';
 import merge from '../../phet-core/js/merge.js';
 import ContextLossFailureDialog from '../../scenery-phet/js/ContextLossFailureDialog.js';
 import Color from '../../scenery/js/util/Color.js';
+import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeUtils from './ThreeUtils.js';
 import mobius from './mobius.js';
 
@@ -141,42 +142,86 @@ class ThreeStage {
 
       const squaredSupersampleInverse = 1 / ( supersampleMultiplier * supersampleMultiplier );
 
-      for ( let x = 0; x < canvasWidth; x++ ) {
-        const xBlock = x * supersampleMultiplier;
-        for ( let y = 0; y < canvasHeight; y++ ) {
-          const yBlock = y * supersampleMultiplier;
-          const outputIndex = ( x + y * canvasWidth ) * 4;
+      // NOTE: duplication exists here to maintain both optimized code-paths. No if-else inside.
+      if ( MobiusQueryParameters.mobiusCanvasSkipGamma ) {
+        for ( let x = 0; x < canvasWidth; x++ ) {
+          const xBlock = x * supersampleMultiplier;
+          for ( let y = 0; y < canvasHeight; y++ ) {
+            const yBlock = y * supersampleMultiplier;
+            const outputIndex = ( x + y * canvasWidth ) * 4;
 
-          // Optimized version of Color.supersampleBlend, inlined
-          let linearPremultipliedRed = 0;
-          let linearPremultipliedGreen = 0;
-          let linearPremultipliedBlue = 0;
-          let linearAlpha = 0;
+            // Optimized version of Color.supersampleBlend, inlined
+            let premultipliedRed = 0;
+            let premultipliedGreen = 0;
+            let premultipliedBlue = 0;
+            let alpha = 0;
 
-          for ( let i = 0; i < supersampleMultiplier; i++ ) {
-            for ( let j = 0; j < supersampleMultiplier; j++ ) {
-              const inputIndex = ( xBlock + i + ( yBlock + j ) * width ) * 4;
+            for ( let i = 0; i < supersampleMultiplier; i++ ) {
+              for ( let j = 0; j < supersampleMultiplier; j++ ) {
+                const inputIndex = ( xBlock + i + ( yBlock + j ) * width ) * 4;
 
-              const alpha = Math.pow( pixels[ inputIndex + 3 ], GAMMA );
+                const pixelAlpha = pixels[ inputIndex + 3 ];
 
-              linearPremultipliedRed += Math.pow( pixels[ inputIndex + 0 ], GAMMA ) * alpha;
-              linearPremultipliedGreen += Math.pow( pixels[ inputIndex + 1 ], GAMMA ) * alpha;
-              linearPremultipliedBlue += Math.pow( pixels[ inputIndex + 2 ], GAMMA ) * alpha;
-              linearAlpha += alpha;
+                premultipliedRed += pixels[ inputIndex + 0 ] * pixelAlpha;
+                premultipliedGreen += pixels[ inputIndex + 1 ] * pixelAlpha;
+                premultipliedBlue += pixels[ inputIndex + 2 ] * pixelAlpha;
+                alpha += pixelAlpha;
+              }
+            }
+
+            if ( alpha === 0 ) {
+              imageDataBuffer[ outputIndex + 0 ] = 0;
+              imageDataBuffer[ outputIndex + 1 ] = 0;
+              imageDataBuffer[ outputIndex + 2 ] = 0;
+              imageDataBuffer[ outputIndex + 3 ] = 0;
+            }
+            else {
+              imageDataBuffer[ outputIndex + 0 ] = Math.floor( premultipliedRed / alpha );
+              imageDataBuffer[ outputIndex + 1 ] = Math.floor( premultipliedGreen / alpha );
+              imageDataBuffer[ outputIndex + 2 ] = Math.floor( premultipliedBlue / alpha );
+              imageDataBuffer[ outputIndex + 3 ] = Math.floor( alpha * squaredSupersampleInverse );
             }
           }
+        }
+      }
+      else {
+        for ( let x = 0; x < canvasWidth; x++ ) {
+          const xBlock = x * supersampleMultiplier;
+          for ( let y = 0; y < canvasHeight; y++ ) {
+            const yBlock = y * supersampleMultiplier;
+            const outputIndex = ( x + y * canvasWidth ) * 4;
 
-          if ( linearAlpha === 0 ) {
-            imageDataBuffer[ outputIndex + 0 ] = 0;
-            imageDataBuffer[ outputIndex + 1 ] = 0;
-            imageDataBuffer[ outputIndex + 2 ] = 0;
-            imageDataBuffer[ outputIndex + 3 ] = 0;
-          }
-          else {
-            imageDataBuffer[ outputIndex + 0 ] = Math.floor( Math.pow( linearPremultipliedRed / linearAlpha, INVERSE_GAMMA ) );
-            imageDataBuffer[ outputIndex + 1 ] = Math.floor( Math.pow( linearPremultipliedGreen / linearAlpha, INVERSE_GAMMA ) );
-            imageDataBuffer[ outputIndex + 2 ] = Math.floor( Math.pow( linearPremultipliedBlue / linearAlpha, INVERSE_GAMMA ) );
-            imageDataBuffer[ outputIndex + 3 ] = Math.floor( Math.pow( linearAlpha * squaredSupersampleInverse, INVERSE_GAMMA ) );
+            // Optimized version of Color.supersampleBlend, inlined
+            let linearPremultipliedRed = 0;
+            let linearPremultipliedGreen = 0;
+            let linearPremultipliedBlue = 0;
+            let linearAlpha = 0;
+
+            for ( let i = 0; i < supersampleMultiplier; i++ ) {
+              for ( let j = 0; j < supersampleMultiplier; j++ ) {
+                const inputIndex = ( xBlock + i + ( yBlock + j ) * width ) * 4;
+
+                const alpha = Math.pow( pixels[ inputIndex + 3 ], GAMMA );
+
+                linearPremultipliedRed += Math.pow( pixels[ inputIndex + 0 ], GAMMA ) * alpha;
+                linearPremultipliedGreen += Math.pow( pixels[ inputIndex + 1 ], GAMMA ) * alpha;
+                linearPremultipliedBlue += Math.pow( pixels[ inputIndex + 2 ], GAMMA ) * alpha;
+                linearAlpha += alpha;
+              }
+            }
+
+            if ( linearAlpha === 0 ) {
+              imageDataBuffer[ outputIndex + 0 ] = 0;
+              imageDataBuffer[ outputIndex + 1 ] = 0;
+              imageDataBuffer[ outputIndex + 2 ] = 0;
+              imageDataBuffer[ outputIndex + 3 ] = 0;
+            }
+            else {
+              imageDataBuffer[ outputIndex + 0 ] = Math.floor( Math.pow( linearPremultipliedRed / linearAlpha, INVERSE_GAMMA ) );
+              imageDataBuffer[ outputIndex + 1 ] = Math.floor( Math.pow( linearPremultipliedGreen / linearAlpha, INVERSE_GAMMA ) );
+              imageDataBuffer[ outputIndex + 2 ] = Math.floor( Math.pow( linearPremultipliedBlue / linearAlpha, INVERSE_GAMMA ) );
+              imageDataBuffer[ outputIndex + 3 ] = Math.floor( Math.pow( linearAlpha * squaredSupersampleInverse, INVERSE_GAMMA ) );
+            }
           }
         }
       }
