@@ -44,6 +44,15 @@ class TextureQuad extends THREE.Mesh {
   }
 
   /**
+   * @public
+   * @param {THREE.Texture} texture
+   */
+  updateTexture( texture ) {
+     this.basicMaterial.map = texture;
+     this.basicMaterial.needsUpdate = true;
+  }
+
+  /**
    * Releases references
    * @public
    */
