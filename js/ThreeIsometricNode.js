@@ -46,6 +46,8 @@ class ThreeIsometricNode extends Node {
     // @public {ThreeStage}
     this.stage = new ThreeStage( options );
 
+    this.stage.setupContextLossDialog();
+
     this.stage.threeCamera.fov = options.fov;
     this.stage.threeCamera.aspect = this.layoutBounds.width / this.layoutBounds.height;
 

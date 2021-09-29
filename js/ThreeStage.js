@@ -424,6 +424,18 @@ class ThreeStage {
   }
 
   /**
+   * Hooks up a listener so that if the WebGL context is loss, we will show a failure dialog
+   * @public
+   */
+  setupContextLossDialog() {
+    this.threeRenderer.context.canvas.addEventListener( 'webglcontextlost', event => {
+      event.preventDefault();
+
+      new ContextLossFailureDialog().show();
+    } );
+  }
+
+  /**
    * Renders the simulation to a specific rendering target
    * @public
    *
