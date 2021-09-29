@@ -69,15 +69,13 @@ class ThreeStage {
 
     // In the event of a context loss, we'll just show a dialog. See https://github.com/phetsims/molecule-shapes/issues/100
     this.threeRenderer.context.canvas.addEventListener( 'webglcontextlost', event => {
-      event.preventDefault();
-
       this.showContextLossDialog();
-
-      if ( document.domain === 'phet.colorado.edu' ) {
-        window._gaq && window._gaq.push( [ '_trackEvent', 'WebGL Context Loss', `${phet.joist.sim.name} ${phet.joist.sim.version}`, document.URL ] );
-      }
     } );
 
+    // For https://github.com/phetsims/density/issues/100, we'll also allow context-restore, and will auto-hide the dialog
+    this.threeRenderer.context.canvas.addEventListener( 'webglcontextrestored', event => {
+      this.contextLossDialog.hideWithoutReload();
+    } );
 
     // @public {Property.<Color>}
     this.backgroundProperty = options.backgroundProperty;
@@ -421,18 +419,6 @@ class ThreeStage {
    */
   get height() {
     return this.canvasHeight;
-  }
-
-  /**
-   * Hooks up a listener so that if the WebGL context is loss, we will show a failure dialog
-   * @public
-   */
-  setupContextLossDialog() {
-    this.threeRenderer.context.canvas.addEventListener( 'webglcontextlost', event => {
-      event.preventDefault();
-
-      new ContextLossFailureDialog().show();
-    } );
   }
 
   /**
