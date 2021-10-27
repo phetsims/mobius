@@ -56,30 +56,33 @@ class ThreeIsometricNode extends Node {
     this.backgroundEventTarget = new Rectangle( {} );
     this.addChild( this.backgroundEventTarget );
 
-    // @private {DOM} - add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
-    this.domNode = new DOM( this.stage.threeRenderer.domElement, {
-      preventTransform: true, // Scenery override for transformation
-      pickable: false
-    } );
+    // Handle fallback for when we don't have WebGL, see https://github.com/phetsims/density/issues/105
+    if ( this.stage.threeRenderer ) {
+      // @private {DOM} - add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
+      this.domNode = new DOM( this.stage.threeRenderer.domElement, {
+        preventTransform: true, // Scenery override for transformation
+        pickable: false
+      } );
 
-    // don't do bounds detection, it's too expensive. We're not pickable anyways
-    this.domNode.invalidateDOM = () => this.domNode.invalidateSelf( new Bounds2( 0, 0, 0, 0 ) );
-    this.domNode.invalidateDOM();
+      // don't do bounds detection, it's too expensive. We're not pickable anyways
+      this.domNode.invalidateDOM = () => this.domNode.invalidateSelf( new Bounds2( 0, 0, 0, 0 ) );
+      this.domNode.invalidateDOM();
 
-    // support Scenery/Joist 0.2 screenshot (takes extra work to output)
-    this.domNode.renderToCanvasSelf = wrapper => {
-      const context = wrapper.context;
-      const canvas = this.stage.renderToCanvas( MobiusQueryParameters.mobiusCanvasSupersampling, Utils.backingScale( context ) );
+      // support Scenery/Joist 0.2 screenshot (takes extra work to output)
+      this.domNode.renderToCanvasSelf = wrapper => {
+        const context = wrapper.context;
+        const canvas = this.stage.renderToCanvas( MobiusQueryParameters.mobiusCanvasSupersampling, Utils.backingScale( context ) );
 
-      context.save();
+        context.save();
 
-      context.setTransform( 1, 0, 0, -1, 0, canvas.height ); // no need to take pixel scaling into account
+        context.setTransform( 1, 0, 0, -1, 0, canvas.height ); // no need to take pixel scaling into account
 
-      context.drawImage( canvas, 0, 0 );
-      context.restore();
-    };
+        context.drawImage( canvas, 0, 0 );
+        context.restore();
+      };
 
-    this.addChild( this.domNode );
+      this.addChild( this.domNode );
+    }
 
     // @public {function} - Ideally should be called whenever the parent/screenView matrix is changed, or any camera
     // change (including zoom or fov).
@@ -148,7 +151,9 @@ class ThreeIsometricNode extends Node {
 
       this.viewOffsetListener();
 
-      this.domNode.invalidateDOM();
+      if ( this.stage.threeRenderer ) {
+        this.domNode.invalidateDOM();
+      }
     }
   }
 

@@ -58,37 +58,40 @@ class ThreeNode extends Node {
     this.backgroundEventTarget = new Rectangle( 0, 0, width, height );
     this.addChild( this.backgroundEventTarget );
 
-    // @private {DOM} - add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
-    this.domNode = new DOM( this.stage.threeRenderer.domElement, {
-      preventTransform: true, // Scenery override for transformation
-      pickable: false
-    } );
+    // Handle fallback for when we don't have WebGL, see https://github.com/phetsims/density/issues/105
+    if ( this.stage.threeRenderer ) {
+      // @private {DOM} - add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
+      this.domNode = new DOM( this.stage.threeRenderer.domElement, {
+        preventTransform: true, // Scenery override for transformation
+        pickable: false
+      } );
 
-    // don't do bounds detection, it's too expensive. We're not pickable anyways
-    this.domNode.invalidateDOM = () => this.domNode.invalidateSelf( new Bounds2( 0, 0, 0, 0 ) );
-    this.domNode.invalidateDOM();
+      // don't do bounds detection, it's too expensive. We're not pickable anyways
+      this.domNode.invalidateDOM = () => this.domNode.invalidateSelf( new Bounds2( 0, 0, 0, 0 ) );
+      this.domNode.invalidateDOM();
 
-    const offsetMatrix = new Matrix3();
-    Utils.prepareForTransform( this.stage.threeRenderer.domElement );
-    this.offsetProperty.link( offset => {
-      offsetMatrix.setToTranslation( offset.x, offset.y );
-      Utils.applyPreparedTransform( offsetMatrix, this.stage.threeRenderer.domElement );
-    } );
+      const offsetMatrix = new Matrix3();
+      Utils.prepareForTransform( this.stage.threeRenderer.domElement );
+      this.offsetProperty.link( offset => {
+        offsetMatrix.setToTranslation( offset.x, offset.y );
+        Utils.applyPreparedTransform( offsetMatrix, this.stage.threeRenderer.domElement );
+      } );
 
-    // support Scenery/Joist 0.2 screenshot (takes extra work to output)
-    this.domNode.renderToCanvasSelf = wrapper => {
-      const canvas = this.stage.renderToCanvas( MobiusQueryParameters.mobiusCanvasSupersampling );
+      // support Scenery/Joist 0.2 screenshot (takes extra work to output)
+      this.domNode.renderToCanvasSelf = wrapper => {
+        const canvas = this.stage.renderToCanvas( MobiusQueryParameters.mobiusCanvasSupersampling );
 
-      const context = wrapper.context;
-      context.save();
+        const context = wrapper.context;
+        context.save();
 
-      context.setTransform( 1, 0, this.offsetProperty.value.x, -1, 0, this.stage.canvasHeight + this.offsetProperty.value.y ); // no need to take pixel scaling into account
+        context.setTransform( 1, 0, this.offsetProperty.value.x, -1, 0, this.stage.canvasHeight + this.offsetProperty.value.y ); // no need to take pixel scaling into account
 
-      context.drawImage( canvas, 0, 0 );
-      context.restore();
-    };
+        context.drawImage( canvas, 0, 0 );
+        context.restore();
+      };
 
-    this.addChild( this.domNode );
+      this.addChild( this.domNode );
+    }
 
     this.mutate( options );
   }
@@ -129,7 +132,9 @@ class ThreeNode extends Node {
     // three.js requires this to be called after changing the parameters
     this.stage.threeCamera.updateProjectionMatrix();
 
-    this.domNode.invalidateDOM();
+    if ( this.stage.threeRenderer ) {
+      this.domNode.invalidateDOM();
+    }
   }
 
   /**
