@@ -23,7 +23,6 @@ const simOptions = {
   credits: {
     leadDesign: 'PhET'
   },
-  hasKeyboardHelpContent: true,
   webgl: true
 };
 
