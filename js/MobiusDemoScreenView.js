@@ -9,7 +9,7 @@
 import Vector3 from '../../dot/js/Vector3.js';
 import ScreenView from '../../joist/js/ScreenView.js';
 import Keypad from '../../scenery-phet/js/keypad/Keypad.js';
-import animatedPanZoomSingleton from '../../scenery/js/listeners/animatedPanZoomSingleton.js';
+import { animatedPanZoomSingleton } from '../../scenery/js/imports.js';
 import NodeTexture from './NodeTexture.js';
 import TextureQuad from './TextureQuad.js';
 import ThreeIsometricNode from './ThreeIsometricNode.js';

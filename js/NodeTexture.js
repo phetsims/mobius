@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Display from '../../scenery/js/display/Display.js';
-import Node from '../../scenery/js/nodes/Node.js';
+import { Display } from '../../scenery/js/imports.js';
+import { Node } from '../../scenery/js/imports.js';
 import mobius from './mobius.js';
 
 class NodeTexture extends THREE.Texture {

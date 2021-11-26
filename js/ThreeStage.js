@@ -14,7 +14,7 @@ import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
 import merge from '../../phet-core/js/merge.js';
 import ContextLossFailureDialog from '../../scenery-phet/js/ContextLossFailureDialog.js';
-import Color from '../../scenery/js/util/Color.js';
+import { Color } from '../../scenery/js/imports.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeUtils from './ThreeUtils.js';
 import mobius from './mobius.js';
