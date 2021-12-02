@@ -269,6 +269,8 @@ class ThreeStage {
    * @returns {THREE.Raycaster}
    */
   getRaycasterFromScreenPoint( screenPoint ) {
+    assert && assert( screenPoint && screenPoint.isFinite() );
+
     // normalized device coordinates
     const ndcX = 2 * screenPoint.x / this.canvasWidth - 1;
     const ndcY = 2 * ( 1 - ( screenPoint.y / this.canvasHeight ) ) - 1;
