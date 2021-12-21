@@ -8,8 +8,8 @@
  */
 
 import merge from '../../phet-core/js/merge.js';
-import Quad from './Quad.js';
 import mobius from './mobius.js';
+import Quad from './Quad.js';
 
 class TextureQuad extends THREE.Mesh {
   /**
@@ -41,15 +41,33 @@ class TextureQuad extends THREE.Mesh {
 
     // @private {Material}
     this.basicMaterial = basicMaterial;
+
+    // @private {number}
+    this.textureQuadWidth = width;
+    this.textureQuadHeight = height;
   }
 
   /**
    * @public
    * @param {THREE.Texture} texture
+   * @param {number} [width]
+   * @param {number} [height]
    */
-  updateTexture( texture ) {
-     this.basicMaterial.map = texture;
-     this.basicMaterial.needsUpdate = true;
+  updateTexture( texture, width = this.textureQuadWidth, height = this.textureQuadHeight ) {
+    this.basicMaterial.map = texture;
+    this.basicMaterial.needsUpdate = true;
+
+    if ( width !== this.textureQuadWidth || height !== this.textureQuadHeight ) {
+      this.textureQuadWidth = width;
+      this.textureQuadHeight = height;
+
+      this.quadGeometry.set(
+        0, 0, 0,
+        width, 0, 0,
+        width, height, 0,
+        0, height, 0,
+        0, 0, 1 );
+    }
   }
 
   /**
