@@ -29,19 +29,24 @@ class ThreeIsometricNode extends Node {
       // {Property.<Matrix3>}
       parentMatrixProperty: new Property( Matrix3.IDENTITY ),
 
-      fov: 50
+      fov: 50,
       // positioned or transformed pixels, or full scenery-transformed?
       // can use https://threejs.org/docs/#api/en/cameras/PerspectiveCamera.setViewOffset to handle sub-pixel stuff?
 
       // Use method-based interaction to control positioning. Or set up the scenery default if listeners are needed.
 
       // FOV auto-control on layout?
+
+      getPhetioMouseHit: null // (point:Vector2)=>PhetioObject, for studio autoselect
     }, options );
 
     super();
 
     // @private {Bounds2}
     this.layoutBounds = layoutBounds;
+
+    // @private
+    this._getPhetioMouseHit = options.getPhetioMouseHit;
 
     // @public {ThreeStage}
     this.stage = new ThreeStage( options );
@@ -97,6 +102,16 @@ class ThreeIsometricNode extends Node {
     this.parentMatrixProperty.lazyLink( this.viewOffsetListener );
 
     this.mutate( options );
+  }
+
+  // @public - for studio autoselect
+  getPhetioMouseHit( point ) {
+    if ( this._getPhetioMouseHit && this.isPhetioMouseHittable( point ) ) {
+      return this._getPhetioMouseHit( point );
+    }
+    else {
+      return super.getPhetioMouseHit( point );
+    }
   }
 
   /**
