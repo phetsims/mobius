@@ -1,4 +1,4 @@
-// Copyright 2019-2021, University of Colorado Boulder
+// Copyright 2019-2022, University of Colorado Boulder
 
 /**
  * Shows three.js content with isometric scaling that takes up the entire viewport in a high-performance way.
