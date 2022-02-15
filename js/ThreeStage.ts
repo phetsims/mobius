@@ -12,50 +12,63 @@ import Bounds2 from '../../dot/js/Bounds2.js';
 import Ray3 from '../../dot/js/Ray3.js';
 import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
-import merge from '../../phet-core/js/merge.js';
+import optionize from '../../phet-core/js/optionize.js';
 import ContextLossFailureDialog from '../../scenery-phet/js/ContextLossFailureDialog.js';
 import { Color } from '../../scenery/js/imports.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeUtils from './ThreeUtils.js';
 import mobius from './mobius.js';
+import IReadOnlyProperty from '../../axon/js/IReadOnlyProperty.js';
 
 // hard-coded gamma (assuming the exponential part of the sRGB curve as a simplification)
 const GAMMA = 2.2;
 const INVERSE_GAMMA = 1 / GAMMA;
 
+type ThreeStageOptions = {
+  backgroundProperty?: IReadOnlyProperty<Color>;
+
+  // The initial camera position
+  cameraPosition?: Vector3;
+};
+
 class ThreeStage {
-  /**
-   * @param {Object} [options]
-   */
-  constructor( options ) {
 
-    options = merge( {
-      // {Property.<Color>}
+  // Scale applied to interaction that isn't directly tied to screen coordinates (rotation), updated in layout
+  activeScale: number;
+
+  canvasWidth: number;
+  canvasHeight: number;
+
+  threeScene: THREE.Scene;
+  threeCamera: THREE.PerspectiveCamera;
+  threeRenderer: THREE.WebGLRenderer | null;
+  contextLossDialog: ContextLossFailureDialog | null;
+
+  backgroundProperty: IReadOnlyProperty<Color>;
+
+  private colorListener: ( c: Color ) => void;
+
+  dimensionsChangedEmitter: TinyEmitter;
+
+  constructor( providedOptions?: ThreeStageOptions ) {
+
+    const options = optionize<ThreeStageOptions, ThreeStageOptions>( {
       backgroundProperty: new Property( Color.BLACK ),
-
-      // {Vector3} - The initial camera position
       cameraPosition: new Vector3( 0, 0, 10 )
-    }, options );
+    }, providedOptions );
 
-    // @public {number} - scale applied to interaction that isn't directly tied to screen coordinates (rotation),
-    // updated in layout
     this.activeScale = 1;
-
-    // @private {number}
     this.canvasWidth = 0;
     this.canvasHeight = 0;
-
-    // @public {THREE.Scene}
     this.threeScene = new THREE.Scene();
 
-    // @public {THREE.Camera} - will set the projection parameters on layout
+    // will set the projection parameters on layout
     this.threeCamera = new THREE.PerspectiveCamera();
 
     // near/far clipping planes
     this.threeCamera.near = 1;
     this.threeCamera.far = 100;
 
-    // @public {THREE.Renderer|null}
     try {
       this.threeRenderer = new THREE.WebGLRenderer( {
         antialias: true,
@@ -70,8 +83,7 @@ class ThreeStage {
     }
     this.threeRenderer && this.threeRenderer.setPixelRatio( window.devicePixelRatio || 1 );
 
-    // @private {ContextLossFailureDialog|null} - dialog shown on context loss, constructed
-    // lazily because Dialog requires sim bounds during construction
+    // Dialog shown on context loss, constructed lazily because Dialog requires sim bounds during construction
     this.contextLossDialog = null;
 
     // In the event of a context loss, we'll just show a dialog. See https://github.com/phetsims/molecule-shapes/issues/100
@@ -81,10 +93,9 @@ class ThreeStage {
 
     // For https://github.com/phetsims/density/issues/100, we'll also allow context-restore, and will auto-hide the dialog
     this.threeRenderer && this.threeRenderer.context.canvas.addEventListener( 'webglcontextrestored', event => {
-      this.contextLossDialog.hideWithoutReload();
+      this.contextLossDialog!.hideWithoutReload();
     } );
 
-    // @public {Property.<Color>}
     this.backgroundProperty = options.backgroundProperty;
 
     // @private {function}
@@ -95,19 +106,13 @@ class ThreeStage {
 
     this.threeCamera.position.copy( ThreeUtils.vectorToThree( options.cameraPosition ) ); // sets the camera's position
 
-    // @public {TinyEmitter}
     this.dimensionsChangedEmitter = new TinyEmitter();
   }
 
   /**
    * Returns a Canvas containing the displayed content in this scene.
-   * @public
-   *
-   * @param {number} [supersampleMultiplier]
-   * @param {number} [backingMultiplier]
-   * @returns {HTMLCanvasElement}
    */
-  renderToCanvas( supersampleMultiplier = 1, backingMultiplier = 1 ) {
+  renderToCanvas( supersampleMultiplier: number = 1, backingMultiplier: number = 1 ): HTMLCanvasElement {
     assert && assert( Number.isInteger( supersampleMultiplier ) );
 
     const canvasWidth = Math.ceil( this.canvasWidth * backingMultiplier );
@@ -240,7 +245,7 @@ class ThreeStage {
       }
 
       // fill the canvas with the pixel data
-      const context = canvas.getContext( '2d' );
+      const context = canvas.getContext( '2d' )!;
       const imageData = context.createImageData( canvasWidth, canvasHeight );
       imageData.data.set( imageDataBuffer );
       context.putImageData( imageData, 0, 0 );
@@ -251,10 +256,7 @@ class ThreeStage {
     return canvas;
   }
 
-  /**
-   * @private
-   */
-  showContextLossDialog() {
+  private showContextLossDialog() {
     if ( !this.contextLossDialog ) {
       this.contextLossDialog = new ContextLossFailureDialog();
     }
@@ -263,12 +265,8 @@ class ThreeStage {
 
   /**
    * Returns a three.js Raycaster meant for ray operations.
-   * @private
-   *
-   * @param {Vector2} screenPoint
-   * @returns {THREE.Raycaster}
    */
-  getRaycasterFromScreenPoint( screenPoint ) {
+  private getRaycasterFromScreenPoint( screenPoint: Vector2 ): THREE.Raycaster {
     assert && assert( screenPoint && screenPoint.isFinite() );
 
     // normalized device coordinates
@@ -283,12 +281,8 @@ class ThreeStage {
 
   /**
    * Projects a 3d point in the global coordinate frame to one within the 2d global coordinate frame.
-   * @public
-   *
-   * @param {Vector3} point
-   * @returns {Vector2}
    */
-  projectPoint( point ) {
+  projectPoint( point: Vector3 ): Vector2 {
     const threePoint = ThreeUtils.vectorToThree( point );
     threePoint.project( this.threeCamera ); // global to NDC
 
@@ -310,22 +304,13 @@ class ThreeStage {
   /**
    * Given a screen point, returns a 3D ray representing the camera's position and direction that point would be in the
    * 3D scene.
-   * @private
-   *
-   * @param {Vector2} screenPoint
-   * @returns {Ray3}
    */
-  getRayFromScreenPoint( screenPoint ) {
+  getRayFromScreenPoint( screenPoint: Vector2 ): Ray3 {
     const threeRay = this.getRaycasterFromScreenPoint( screenPoint ).ray;
     return new Ray3( ThreeUtils.threeToVector( threeRay.origin ), ThreeUtils.threeToVector( threeRay.direction ).normalize() );
   }
 
-  /**
-   * @public
-   * @param {number} width
-   * @param {width} height
-   */
-  setDimensions( width, height ) {
+  setDimensions( width: number, height: number ) {
     assert && assert( typeof width === 'number' && width % 1 === 0 );
     assert && assert( typeof height === 'number' && height % 1 === 0 );
 
@@ -342,11 +327,8 @@ class ThreeStage {
    * Adjusts the camera's view offsets so that it displays the camera's main output within the specified cameraBounds.
    * This is a generalization of the isometric FOV computation, as it also supports other combinations such as properly
    * handling pan/zoom. See https://github.com/phetsims/density/issues/50
-   * @public
-   *
-   * @param {Bounds2} cameraBounds
    */
-  adjustViewOffset( cameraBounds ) {
+  adjustViewOffset( cameraBounds: Bounds2 ) {
     assert && assert( Math.abs( this.threeCamera.aspect - cameraBounds.width / cameraBounds.height ) < 1e-5, 'Camera aspect should match cameraBounds' );
 
     // We essentially reverse some of the computation being done by PerspectiveCamera's updateProjectionMatrix(), so
@@ -417,31 +399,20 @@ class ThreeStage {
     this.threeCamera.updateProjectionMatrix();
   }
 
-  /**
-   * @public
-   *
-   * @returns {number}
-   */
-  get width() {
+  get width(): number {
     return this.canvasWidth;
   }
 
-  /**
-   * @public
-   *
-   * @returns {number}
-   */
-  get height() {
+  get height(): number {
     return this.canvasHeight;
   }
 
   /**
    * Renders the simulation to a specific rendering target
-   * @public
    *
-   * @param {THREE.WebGLRenderTarget|undefined} target - undefined for the default target
+   * @param target - undefined for the default target
    */
-  render( target ) {
+  render( target: THREE.WebGLRenderTarget | undefined ) {
     // render the 3D scene first
     if ( this.threeRenderer ) {
       this.threeRenderer.setRenderTarget( target || null );
@@ -452,10 +423,11 @@ class ThreeStage {
 
   /**
    * Releases references.
-   * @public
    */
   dispose() {
     this.threeRenderer && this.threeRenderer.dispose();
+
+    // @ts-ignore
     this.threeScene.dispose();
     this.backgroundProperty.unlink( this.colorListener );
   }
@@ -468,16 +440,8 @@ class ThreeStage {
    * layout bounds fit perfectly in the window, so we don't really have a constraint.
    * Most of the complexity here is that threeCamera.fov is in degrees, and our ideal vertically-constrained FOV is
    * 50 (so there's conversion factors in place).
-   * @public
-   *
-   * @param {number} fov
-   * @param {number} canvasWidth
-   * @param {number} canvasHeight
-   * @param {number} layoutWidth
-   * @param {number} layoutHeight
-   * @returns {number}
    */
-  static computeIsometricFOV( fov, canvasWidth, canvasHeight, layoutWidth, layoutHeight ) {
+  static computeIsometricFOV( fov: number, canvasWidth: number, canvasHeight: number, layoutWidth: number, layoutHeight: number ): number {
     const sx = canvasWidth / layoutWidth;
     const sy = canvasHeight / layoutHeight;
 
@@ -487,3 +451,4 @@ class ThreeStage {
 
 mobius.register( 'ThreeStage', ThreeStage );
 export default ThreeStage;
+export type { ThreeStageOptions };

@@ -12,13 +12,13 @@ import mobius from './mobius.js';
 import Quad from './Quad.js';
 
 class TextureQuad extends THREE.Mesh {
-  /**
-   * @param {THREE.Texture} texture
-   * @param {number} width
-   * @param {number} height
-   * @param {Object} [materialOptions]
-   */
-  constructor( texture, width, height, materialOptions ) {
+
+  quadGeometry: Quad;
+  basicMaterial: THREE.MeshBasicMaterial;
+  textureQuadWidth: number;
+  textureQuadHeight: number;
+
+  constructor( texture: THREE.Texture, width: number, height: number, materialOptions?: THREE.MaterialParameters ) {
 
     const quadGeometry = new Quad(
       0, 0, 0,
@@ -36,24 +36,13 @@ class TextureQuad extends THREE.Mesh {
 
     super( quadGeometry, basicMaterial );
 
-    // @private {Quad}
     this.quadGeometry = quadGeometry;
-
-    // @private {Material}
     this.basicMaterial = basicMaterial;
-
-    // @private {number}
     this.textureQuadWidth = width;
     this.textureQuadHeight = height;
   }
 
-  /**
-   * @public
-   * @param {THREE.Texture} texture
-   * @param {number} [width]
-   * @param {number} [height]
-   */
-  updateTexture( texture, width = this.textureQuadWidth, height = this.textureQuadHeight ) {
+  updateTexture( texture: THREE.Texture, width: number = this.textureQuadWidth, height: number = this.textureQuadHeight ) {
     this.basicMaterial.map = texture;
     this.basicMaterial.needsUpdate = true;
 
@@ -72,12 +61,12 @@ class TextureQuad extends THREE.Mesh {
 
   /**
    * Releases references
-   * @public
    */
   dispose() {
     this.quadGeometry.dispose();
     this.basicMaterial.dispose();
 
+    // @ts-ignore
     super.dispose && super.dispose();
   }
 }

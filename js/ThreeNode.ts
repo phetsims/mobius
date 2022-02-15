@@ -11,41 +11,44 @@ import Bounds2 from '../../dot/js/Bounds2.js';
 import Matrix3 from '../../dot/js/Matrix3.js';
 import Vector2 from '../../dot/js/Vector2.js';
 import Vector2Property from '../../dot/js/Vector2Property.js';
-import merge from '../../phet-core/js/merge.js';
-import { DOM } from '../../scenery/js/imports.js';
-import { Node } from '../../scenery/js/imports.js';
-import { Rectangle } from '../../scenery/js/imports.js';
-import { Utils } from '../../scenery/js/imports.js';
+import { DOM, Node, NodeOptions, Rectangle, Utils } from '../../scenery/js/imports.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
-import ThreeStage from './ThreeStage.js';
+import ThreeStage, { ThreeStageOptions } from './ThreeStage.js';
 import mobius from './mobius.js';
+import optionize from '../../phet-core/js/optionize.js';
+import Property from '../../axon/js/Property.js';
+import Ray3 from '../../dot/js/Ray3.js';
+import Vector3 from '../../dot/js/Vector3.js';
+
+type ThreeNodeSelfOptions = {
+  fov?: number;
+};
+
+type ThreeNodeOptions = ThreeNodeSelfOptions & ThreeStageOptions & NodeOptions;
 
 class ThreeNode extends Node {
-  /**
-   * @param {number} width
-   * @param {number} height
-   * @param {Object} [options]
-   */
-  constructor( width, height, options ) {
 
-    options = merge( {
+  stage: ThreeStage;
+  private layoutWidth: number;
+  private layoutHeight: number;
+  private offsetProperty: Property<Vector2>;
+  backgroundEventTarget: Node;
+  private domNode!: DOM;
+
+  constructor( width: number, height: number, providedOptions?: ThreeNodeOptions ) {
+
+    const options = optionize<ThreeNodeOptions, ThreeNodeSelfOptions, ThreeStageOptions & NodeOptions>( {
       fov: 50
 
       // positioned or transformed pixels, or full scenery-transformed?
       // can use https://threejs.org/docs/#api/en/cameras/PerspectiveCamera.setViewOffset to handle sub-pixel stuff?
-    }, options );
+    }, providedOptions );
 
     super();
 
-    // @public {ThreeStage}
     this.stage = new ThreeStage( options );
-
-    // @private {number}
     this.layoutWidth = width;
     this.layoutHeight = height;
-
-    // @private {boolean}
-    this.applyClip = options.applyClip;
 
     // static camera properties
     this.stage.threeCamera.fov = options.fov;
@@ -74,7 +77,7 @@ class ThreeNode extends Node {
       Utils.prepareForTransform( this.stage.threeRenderer.domElement );
       this.offsetProperty.link( offset => {
         offsetMatrix.setToTranslation( offset.x, offset.y );
-        Utils.applyPreparedTransform( offsetMatrix, this.stage.threeRenderer.domElement );
+        Utils.applyPreparedTransform( offsetMatrix, this.stage.threeRenderer!.domElement );
       } );
 
       // support Scenery/Joist 0.2 screenshot (takes extra work to output)
@@ -98,30 +101,19 @@ class ThreeNode extends Node {
 
   /**
    * Projects a 3d point in the global coordinate frame to one within the 2d global coordinate frame.
-   * @public
-   *
-   * @param {Vector3} point
-   * @returns {Vector2}
    */
-  projectPoint( point ) {
+  projectPoint( point: Vector3 ): Vector2 {
     return this.stage.projectPoint( point );
   }
 
   /**
    * Given a screen point, returns a 3D ray representing the camera's position and direction that point would be in the
    * 3D scene.
-   * @private
-   *
-   * @param {Vector2} screenPoint
-   * @returns {Ray3}
    */
-  getRayFromScreenPoint( screenPoint ) {
+  private getRayFromScreenPoint( screenPoint: Vector2 ): Ray3 {
     return this.stage.getRayFromScreenPoint( screenPoint );
   }
 
-  /**
-   * @public
-   */
   layout() {
     const globalBounds = this.localToGlobalBounds( this.backgroundEventTarget.bounds );
     const roundedBounds = globalBounds.roundedOut();
@@ -139,18 +131,15 @@ class ThreeNode extends Node {
 
   /**
    * Renders the simulation to a specific rendering target
-   * @public
    *
-   * @param {THREE.WebGLRenderTarget|undefined} target - undefined for the default target
+   * @param target - undefined for the default target
    */
-  render( target ) {
+  render( target: THREE.WebGLRenderTarget | undefined ) {
     this.stage.render( target );
   }
 
   /**
    * Releases references.
-   * @public
-   * @override
    */
   dispose() {
     super.dispose();

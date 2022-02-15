@@ -11,12 +11,14 @@ import { Node } from '../../scenery/js/imports.js';
 import mobius from './mobius.js';
 
 class NodeTexture extends THREE.Texture {
-  /**
-   * @param {Node} node
-   * @param {number} width
-   * @param {number} height
-   */
-  constructor( node, width, height ) {
+
+  private _display: Display;
+  private _scene: Node;
+
+  _width: number;
+  _height: number;
+
+  constructor( node: Node, width: number, height: number ) {
     const scene = new Node( {
       renderer: 'canvas',
       preventFit: true
@@ -33,13 +35,8 @@ class NodeTexture extends THREE.Texture {
 
     super( canvas );
 
-    // @private {Display}
     this._display = display;
-
-    // @private {Node}
     this._scene = scene;
-
-    // @public {number}
     this._width = width;
     this._height = height;
 
@@ -49,7 +46,6 @@ class NodeTexture extends THREE.Texture {
 
   /**
    * Updates the node's appearance in the texture.
-   * @public
    */
   update() {
     this._display.updateDisplay();
@@ -58,7 +54,6 @@ class NodeTexture extends THREE.Texture {
 
   /**
    * Releases references.
-   * @public
    */
   dispose() {
     this._display.dispose();

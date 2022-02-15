@@ -7,16 +7,13 @@
  */
 
 import merge from '../../phet-core/js/merge.js';
-import PhetioObject from '../../tandem/js/PhetioObject.js';
+import PhetioObject, { PhetioObjectOptions } from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import IOType from '../../tandem/js/types/IOType.js';
 import mobius from './mobius.js';
 
 class ThreeObject3DPhetioObject extends PhetioObject {
-  /**
-   * @param {Object} [options]
-   */
-  constructor( options ) {
+  constructor( options?: PhetioObjectOptions ) {
     options = merge( {
       phetioType: ThreeObject3DPhetioObject.ThreeObject3DIO,
       tandem: Tandem.REQUIRED
@@ -24,6 +21,8 @@ class ThreeObject3DPhetioObject extends PhetioObject {
 
     super( options );
   }
+
+  static ThreeObject3DIO: IOType;
 }
 
 ThreeObject3DPhetioObject.ThreeObject3DIO = new IOType( 'ThreeObject3DIO', {

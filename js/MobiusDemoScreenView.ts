@@ -15,14 +15,19 @@ import TextureQuad from './TextureQuad.js';
 import ThreeIsometricNode from './ThreeIsometricNode.js';
 import ThreeUtils from './ThreeUtils.js';
 import mobius from './mobius.js';
+import Bounds2 from '../../dot/js/Bounds2.js';
 
 class MobiusDemoScreenView extends ScreenView {
+
+  private sceneNode!: ThreeIsometricNode;
+  private cubeMesh!: THREE.Mesh;
+
   constructor() {
     super( {
       preventFit: true
     } );
 
-    // @protected {boolean} - If we detect that we can't use WebGL, we'll set this to false so we can bail out.
+    // f we detect that we can't use WebGL, we'll set this to false so we can bail out.
     this.enabled = true;
 
     if ( !ThreeUtils.isWebGLEnabled() ) {
@@ -31,9 +36,9 @@ class MobiusDemoScreenView extends ScreenView {
       return;
     }
 
-    // @private {ThreeIsometricNode} - Used to display the 3D view
+    // Used to display the 3D view
     this.sceneNode = new ThreeIsometricNode( this.layoutBounds, {
-      parentMatrixProperty: animatedPanZoomSingleton.listener.matrixProperty,
+      parentMatrixProperty: animatedPanZoomSingleton.listener!.matrixProperty,
       cameraPosition: new Vector3( 0, 0.4, 2 )
     } );
     this.addChild( this.sceneNode );
@@ -75,12 +80,7 @@ class MobiusDemoScreenView extends ScreenView {
     this.cubeMesh.add( label );
   }
 
-  /**
-   * @public
-   * @override
-   * @param {Bounds2} viewBounds
-   */
-  layout( viewBounds ) {
+  layout( viewBounds: Bounds2 ) {
     super.layout( viewBounds );
 
     // If the simulation was not able to load for WebGL, bail out
@@ -96,11 +96,8 @@ class MobiusDemoScreenView extends ScreenView {
 
   /**
    * Steps forward in time.
-   * @public
-   *
-   * @param {number} dt
    */
-  step( dt ) {
+  step( dt: number ) {
     // If the simulation was not able to load for WebGL, bail out
     if ( !this.sceneNode ) {
       return;

@@ -11,24 +11,10 @@ import TriangleArrayWriter from './TriangleArrayWriter.js';
 import Vector3 from '../../dot/js/Vector3.js';
 
 class Quad extends THREE.BufferGeometry {
-  /**
-   * @param {number} p0x
-   * @param {number} p0y
-   * @param {number} p0z
-   * @param {number} p1x
-   * @param {number} p1y
-   * @param {number} p1z
-   * @param {number} p2x
-   * @param {number} p2y
-   * @param {number} p2z
-   * @param {number} p3x
-   * @param {number} p3y
-   * @param {number} p3z
-   * @param {number} nx
-   * @param {number} ny
-   * @param {number} nz
-   */
-  constructor( p0x, p0y, p0z, p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, nx, ny, nz ) {
+
+  private _update: ( p0x: number, p0y: number, p0z: number, p1x: number, p1y: number, p1z: number, p2x: number, p2y: number, p2z: number, p3x: number, p3y: number, p3z: number, nx: number, ny: number, nz: number ) => void;
+
+  constructor( p0x: number, p0y: number, p0z: number, p1x: number, p1y: number, p1z: number, p2x: number, p2y: number, p2z: number, p3x: number, p3y: number, p3z: number, nx: number, ny: number, nz: number ) {
 
     super();
 
@@ -44,8 +30,7 @@ class Quad extends THREE.BufferGeometry {
     this.addAttribute( 'normal', new THREE.BufferAttribute( normalArray, 3 ) );
     this.addAttribute( 'uv', new THREE.BufferAttribute( uvArray, 2 ) );
 
-    // @private
-    this._update = ( p0x, p0y, p0z, p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, nx, ny, nz ) => {
+    this._update = ( p0x: number, p0y: number, p0z: number, p1x: number, p1y: number, p1z: number, p2x: number, p2y: number, p2z: number, p3x: number, p3y: number, p3z: number, nx: number, ny: number, nz: number ) => {
       Quad.updateArrays( positionArray, normalArray, uvArray, p0x, p0y, p0z, p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, nx, ny, nz );
       this.attributes.position.needsUpdate = true;
       this.attributes.normal.needsUpdate = true;
@@ -53,56 +38,36 @@ class Quad extends THREE.BufferGeometry {
     };
   }
 
-  /**
-   * @public
-   *
-   * @param {number} p0x
-   * @param {number} p0y
-   * @param {number} p0z
-   * @param {number} p1x
-   * @param {number} p1y
-   * @param {number} p1z
-   * @param {number} p2x
-   * @param {number} p2y
-   * @param {number} p2z
-   * @param {number} p3x
-   * @param {number} p3y
-   * @param {number} p3z
-   * @param {number} nx
-   * @param {number} ny
-   * @param {number} nz
-   */
-  set( p0x, p0y, p0z, p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, nx, ny, nz ) {
+  set( p0x: number, p0y: number, p0z: number, p1x: number, p1y: number, p1z: number, p2x: number, p2y: number, p2z: number, p3x: number, p3y: number, p3z: number, nx: number, ny: number, nz: number ) {
     this._update( p0x, p0y, p0z, p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, nx, ny, nz );
   }
 
   /**
    * Updates provided geometry arrays given the specific size.
-   * @public
    *
-   * @param {Float32Array|null} positionArray
-   * @param {Float32Array|null} normalArray
-   * @param {Float32Array|null} uvArray
-   * @param {number} p0x
-   * @param {number} p0y
-   * @param {number} p0z
-   * @param {number} p1x
-   * @param {number} p1y
-   * @param {number} p1z
-   * @param {number} p2x
-   * @param {number} p2y
-   * @param {number} p2z
-   * @param {number} p3x
-   * @param {number} p3y
-   * @param {number} p3z
-   * @param {number} nx
-   * @param {number} ny
-   * @param {number} nz
-   * @param {number} offset - How many vertices have been specified so far?
-   * @param {Vector3} offsetPosition - How to transform all of the points
-   * @returns {number} - The offset after the specified vertices have been written
+   * @param positionArray
+   * @param normalArray
+   * @param uvArray
+   * @param p0x
+   * @param p0y
+   * @param p0z
+   * @param p1x
+   * @param p1y
+   * @param p1z
+   * @param p2x
+   * @param p2y
+   * @param p2z
+   * @param p3x
+   * @param p3y
+   * @param p3z
+   * @param nx
+   * @param ny
+   * @param nz
+   * @param offset - How many vertices have been specified so far?
+   * @param offsetPosition - How to transform all the points
+   * @returns - The offset after the specified vertices have been written
    */
-  static updateArrays( positionArray, normalArray, uvArray, p0x, p0y, p0z, p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, nx, ny, nz, offset = 0, offsetPosition = Vector3.ZERO ) {
+  static updateArrays( positionArray: Float32Array | null, normalArray: Float32Array | null, uvArray: Float32Array | null, p0x: number, p0y: number, p0z: number, p1x: number, p1y: number, p1z: number, p2x: number, p2y: number, p2z: number, p3x: number, p3y: number, p3z: number, nx: number, ny: number, nz: number, offset: number = 0, offsetPosition: Vector3 = Vector3.ZERO ): number {
     const writer = new TriangleArrayWriter( positionArray, normalArray, uvArray, offset, offsetPosition );
 
     writer.position( p0x, p0y, p0z );

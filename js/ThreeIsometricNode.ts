@@ -9,24 +9,45 @@
 import Property from '../../axon/js/Property.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
 import Matrix3 from '../../dot/js/Matrix3.js';
-import merge from '../../phet-core/js/merge.js';
-import { DOM } from '../../scenery/js/imports.js';
+import optionize from '../../phet-core/js/optionize.js';
+import { DOM, NodeOptions } from '../../scenery/js/imports.js';
 import { Node } from '../../scenery/js/imports.js';
 import { Rectangle } from '../../scenery/js/imports.js';
 import { Utils } from '../../scenery/js/imports.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
-import ThreeStage from './ThreeStage.js';
+import ThreeStage, { ThreeStageOptions } from './ThreeStage.js';
 import mobius from './mobius.js';
+import IReadOnlyProperty from '../../axon/js/IReadOnlyProperty.js';
+import Vector2 from '../../dot/js/Vector2.js';
+import Vector3 from '../../dot/js/Vector3.js';
+import Ray3 from '../../dot/js/Ray3.js';
+
+type MouseHitListener = ( point: Vector2 ) => any;
+
+type ThreeIsometricNodeSelfOptions = {
+  parentMatrixProperty?: IReadOnlyProperty<Matrix3>;
+  fov?: number;
+  getPhetioMouseHit?: MouseHitListener | null;
+};
+
+type ThreeIsometricNodeOptions = ThreeIsometricNodeSelfOptions & ThreeStageOptions & NodeOptions;
 
 class ThreeIsometricNode extends Node {
-  /**
-   * @param {Bounds2} layoutBounds
-   * @param {Object} [options]
-   */
-  constructor( layoutBounds, options ) {
 
-    options = merge( {
-      // {Property.<Matrix3>}
+  private layoutBounds: Bounds2;
+  private _getPhetioMouseHit: MouseHitListener | null;
+  stage: ThreeStage;
+  private parentMatrixProperty: IReadOnlyProperty<Matrix3>;
+
+  // our target for drags that don't hit other UI components
+  backgroundEventTarget: Rectangle;
+
+  private domNode!: DOM;
+  viewOffsetListener: () => void;
+
+  constructor( layoutBounds: Bounds2, providedOptions?: ThreeIsometricNodeOptions ) {
+
+    const options = optionize<ThreeIsometricNodeOptions, ThreeIsometricNodeSelfOptions, ThreeStageOptions & NodeOptions>( {
       parentMatrixProperty: new Property( Matrix3.IDENTITY ),
 
       fov: 50,
@@ -38,32 +59,26 @@ class ThreeIsometricNode extends Node {
       // FOV auto-control on layout?
 
       getPhetioMouseHit: null // (point:Vector2)=>PhetioObject, for studio autoselect
-    }, options );
+    }, providedOptions );
 
     super();
 
-    // @private {Bounds2}
     this.layoutBounds = layoutBounds;
-
-    // @private
     this._getPhetioMouseHit = options.getPhetioMouseHit;
 
-    // @public {ThreeStage}
     this.stage = new ThreeStage( options );
 
     this.stage.threeCamera.fov = options.fov;
     this.stage.threeCamera.aspect = this.layoutBounds.width / this.layoutBounds.height;
 
-    // @private {Property.<Matrix3>}
     this.parentMatrixProperty = options.parentMatrixProperty;
 
-    // @public {Node} - our target for drags that don't hit other UI components
     this.backgroundEventTarget = new Rectangle( {} );
     this.addChild( this.backgroundEventTarget );
 
     // Handle fallback for when we don't have WebGL, see https://github.com/phetsims/density/issues/105
     if ( this.stage.threeRenderer ) {
-      // @private {DOM} - add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
+      // add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
       this.domNode = new DOM( this.stage.threeRenderer.domElement, {
         preventTransform: true, // Scenery override for transformation
         pickable: false
@@ -89,7 +104,7 @@ class ThreeIsometricNode extends Node {
       this.addChild( this.domNode );
     }
 
-    // @public {function} - Ideally should be called whenever the parent/screenView matrix is changed, or any camera
+    // Ideally should be called whenever the parent/screenView matrix is changed, or any camera
     // change (including zoom or fov).
     this.viewOffsetListener = () => {
       const screenWidth = this.stage.width;
@@ -104,8 +119,8 @@ class ThreeIsometricNode extends Node {
     this.mutate( options );
   }
 
-  // @public - for studio autoselect
-  getPhetioMouseHit( point ) {
+  // for studio autoselect
+  getPhetioMouseHit( point: Vector2 ): any {
     if ( this._getPhetioMouseHit && this.isPhetioMouseHittable( point ) ) {
       return this._getPhetioMouseHit( point );
     }
@@ -116,34 +131,20 @@ class ThreeIsometricNode extends Node {
 
   /**
    * Projects a 3d point in the global coordinate frame to one within the 2d global coordinate frame.
-   * @public
-   *
-   * @param {Vector3} point
-   * @returns {Vector2}
    */
-  projectPoint( point ) {
+  projectPoint( point: Vector3 ): Vector2 {
     return this.stage.projectPoint( point );
   }
 
   /**
    * Given a screen point, returns a 3D ray representing the camera's position and direction that point would be in the
    * 3D scene.
-   * @public
-   *
-   * @param {Vector2} globalScreenPoint
-   * @returns {Ray3}
    */
-  getRayFromScreenPoint( globalScreenPoint ) {
+  getRayFromScreenPoint( globalScreenPoint: Vector2 ): Ray3 {
     return this.stage.getRayFromScreenPoint( globalScreenPoint );
   }
 
-  /**
-   * @public
-   *
-   * @param {number} width
-   * @param {number} height
-   */
-  layout( width, height ) {
+  layout( width: number, height: number ) {
     // We need to lay out things for window dimensions so we don't overly resize, see
     // https://github.com/phetsims/density/issues/50. For this we'll actually take up the full window, and adjust things
     // using adjustViewOffset to handle both the isometric scaling AND pan/zoom. This is necessary so that the navbar
@@ -175,21 +176,18 @@ class ThreeIsometricNode extends Node {
 
   /**
    * Renders the simulation to a specific rendering target
-   * @public
    *
-   * @param {THREE.WebGLRenderTarget|undefined} target - undefined for the default target
+   * @param target - undefined for the default target
    */
-  render( target ) {
+  render( target: THREE.WebGLRenderTarget | undefined ) {
     this.stage.render( target );
   }
 
   /**
    * Releases references.
-   * @public
-   * @override
    */
   dispose() {
-    this.parentMatrixProperty.lazyLink( this.viewOffsetListener );
+    this.parentMatrixProperty.unlink( this.viewOffsetListener );
 
     super.dispose();
 
