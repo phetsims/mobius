@@ -31,7 +31,7 @@ class NodeTexture extends THREE.Texture {
     } );
     display.updateDisplay();
 
-    const canvas = display._rootBackbone.blocks[ 0 ].canvas;
+    const canvas = display.rootBackbone.blocks[ 0 ].canvas;
 
     super( canvas );
 
