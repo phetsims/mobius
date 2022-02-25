@@ -8,7 +8,7 @@
 
 import ThreeObject3DPhetioObject from './ThreeObject3DPhetioObject.js';
 import mobius from './mobius.js';
-import Constructor from '../../phet-core/js/Constructor.js';
+import Constructor from '../../phet-core/js/types/Constructor.js';
 import memoize from '../../phet-core/js/memoize.js';
 
 /**
