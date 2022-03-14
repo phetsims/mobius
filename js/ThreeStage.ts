@@ -24,14 +24,14 @@ import IReadOnlyProperty from '../../axon/js/IReadOnlyProperty.js';
 const GAMMA = 2.2;
 const INVERSE_GAMMA = 1 / GAMMA;
 
-type ThreeStageOptions = {
+export type ThreeStageOptions = {
   backgroundProperty?: IReadOnlyProperty<Color>;
 
   // The initial camera position
   cameraPosition?: Vector3;
 };
 
-class ThreeStage {
+export default class ThreeStage {
 
   // Scale applied to interaction that isn't directly tied to screen coordinates (rotation), updated in layout
   activeScale: number;
@@ -450,5 +450,3 @@ class ThreeStage {
 }
 
 mobius.register( 'ThreeStage', ThreeStage );
-export default ThreeStage;
-export type { ThreeStageOptions };

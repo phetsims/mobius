@@ -10,7 +10,7 @@ import { Display } from '../../scenery/js/imports.js';
 import { Node } from '../../scenery/js/imports.js';
 import mobius from './mobius.js';
 
-class NodeTexture extends THREE.Texture {
+export default class NodeTexture extends THREE.Texture {
 
   private _display: Display;
   private _scene: Node;
@@ -64,4 +64,3 @@ class NodeTexture extends THREE.Texture {
 }
 
 mobius.register( 'NodeTexture', NodeTexture );
-export default NodeTexture;

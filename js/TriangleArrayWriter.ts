@@ -9,7 +9,7 @@
 import Vector3 from '../../dot/js/Vector3.js';
 import mobius from './mobius.js';
 
-class TriangleArrayWriter {
+export default class TriangleArrayWriter {
 
   private positionArray: Float32Array | null;
   private normalArray: Float32Array | null;
@@ -84,4 +84,3 @@ class TriangleArrayWriter {
 }
 
 mobius.register( 'TriangleArrayWriter', TriangleArrayWriter );
-export default TriangleArrayWriter;

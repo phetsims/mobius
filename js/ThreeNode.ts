@@ -24,9 +24,9 @@ type ThreeNodeSelfOptions = {
   fov?: number;
 };
 
-type ThreeNodeOptions = ThreeNodeSelfOptions & ThreeStageOptions & NodeOptions;
+export type ThreeNodeOptions = ThreeNodeSelfOptions & ThreeStageOptions & NodeOptions;
 
-class ThreeNode extends Node {
+export default class ThreeNode extends Node {
 
   stage: ThreeStage;
   private layoutWidth: number;
@@ -149,4 +149,3 @@ class ThreeNode extends Node {
 }
 
 mobius.register( 'ThreeNode', ThreeNode );
-export default ThreeNode;

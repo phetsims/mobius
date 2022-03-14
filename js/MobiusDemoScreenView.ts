@@ -17,7 +17,7 @@ import ThreeUtils from './ThreeUtils.js';
 import mobius from './mobius.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
 
-class MobiusDemoScreenView extends ScreenView {
+export default class MobiusDemoScreenView extends ScreenView {
 
   private sceneNode!: ThreeIsometricNode;
   private cubeMesh!: THREE.Mesh;
@@ -110,4 +110,3 @@ class MobiusDemoScreenView extends ScreenView {
 }
 
 mobius.register( 'MobiusDemoScreenView', MobiusDemoScreenView );
-export default MobiusDemoScreenView;

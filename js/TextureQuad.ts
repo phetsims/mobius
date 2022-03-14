@@ -11,7 +11,7 @@ import merge from '../../phet-core/js/merge.js';
 import mobius from './mobius.js';
 import Quad from './Quad.js';
 
-class TextureQuad extends THREE.Mesh {
+export default class TextureQuad extends THREE.Mesh {
 
   quadGeometry: Quad;
   basicMaterial: THREE.MeshBasicMaterial;
@@ -72,4 +72,3 @@ class TextureQuad extends THREE.Mesh {
 }
 
 mobius.register( 'TextureQuad', TextureQuad );
-export default TextureQuad;

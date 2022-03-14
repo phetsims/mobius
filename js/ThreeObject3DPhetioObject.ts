@@ -12,7 +12,7 @@ import Tandem from '../../tandem/js/Tandem.js';
 import IOType from '../../tandem/js/types/IOType.js';
 import mobius from './mobius.js';
 
-class ThreeObject3DPhetioObject extends PhetioObject {
+export default class ThreeObject3DPhetioObject extends PhetioObject {
   constructor( options?: PhetioObjectOptions ) {
     options = merge( {
       phetioType: ThreeObject3DPhetioObject.ThreeObject3DIO,
@@ -33,4 +33,3 @@ ThreeObject3DPhetioObject.ThreeObject3DIO = new IOType( 'ThreeObject3DIO', {
 } );
 
 mobius.register( 'ThreeObject3DPhetioObject', ThreeObject3DPhetioObject );
-export default ThreeObject3DPhetioObject;

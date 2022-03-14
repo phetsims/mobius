@@ -10,7 +10,7 @@ import mobius from './mobius.js';
 import TriangleArrayWriter from './TriangleArrayWriter.js';
 import Vector3 from '../../dot/js/Vector3.js';
 
-class Quad extends THREE.BufferGeometry {
+export default class Quad extends THREE.BufferGeometry {
 
   private _update: ( p0x: number, p0y: number, p0z: number, p1x: number, p1y: number, p1z: number, p2x: number, p2y: number, p2z: number, p3x: number, p3y: number, p3z: number, nx: number, ny: number, nz: number ) => void;
 
@@ -93,4 +93,3 @@ class Quad extends THREE.BufferGeometry {
 }
 
 mobius.register( 'Quad', Quad );
-export default Quad;

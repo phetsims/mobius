@@ -30,9 +30,9 @@ type ThreeIsometricNodeSelfOptions = {
   getPhetioMouseHit?: MouseHitListener | null;
 };
 
-type ThreeIsometricNodeOptions = ThreeIsometricNodeSelfOptions & ThreeStageOptions & NodeOptions;
+export type ThreeIsometricNodeOptions = ThreeIsometricNodeSelfOptions & ThreeStageOptions & NodeOptions;
 
-class ThreeIsometricNode extends Node {
+export default class ThreeIsometricNode extends Node {
 
   private layoutBounds: Bounds2;
   private _getPhetioMouseHit: MouseHitListener | null;
@@ -196,4 +196,3 @@ class ThreeIsometricNode extends Node {
 }
 
 mobius.register( 'ThreeIsometricNode', ThreeIsometricNode );
-export default ThreeIsometricNode;
