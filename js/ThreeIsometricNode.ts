@@ -120,7 +120,7 @@ export default class ThreeIsometricNode extends Node {
   }
 
   // for studio autoselect
-  getPhetioMouseHit( point: Vector2 ): any {
+  override getPhetioMouseHit( point: Vector2 ): any {
     if ( this._getPhetioMouseHit && this.isPhetioMouseHittable( point ) ) {
       return this._getPhetioMouseHit( point );
     }
@@ -186,7 +186,7 @@ export default class ThreeIsometricNode extends Node {
   /**
    * Releases references.
    */
-  dispose() {
+  override dispose() {
     this.parentMatrixProperty.unlink( this.viewOffsetListener );
 
     super.dispose();

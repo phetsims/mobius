@@ -55,7 +55,7 @@ export default class NodeTexture extends THREE.Texture {
   /**
    * Releases references.
    */
-  dispose() {
+  override dispose() {
     this._display.dispose();
     this._scene.dispose();
 

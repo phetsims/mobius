@@ -141,7 +141,7 @@ export default class ThreeNode extends Node {
   /**
    * Releases references.
    */
-  dispose() {
+  override dispose() {
     super.dispose();
 
     this.stage.dispose();

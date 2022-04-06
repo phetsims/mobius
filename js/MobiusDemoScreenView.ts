@@ -80,7 +80,7 @@ export default class MobiusDemoScreenView extends ScreenView {
     this.cubeMesh.add( label );
   }
 
-  layout( viewBounds: Bounds2 ) {
+  override layout( viewBounds: Bounds2 ) {
     super.layout( viewBounds );
 
     // If the simulation was not able to load for WebGL, bail out
