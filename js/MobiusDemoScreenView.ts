@@ -16,6 +16,7 @@ import ThreeIsometricNode from './ThreeIsometricNode.js';
 import ThreeUtils from './ThreeUtils.js';
 import mobius from './mobius.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
+import Tandem from '../../tandem/js/Tandem.js';
 
 export default class MobiusDemoScreenView extends ScreenView {
 
@@ -24,7 +25,8 @@ export default class MobiusDemoScreenView extends ScreenView {
 
   constructor() {
     super( {
-      preventFit: true
+      preventFit: true,
+      tandem: Tandem.OPT_OUT
     } );
 
     // f we detect that we can't use WebGL, we'll set this to false so we can bail out.
