@@ -112,7 +112,7 @@ export default class ThreeStage {
   /**
    * Returns a Canvas containing the displayed content in this scene.
    */
-  renderToCanvas( supersampleMultiplier: number = 1, backingMultiplier: number = 1 ): HTMLCanvasElement {
+  renderToCanvas( supersampleMultiplier = 1, backingMultiplier = 1 ): HTMLCanvasElement {
     assert && assert( Number.isInteger( supersampleMultiplier ) );
 
     const canvasWidth = Math.ceil( this.canvasWidth * backingMultiplier );

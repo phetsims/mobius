@@ -67,7 +67,7 @@ export default class Quad extends THREE.BufferGeometry {
    * @param offsetPosition - How to transform all the points
    * @returns - The offset after the specified vertices have been written
    */
-  static updateArrays( positionArray: Float32Array | null, normalArray: Float32Array | null, uvArray: Float32Array | null, p0x: number, p0y: number, p0z: number, p1x: number, p1y: number, p1z: number, p2x: number, p2y: number, p2z: number, p3x: number, p3y: number, p3z: number, nx: number, ny: number, nz: number, offset: number = 0, offsetPosition: Vector3 = Vector3.ZERO ): number {
+  static updateArrays( positionArray: Float32Array | null, normalArray: Float32Array | null, uvArray: Float32Array | null, p0x: number, p0y: number, p0z: number, p1x: number, p1y: number, p1z: number, p2x: number, p2y: number, p2z: number, p3x: number, p3y: number, p3z: number, nx: number, ny: number, nz: number, offset = 0, offsetPosition: Vector3 = Vector3.ZERO ): number {
     const writer = new TriangleArrayWriter( positionArray, normalArray, uvArray, offset, offsetPosition );
 
     writer.position( p0x, p0y, p0z );

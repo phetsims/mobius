@@ -29,7 +29,7 @@ export default class TriangleArrayWriter {
    * @param offset - How many vertices have been specified so far?
    * @param offsetPosition - How to transform all of the points
    */
-  constructor( positionArray: Float32Array | null, normalArray: Float32Array | null, uvArray: Float32Array | null, offset: number = 0, offsetPosition: Vector3 = Vector3.ZERO ) {
+  constructor( positionArray: Float32Array | null, normalArray: Float32Array | null, uvArray: Float32Array | null, offset = 0, offsetPosition: Vector3 = Vector3.ZERO ) {
 
     this.positionArray = positionArray;
     this.normalArray = normalArray;
