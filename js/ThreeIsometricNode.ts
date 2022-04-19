@@ -47,7 +47,7 @@ export default class ThreeIsometricNode extends Node {
 
   constructor( layoutBounds: Bounds2, providedOptions?: ThreeIsometricNodeOptions ) {
 
-    const options = optionize<ThreeIsometricNodeOptions, ThreeIsometricNodeSelfOptions, ThreeStageOptions & NodeOptions>( {
+    const options = optionize<ThreeIsometricNodeOptions, ThreeIsometricNodeSelfOptions, ThreeStageOptions & NodeOptions>()( {
       parentMatrixProperty: new Property( Matrix3.IDENTITY ),
 
       fov: 50,

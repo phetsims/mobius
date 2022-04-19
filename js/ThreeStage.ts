@@ -52,7 +52,7 @@ export default class ThreeStage {
 
   constructor( providedOptions?: ThreeStageOptions ) {
 
-    const options = optionize<ThreeStageOptions, ThreeStageOptions>( {
+    const options = optionize<ThreeStageOptions, ThreeStageOptions>()( {
       backgroundProperty: new Property( Color.BLACK ),
       cameraPosition: new Vector3( 0, 0, 10 )
     }, providedOptions );

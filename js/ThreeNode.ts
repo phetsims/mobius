@@ -37,7 +37,7 @@ export default class ThreeNode extends Node {
 
   constructor( width: number, height: number, providedOptions?: ThreeNodeOptions ) {
 
-    const options = optionize<ThreeNodeOptions, ThreeNodeSelfOptions, ThreeStageOptions & NodeOptions>( {
+    const options = optionize<ThreeNodeOptions, ThreeNodeSelfOptions, ThreeStageOptions & NodeOptions>()( {
       fov: 50
 
       // positioned or transformed pixels, or full scenery-transformed?
