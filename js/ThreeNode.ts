@@ -57,7 +57,7 @@ export default class ThreeNode extends Node {
     // @private {Property.<Vector2>}
     this.offsetProperty = new Vector2Property( Vector2.ZERO );
 
-    // @public {Node} - our target for drags that don't hit other UI components
+    // {Node} - our target for drags that don't hit other UI components
     this.backgroundEventTarget = new Rectangle( 0, 0, width, height );
     this.addChild( this.backgroundEventTarget );
 
