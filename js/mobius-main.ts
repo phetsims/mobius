@@ -9,7 +9,7 @@
 import Property from '../../axon/js/Property.js';
 import Screen from '../../joist/js/Screen.js';
 import ScreenIcon from '../../joist/js/ScreenIcon.js';
-import Sim from '../../joist/js/Sim.js';
+import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import { Rectangle } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
@@ -19,7 +19,7 @@ import mobiusStrings from './mobiusStrings.js';
 // empty model used for all demo screens
 const MODEL = {};
 
-const simOptions = {
+const simOptions: SimOptions = {
   credits: {
     leadDesign: 'PhET'
   },
