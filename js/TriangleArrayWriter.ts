@@ -44,7 +44,7 @@ export default class TriangleArrayWriter {
   /**
    * Writes a position into the (optional) positionArray, and increments the offset.
    */
-  position( x: number, y: number, z: number ) {
+  position( x: number, y: number, z: number ): void {
     if ( this.positionArray ) {
       this.positionArray[ this.positionIndex++ ] = x + this.offsetPosition.x;
       this.positionArray[ this.positionIndex++ ] = y + this.offsetPosition.y;
@@ -57,7 +57,7 @@ export default class TriangleArrayWriter {
   /**
    * Writes a normal into the (optional) normalArray
    */
-  normal( x: number, y: number, z: number ) {
+  normal( x: number, y: number, z: number ): void {
     if ( this.normalArray ) {
       this.normalArray[ this.normalIndex++ ] = x;
       this.normalArray[ this.normalIndex++ ] = y;
@@ -68,7 +68,7 @@ export default class TriangleArrayWriter {
   /**
    * Writes a UV into the (optional) uvArray
    */
-  uv( u: number, v: number ) {
+  uv( u: number, v: number ): void {
     if ( this.uvArray ) {
       this.uvArray[ this.uvIndex++ ] = u;
       this.uvArray[ this.uvIndex++ ] = v;

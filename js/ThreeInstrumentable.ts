@@ -35,7 +35,7 @@ const ThreeInstrumentable = memoize( <SuperType extends Constructor>( type: Supe
     /**
      * Releases references
      */
-    dispose() {
+    dispose(): void {
       // @ts-ignore
       super.dispose && super.dispose();
 

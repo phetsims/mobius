@@ -144,7 +144,7 @@ export default class ThreeIsometricNode extends Node {
     return this.stage.getRayFromScreenPoint( globalScreenPoint );
   }
 
-  layout( width: number, height: number ) {
+  layout( width: number, height: number ): void {
     // We need to lay out things for window dimensions so we don't overly resize, see
     // https://github.com/phetsims/density/issues/50. For this we'll actually take up the full window, and adjust things
     // using adjustViewOffset to handle both the isometric scaling AND pan/zoom. This is necessary so that the navbar
@@ -179,14 +179,14 @@ export default class ThreeIsometricNode extends Node {
    *
    * @param target - undefined for the default target
    */
-  render( target: THREE.WebGLRenderTarget | undefined ) {
+  render( target: THREE.WebGLRenderTarget | undefined ): void {
     this.stage.render( target );
   }
 
   /**
    * Releases references.
    */
-  override dispose() {
+  override dispose(): void {
     this.parentMatrixProperty.unlink( this.viewOffsetListener );
 
     super.dispose();

@@ -47,7 +47,7 @@ export default class NodeTexture extends THREE.Texture {
   /**
    * Updates the node's appearance in the texture.
    */
-  update() {
+  update(): void {
     this._display.updateDisplay();
     this.needsUpdate = true;
   }
@@ -55,7 +55,7 @@ export default class NodeTexture extends THREE.Texture {
   /**
    * Releases references.
    */
-  override dispose() {
+  override dispose(): void {
     this._display.dispose();
     this._scene.dispose();
 

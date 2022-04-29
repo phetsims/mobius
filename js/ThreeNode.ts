@@ -114,7 +114,7 @@ export default class ThreeNode extends Node {
     return this.stage.getRayFromScreenPoint( screenPoint );
   }
 
-  layout() {
+  layout(): void {
     const globalBounds = this.localToGlobalBounds( this.backgroundEventTarget.bounds );
     const roundedBounds = globalBounds.roundedOut();
 
@@ -134,14 +134,14 @@ export default class ThreeNode extends Node {
    *
    * @param target - undefined for the default target
    */
-  render( target: THREE.WebGLRenderTarget | undefined ) {
+  render( target: THREE.WebGLRenderTarget | undefined ): void {
     this.stage.render( target );
   }
 
   /**
    * Releases references.
    */
-  override dispose() {
+  override dispose(): void {
     super.dispose();
 
     this.stage.dispose();

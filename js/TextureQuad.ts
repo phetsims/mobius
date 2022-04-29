@@ -42,7 +42,7 @@ export default class TextureQuad extends THREE.Mesh {
     this.textureQuadHeight = height;
   }
 
-  updateTexture( texture: THREE.Texture, width: number = this.textureQuadWidth, height: number = this.textureQuadHeight ) {
+  updateTexture( texture: THREE.Texture, width: number = this.textureQuadWidth, height: number = this.textureQuadHeight ): void {
     this.basicMaterial.map = texture;
     this.basicMaterial.needsUpdate = true;
 
@@ -62,7 +62,7 @@ export default class TextureQuad extends THREE.Mesh {
   /**
    * Releases references
    */
-  dispose() {
+  dispose(): void {
     this.quadGeometry.dispose();
     this.basicMaterial.dispose();
 

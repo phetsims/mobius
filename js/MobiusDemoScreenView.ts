@@ -82,7 +82,7 @@ export default class MobiusDemoScreenView extends ScreenView {
     this.cubeMesh.add( label );
   }
 
-  override layout( viewBounds: Bounds2 ) {
+  override layout( viewBounds: Bounds2 ): void {
     super.layout( viewBounds );
 
     // If the simulation was not able to load for WebGL, bail out
@@ -99,7 +99,7 @@ export default class MobiusDemoScreenView extends ScreenView {
   /**
    * Steps forward in time.
    */
-  override step( dt: number ) {
+  override step( dt: number ): void {
     // If the simulation was not able to load for WebGL, bail out
     if ( !this.sceneNode ) {
       return;

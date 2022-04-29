@@ -256,7 +256,7 @@ export default class ThreeStage {
     return canvas;
   }
 
-  private showContextLossDialog() {
+  private showContextLossDialog(): void {
     if ( !this.contextLossDialog ) {
       this.contextLossDialog = new ContextLossFailureDialog();
     }
@@ -310,7 +310,7 @@ export default class ThreeStage {
     return new Ray3( ThreeUtils.threeToVector( threeRay.origin ), ThreeUtils.threeToVector( threeRay.direction ).normalize() );
   }
 
-  setDimensions( width: number, height: number ) {
+  setDimensions( width: number, height: number ): void {
     assert && assert( typeof width === 'number' && width % 1 === 0 );
     assert && assert( typeof height === 'number' && height % 1 === 0 );
 
@@ -328,7 +328,7 @@ export default class ThreeStage {
    * This is a generalization of the isometric FOV computation, as it also supports other combinations such as properly
    * handling pan/zoom. See https://github.com/phetsims/density/issues/50
    */
-  adjustViewOffset( cameraBounds: Bounds2 ) {
+  adjustViewOffset( cameraBounds: Bounds2 ): void {
     assert && assert( Math.abs( this.threeCamera.aspect - cameraBounds.width / cameraBounds.height ) < 1e-5, 'Camera aspect should match cameraBounds' );
 
     // We essentially reverse some of the computation being done by PerspectiveCamera's updateProjectionMatrix(), so
@@ -412,7 +412,7 @@ export default class ThreeStage {
    *
    * @param target - undefined for the default target
    */
-  render( target: THREE.WebGLRenderTarget | undefined ) {
+  render( target: THREE.WebGLRenderTarget | undefined ): void {
     // render the 3D scene first
     if ( this.threeRenderer ) {
       this.threeRenderer.setRenderTarget( target || null );
@@ -424,7 +424,7 @@ export default class ThreeStage {
   /**
    * Releases references.
    */
-  dispose() {
+  dispose(): void {
     this.threeRenderer && this.threeRenderer.dispose();
 
     // @ts-ignore
