@@ -46,7 +46,7 @@ export default class ThreeStage {
 
   backgroundProperty: IReadOnlyProperty<Color>;
 
-  private colorListener: ( c: Color ) => void;
+  private readonly colorListener: ( c: Color ) => void;
 
   dimensionsChangedEmitter: TinyEmitter;
 
@@ -98,7 +98,6 @@ export default class ThreeStage {
 
     this.backgroundProperty = options.backgroundProperty;
 
-    // @private {function}
     this.colorListener = color => {
       this.threeRenderer && this.threeRenderer.setClearColor( color.toNumber(), color.alpha );
     };

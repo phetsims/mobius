@@ -20,8 +20,8 @@ import Tandem from '../../tandem/js/Tandem.js';
 
 export default class MobiusDemoScreenView extends ScreenView {
 
-  private sceneNode!: ThreeIsometricNode;
-  private cubeMesh!: THREE.Mesh;
+  private readonly sceneNode!: ThreeIsometricNode;
+  private readonly cubeMesh!: THREE.Mesh;
 
   constructor() {
     super( {
@@ -66,7 +66,7 @@ export default class MobiusDemoScreenView extends ScreenView {
       color: 0xFF0000
     } );
 
-    // @private {THREE.Mesh} - Create a mesh with the geometry and material
+    // Create a mesh with the geometry and material
     this.cubeMesh = new THREE.Mesh( cubeGeometry, cubeMaterial );
     this.sceneNode.stage.threeScene.add( this.cubeMesh );
 

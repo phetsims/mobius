@@ -54,7 +54,6 @@ export default class ThreeNode extends Node {
     this.stage.threeCamera.fov = options.fov;
     this.stage.threeCamera.aspect = width / height;
 
-    // @private {Property.<Vector2>}
     this.offsetProperty = new Vector2Property( Vector2.ZERO );
 
     // {Node} - our target for drags that don't hit other UI components
@@ -63,7 +62,7 @@ export default class ThreeNode extends Node {
 
     // Handle fallback for when we don't have WebGL, see https://github.com/phetsims/density/issues/105
     if ( this.stage.threeRenderer ) {
-      // @private {DOM} - add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
+      // add the Canvas in with a DOM node that prevents Scenery from applying transformations on it
       this.domNode = new DOM( this.stage.threeRenderer.domElement, {
         preventTransform: true, // Scenery override for transformation
         pickable: false
