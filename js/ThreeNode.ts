@@ -20,11 +20,11 @@ import Property from '../../axon/js/Property.js';
 import Ray3 from '../../dot/js/Ray3.js';
 import Vector3 from '../../dot/js/Vector3.js';
 
-type ThreeNodeSelfOptions = {
+type SelfOptions = {
   fov?: number;
 };
 
-export type ThreeNodeOptions = ThreeNodeSelfOptions & ThreeStageOptions & NodeOptions;
+export type ThreeNodeOptions = SelfOptions & ThreeStageOptions & NodeOptions;
 
 export default class ThreeNode extends Node {
 
@@ -37,7 +37,7 @@ export default class ThreeNode extends Node {
 
   constructor( width: number, height: number, providedOptions?: ThreeNodeOptions ) {
 
-    const options = optionize<ThreeNodeOptions, ThreeNodeSelfOptions, ThreeStageOptions & NodeOptions>()( {
+    const options = optionize<ThreeNodeOptions, SelfOptions, ThreeStageOptions & NodeOptions>()( {
       fov: 50
 
       // positioned or transformed pixels, or full scenery-transformed?

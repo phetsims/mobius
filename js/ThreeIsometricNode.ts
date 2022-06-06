@@ -24,13 +24,13 @@ import Ray3 from '../../dot/js/Ray3.js';
 
 type MouseHitListener = ( point: Vector2 ) => any;
 
-type ThreeIsometricNodeSelfOptions = {
+type SelfOptions = {
   parentMatrixProperty?: IReadOnlyProperty<Matrix3>;
   fov?: number;
   getPhetioMouseHit?: MouseHitListener | null;
 };
 
-export type ThreeIsometricNodeOptions = ThreeIsometricNodeSelfOptions & ThreeStageOptions & NodeOptions;
+export type ThreeIsometricNodeOptions = SelfOptions & ThreeStageOptions & NodeOptions;
 
 export default class ThreeIsometricNode extends Node {
 
@@ -47,7 +47,7 @@ export default class ThreeIsometricNode extends Node {
 
   constructor( layoutBounds: Bounds2, providedOptions?: ThreeIsometricNodeOptions ) {
 
-    const options = optionize<ThreeIsometricNodeOptions, ThreeIsometricNodeSelfOptions, ThreeStageOptions & NodeOptions>()( {
+    const options = optionize<ThreeIsometricNodeOptions, SelfOptions, ThreeStageOptions & NodeOptions>()( {
       parentMatrixProperty: new Property( Matrix3.IDENTITY ),
 
       fov: 50,
