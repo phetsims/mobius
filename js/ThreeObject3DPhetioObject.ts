@@ -6,18 +6,23 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import merge from '../../phet-core/js/merge.js';
+import optionize from '../../phet-core/js/optionize.js';
+import EmptyObjectType from '../../phet-core/js/types/EmptyObjectType.js';
 import PhetioObject, { PhetioObjectOptions } from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import IOType from '../../tandem/js/types/IOType.js';
 import mobius from './mobius.js';
 
+type SelfOptions = EmptyObjectType;
+type ThreeObject3DPhetioObjectOptions = SelfOptions & PhetioObjectOptions;
+
 export default class ThreeObject3DPhetioObject extends PhetioObject {
-  constructor( options?: PhetioObjectOptions ) {
-    options = merge( {
+  constructor( providedOptions?: ThreeObject3DPhetioObjectOptions ) {
+
+    const options = optionize<ThreeObject3DPhetioObjectOptions, SelfOptions, PhetioObjectOptions>()( {
       phetioType: ThreeObject3DPhetioObject.ThreeObject3DIO,
       tandem: Tandem.REQUIRED
-    }, options );
+    }, providedOptions );
 
     super( options );
   }
