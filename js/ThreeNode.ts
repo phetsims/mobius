@@ -28,14 +28,14 @@ export type ThreeNodeOptions = SelfOptions & ThreeStageOptions & NodeOptions;
 
 export default class ThreeNode extends Node {
 
-  stage: ThreeStage;
+  public readonly stage: ThreeStage;
   private layoutWidth: number;
   private layoutHeight: number;
   private offsetProperty: Property<Vector2>;
-  backgroundEventTarget: Node;
+  public readonly backgroundEventTarget: Node;
   private domNode!: DOM;
 
-  constructor( width: number, height: number, providedOptions?: ThreeNodeOptions ) {
+  public constructor( width: number, height: number, providedOptions?: ThreeNodeOptions ) {
 
     const options = optionize<ThreeNodeOptions, SelfOptions, ThreeStageOptions & NodeOptions>()( {
       fov: 50
@@ -101,7 +101,7 @@ export default class ThreeNode extends Node {
   /**
    * Projects a 3d point in the global coordinate frame to one within the 2d global coordinate frame.
    */
-  projectPoint( point: Vector3 ): Vector2 {
+  public projectPoint( point: Vector3 ): Vector2 {
     return this.stage.projectPoint( point );
   }
 
@@ -113,7 +113,7 @@ export default class ThreeNode extends Node {
     return this.stage.getRayFromScreenPoint( screenPoint );
   }
 
-  layout(): void {
+  public layout(): void {
     const globalBounds = this.localToGlobalBounds( this.backgroundEventTarget.bounds );
     const roundedBounds = globalBounds.roundedOut();
 
@@ -133,14 +133,14 @@ export default class ThreeNode extends Node {
    *
    * @param target - undefined for the default target
    */
-  render( target: THREE.WebGLRenderTarget | undefined ): void {
+  public render( target: THREE.WebGLRenderTarget | undefined ): void {
     this.stage.render( target );
   }
 
   /**
    * Releases references.
    */
-  override dispose(): void {
+  public override dispose(): void {
     super.dispose();
 
     this.stage.dispose();

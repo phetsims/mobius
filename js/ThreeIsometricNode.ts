@@ -36,16 +36,16 @@ export default class ThreeIsometricNode extends Node {
 
   private layoutBounds: Bounds2;
   private _getPhetioMouseHit: MouseHitListener | null;
-  stage: ThreeStage;
+  public readonly stage: ThreeStage;
   private parentMatrixProperty: IReadOnlyProperty<Matrix3>;
 
   // our target for drags that don't hit other UI components
-  backgroundEventTarget: Rectangle;
+  public readonly backgroundEventTarget: Rectangle;
 
   private domNode!: DOM;
-  viewOffsetListener: () => void;
+  private viewOffsetListener: () => void;
 
-  constructor( layoutBounds: Bounds2, providedOptions?: ThreeIsometricNodeOptions ) {
+  public constructor( layoutBounds: Bounds2, providedOptions?: ThreeIsometricNodeOptions ) {
 
     const options = optionize<ThreeIsometricNodeOptions, SelfOptions, ThreeStageOptions & NodeOptions>()( {
       parentMatrixProperty: new Property( Matrix3.IDENTITY ),
@@ -120,7 +120,7 @@ export default class ThreeIsometricNode extends Node {
   }
 
   // for studio autoselect
-  override getPhetioMouseHit( point: Vector2 ): any {
+  public override getPhetioMouseHit( point: Vector2 ): any {
     if ( this._getPhetioMouseHit && this.isPhetioMouseHittable( point ) ) {
       return this._getPhetioMouseHit( point );
     }
@@ -132,7 +132,7 @@ export default class ThreeIsometricNode extends Node {
   /**
    * Projects a 3d point in the global coordinate frame to one within the 2d global coordinate frame.
    */
-  projectPoint( point: Vector3 ): Vector2 {
+  public projectPoint( point: Vector3 ): Vector2 {
     return this.stage.projectPoint( point );
   }
 
@@ -140,11 +140,11 @@ export default class ThreeIsometricNode extends Node {
    * Given a screen point, returns a 3D ray representing the camera's position and direction that point would be in the
    * 3D scene.
    */
-  getRayFromScreenPoint( globalScreenPoint: Vector2 ): Ray3 {
+  public getRayFromScreenPoint( globalScreenPoint: Vector2 ): Ray3 {
     return this.stage.getRayFromScreenPoint( globalScreenPoint );
   }
 
-  layout( width: number, height: number ): void {
+  public layout( width: number, height: number ): void {
     // We need to lay out things for window dimensions so we don't overly resize, see
     // https://github.com/phetsims/density/issues/50. For this we'll actually take up the full window, and adjust things
     // using adjustViewOffset to handle both the isometric scaling AND pan/zoom. This is necessary so that the navbar
@@ -179,14 +179,14 @@ export default class ThreeIsometricNode extends Node {
    *
    * @param target - undefined for the default target
    */
-  render( target: THREE.WebGLRenderTarget | undefined ): void {
+  public render( target: THREE.WebGLRenderTarget | undefined ): void {
     this.stage.render( target );
   }
 
   /**
    * Releases references.
    */
-  override dispose(): void {
+  public override dispose(): void {
     this.parentMatrixProperty.unlink( this.viewOffsetListener );
 
     super.dispose();

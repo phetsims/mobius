@@ -17,7 +17,7 @@ type SelfOptions = EmptyObjectType;
 type ThreeObject3DPhetioObjectOptions = SelfOptions & PhetioObjectOptions;
 
 export default class ThreeObject3DPhetioObject extends PhetioObject {
-  constructor( providedOptions?: ThreeObject3DPhetioObjectOptions ) {
+  public constructor( providedOptions?: ThreeObject3DPhetioObjectOptions ) {
 
     const options = optionize<ThreeObject3DPhetioObjectOptions, SelfOptions, PhetioObjectOptions>()( {
       phetioType: ThreeObject3DPhetioObject.ThreeObject3DIO,
@@ -27,7 +27,7 @@ export default class ThreeObject3DPhetioObject extends PhetioObject {
     super( options );
   }
 
-  static ThreeObject3DIO: IOType;
+  public static ThreeObject3DIO: IOType;
 }
 
 ThreeObject3DPhetioObject.ThreeObject3DIO = new IOType( 'ThreeObject3DIO', {

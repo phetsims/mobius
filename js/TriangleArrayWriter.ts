@@ -11,9 +11,9 @@ import mobius from './mobius.js';
 
 export default class TriangleArrayWriter {
 
-  private positionArray: Float32Array | null;
-  private normalArray: Float32Array | null;
-  private uvArray: Float32Array | null;
+  private readonly positionArray: Float32Array | null;
+  private readonly normalArray: Float32Array | null;
+  private readonly uvArray: Float32Array | null;
 
   private positionIndex: number;
   private normalIndex: number;
@@ -29,7 +29,7 @@ export default class TriangleArrayWriter {
    * @param offset - How many vertices have been specified so far?
    * @param offsetPosition - How to transform all of the points
    */
-  constructor( positionArray: Float32Array | null, normalArray: Float32Array | null, uvArray: Float32Array | null, offset = 0, offsetPosition: Vector3 = Vector3.ZERO ) {
+  public constructor( positionArray: Float32Array | null, normalArray: Float32Array | null, uvArray: Float32Array | null, offset = 0, offsetPosition: Vector3 = Vector3.ZERO ) {
 
     this.positionArray = positionArray;
     this.normalArray = normalArray;
@@ -44,7 +44,7 @@ export default class TriangleArrayWriter {
   /**
    * Writes a position into the (optional) positionArray, and increments the offset.
    */
-  position( x: number, y: number, z: number ): void {
+  public position( x: number, y: number, z: number ): void {
     if ( this.positionArray ) {
       this.positionArray[ this.positionIndex++ ] = x + this.offsetPosition.x;
       this.positionArray[ this.positionIndex++ ] = y + this.offsetPosition.y;
@@ -57,7 +57,7 @@ export default class TriangleArrayWriter {
   /**
    * Writes a normal into the (optional) normalArray
    */
-  normal( x: number, y: number, z: number ): void {
+  public normal( x: number, y: number, z: number ): void {
     if ( this.normalArray ) {
       this.normalArray[ this.normalIndex++ ] = x;
       this.normalArray[ this.normalIndex++ ] = y;
@@ -68,7 +68,7 @@ export default class TriangleArrayWriter {
   /**
    * Writes a UV into the (optional) uvArray
    */
-  uv( u: number, v: number ): void {
+  public uv( u: number, v: number ): void {
     if ( this.uvArray ) {
       this.uvArray[ this.uvIndex++ ] = u;
       this.uvArray[ this.uvIndex++ ] = v;
@@ -78,7 +78,7 @@ export default class TriangleArrayWriter {
   /**
    * Returns the offset (previous offset + number of triangles added, counted from the positionArray)
    */
-  getOffset(): number {
+  public getOffset(): number {
     return this.offset;
   }
 }

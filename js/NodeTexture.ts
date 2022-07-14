@@ -15,10 +15,10 @@ export default class NodeTexture extends THREE.Texture {
   private _display: Display;
   private _scene: Node;
 
-  _width: number;
-  _height: number;
+  public _width: number;
+  public _height: number;
 
-  constructor( node: Node, width: number, height: number ) {
+  public constructor( node: Node, width: number, height: number ) {
     const scene = new Node( {
       renderer: 'canvas',
       preventFit: true
@@ -47,7 +47,7 @@ export default class NodeTexture extends THREE.Texture {
   /**
    * Updates the node's appearance in the texture.
    */
-  update(): void {
+  public update(): void {
     this._display.updateDisplay();
     this.needsUpdate = true;
   }
@@ -55,7 +55,7 @@ export default class NodeTexture extends THREE.Texture {
   /**
    * Releases references.
    */
-  override dispose(): void {
+  public override dispose(): void {
     this._display.dispose();
     this._scene.dispose();
 

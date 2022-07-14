@@ -13,12 +13,12 @@ import Quad from './Quad.js';
 
 export default class TextureQuad extends THREE.Mesh {
 
-  quadGeometry: Quad;
-  basicMaterial: THREE.MeshBasicMaterial;
-  textureQuadWidth: number;
-  textureQuadHeight: number;
+  private readonly quadGeometry: Quad;
+  private readonly basicMaterial: THREE.MeshBasicMaterial;
+  private textureQuadWidth: number;
+  private textureQuadHeight: number;
 
-  constructor( texture: THREE.Texture, width: number, height: number, materialOptions?: THREE.MaterialParameters ) {
+  public constructor( texture: THREE.Texture, width: number, height: number, materialOptions?: THREE.MaterialParameters ) {
 
     const quadGeometry = new Quad(
       0, 0, 0,
@@ -42,7 +42,7 @@ export default class TextureQuad extends THREE.Mesh {
     this.textureQuadHeight = height;
   }
 
-  updateTexture( texture: THREE.Texture, width: number = this.textureQuadWidth, height: number = this.textureQuadHeight ): void {
+  public updateTexture( texture: THREE.Texture, width: number = this.textureQuadWidth, height: number = this.textureQuadHeight ): void {
     this.basicMaterial.map = texture;
     this.basicMaterial.needsUpdate = true;
 
@@ -62,7 +62,7 @@ export default class TextureQuad extends THREE.Mesh {
   /**
    * Releases references
    */
-  dispose(): void {
+  public dispose(): void {
     this.quadGeometry.dispose();
     this.basicMaterial.dispose();
 

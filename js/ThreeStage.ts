@@ -34,23 +34,24 @@ export type ThreeStageOptions = {
 export default class ThreeStage {
 
   // Scale applied to interaction that isn't directly tied to screen coordinates (rotation), updated in layout
-  activeScale: number;
+  public activeScale: number;
 
-  canvasWidth: number;
-  canvasHeight: number;
+  public canvasWidth: number;
+  public canvasHeight: number;
 
-  threeScene: THREE.Scene;
-  threeCamera: THREE.PerspectiveCamera;
-  threeRenderer: THREE.WebGLRenderer | null;
-  contextLossDialog: ContextLossFailureDialog | null;
+  public readonly threeScene: THREE.Scene;
+  public readonly threeCamera: THREE.PerspectiveCamera;
+  public threeRenderer: THREE.WebGLRenderer | null;
 
-  backgroundProperty: IReadOnlyProperty<Color>;
+  private contextLossDialog: ContextLossFailureDialog | null;
+
+  private readonly backgroundProperty: IReadOnlyProperty<Color>;
 
   private readonly colorListener: ( c: Color ) => void;
 
-  dimensionsChangedEmitter: TinyEmitter;
+  public readonly dimensionsChangedEmitter: TinyEmitter;
 
-  constructor( providedOptions?: ThreeStageOptions ) {
+  public constructor( providedOptions?: ThreeStageOptions ) {
 
     const options = optionize<ThreeStageOptions, ThreeStageOptions>()( {
       backgroundProperty: new Property( Color.BLACK ),
@@ -111,7 +112,7 @@ export default class ThreeStage {
   /**
    * Returns a Canvas containing the displayed content in this scene.
    */
-  renderToCanvas( supersampleMultiplier = 1, backingMultiplier = 1 ): HTMLCanvasElement {
+  public renderToCanvas( supersampleMultiplier = 1, backingMultiplier = 1 ): HTMLCanvasElement {
     assert && assert( Number.isInteger( supersampleMultiplier ) );
 
     const canvasWidth = Math.ceil( this.canvasWidth * backingMultiplier );
@@ -281,7 +282,7 @@ export default class ThreeStage {
   /**
    * Projects a 3d point in the global coordinate frame to one within the 2d global coordinate frame.
    */
-  projectPoint( point: Vector3 ): Vector2 {
+  public projectPoint( point: Vector3 ): Vector2 {
     const threePoint = ThreeUtils.vectorToThree( point );
     threePoint.project( this.threeCamera ); // global to NDC
 
@@ -304,12 +305,12 @@ export default class ThreeStage {
    * Given a screen point, returns a 3D ray representing the camera's position and direction that point would be in the
    * 3D scene.
    */
-  getRayFromScreenPoint( screenPoint: Vector2 ): Ray3 {
+  public getRayFromScreenPoint( screenPoint: Vector2 ): Ray3 {
     const threeRay = this.getRaycasterFromScreenPoint( screenPoint ).ray;
     return new Ray3( ThreeUtils.threeToVector( threeRay.origin ), ThreeUtils.threeToVector( threeRay.direction ).normalize() );
   }
 
-  setDimensions( width: number, height: number ): void {
+  public setDimensions( width: number, height: number ): void {
     assert && assert( typeof width === 'number' && width % 1 === 0 );
     assert && assert( typeof height === 'number' && height % 1 === 0 );
 
@@ -327,7 +328,7 @@ export default class ThreeStage {
    * This is a generalization of the isometric FOV computation, as it also supports other combinations such as properly
    * handling pan/zoom. See https://github.com/phetsims/density/issues/50
    */
-  adjustViewOffset( cameraBounds: Bounds2 ): void {
+  public adjustViewOffset( cameraBounds: Bounds2 ): void {
     assert && assert( Math.abs( this.threeCamera.aspect - cameraBounds.width / cameraBounds.height ) < 1e-5, 'Camera aspect should match cameraBounds' );
 
     // We essentially reverse some of the computation being done by PerspectiveCamera's updateProjectionMatrix(), so
@@ -398,11 +399,11 @@ export default class ThreeStage {
     this.threeCamera.updateProjectionMatrix();
   }
 
-  get width(): number {
+  public get width(): number {
     return this.canvasWidth;
   }
 
-  get height(): number {
+  public get height(): number {
     return this.canvasHeight;
   }
 
@@ -411,7 +412,7 @@ export default class ThreeStage {
    *
    * @param target - undefined for the default target
    */
-  render( target: THREE.WebGLRenderTarget | undefined ): void {
+  public render( target: THREE.WebGLRenderTarget | undefined ): void {
     // render the 3D scene first
     if ( this.threeRenderer ) {
       this.threeRenderer.setRenderTarget( target || null );
@@ -423,7 +424,7 @@ export default class ThreeStage {
   /**
    * Releases references.
    */
-  dispose(): void {
+  public dispose(): void {
     this.threeRenderer && this.threeRenderer.dispose();
 
     // @ts-ignore
@@ -440,7 +441,7 @@ export default class ThreeStage {
    * Most of the complexity here is that threeCamera.fov is in degrees, and our ideal vertically-constrained FOV is
    * 50 (so there's conversion factors in place).
    */
-  static computeIsometricFOV( fov: number, canvasWidth: number, canvasHeight: number, layoutWidth: number, layoutHeight: number ): number {
+  public static computeIsometricFOV( fov: number, canvasWidth: number, canvasHeight: number, layoutWidth: number, layoutHeight: number ): number {
     const sx = canvasWidth / layoutWidth;
     const sy = canvasHeight / layoutHeight;
 

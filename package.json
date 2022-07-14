@@ -30,10 +30,7 @@
       {
         "files": [
           "**/*.ts"
-        ],
-        "rules": {
-          "@typescript-eslint/explicit-member-accessibility": "off"
-        }
+        ]
       }
     ]
   }
