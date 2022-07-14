@@ -16,14 +16,14 @@ import memoize from '../../phet-core/js/memoize.js';
  */
 const ThreeInstrumentable = memoize( <SuperType extends Constructor>( type: SuperType ) => {
 
-  return class extends type {
+  return class ThreeInstrumentableMixin extends type {
 
-    phetioObject: ThreeObject3DPhetioObject;
+    public phetioObject: ThreeObject3DPhetioObject;
 
     /**
      * Pass tandem as the first arg, the rest will be passed through
      */
-    constructor( ...args: any[] ) {
+    public constructor( ...args: any[] ) {
       const options = args[ args.length - 1 ];
       const threeArgs = args.slice( 0, args.length - 1 );
 
@@ -35,7 +35,7 @@ const ThreeInstrumentable = memoize( <SuperType extends Constructor>( type: Supe
     /**
      * Releases references
      */
-    dispose(): void {
+    public dispose(): void {
       // @ts-ignore
       super.dispose && super.dispose();
 
