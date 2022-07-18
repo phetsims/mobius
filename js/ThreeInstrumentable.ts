@@ -10,6 +10,7 @@ import ThreeObject3DPhetioObject from './ThreeObject3DPhetioObject.js';
 import mobius from './mobius.js';
 import Constructor from '../../phet-core/js/types/Constructor.js';
 import memoize from '../../phet-core/js/memoize.js';
+import IntentionalAny from '../../phet-core/js/types/IntentionalAny.js';
 
 /**
  * @param type - Should be THREE.Object3D or a subtype
@@ -23,7 +24,7 @@ const ThreeInstrumentable = memoize( <SuperType extends Constructor>( type: Supe
     /**
      * Pass tandem as the first arg, the rest will be passed through
      */
-    public constructor( ...args: any[] ) {
+    public constructor( ...args: IntentionalAny[] ) {
       const options = args[ args.length - 1 ];
       const threeArgs = args.slice( 0, args.length - 1 );
 

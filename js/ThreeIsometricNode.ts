@@ -10,10 +10,7 @@ import Property from '../../axon/js/Property.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
 import Matrix3 from '../../dot/js/Matrix3.js';
 import optionize from '../../phet-core/js/optionize.js';
-import { DOM, NodeOptions } from '../../scenery/js/imports.js';
-import { Node } from '../../scenery/js/imports.js';
-import { Rectangle } from '../../scenery/js/imports.js';
-import { Utils } from '../../scenery/js/imports.js';
+import { DOM, Node, NodeOptions, Rectangle, Utils } from '../../scenery/js/imports.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeStage, { ThreeStageOptions } from './ThreeStage.js';
 import mobius from './mobius.js';
@@ -21,8 +18,9 @@ import IReadOnlyProperty from '../../axon/js/IReadOnlyProperty.js';
 import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
 import Ray3 from '../../dot/js/Ray3.js';
+import PhetioObject from '../../tandem/js/PhetioObject.js';
 
-type MouseHitListener = ( point: Vector2 ) => any;
+type MouseHitListener = ( point: Vector2 ) => PhetioObject | null;
 
 type SelfOptions = {
   parentMatrixProperty?: IReadOnlyProperty<Matrix3>;
@@ -120,7 +118,7 @@ export default class ThreeIsometricNode extends Node {
   }
 
   // for studio autoselect
-  public override getPhetioMouseHit( point: Vector2 ): any {
+  public override getPhetioMouseHit( point: Vector2 ): PhetioObject | null {
     if ( this._getPhetioMouseHit && this.isPhetioMouseHittable( point ) ) {
       return this._getPhetioMouseHit( point );
     }

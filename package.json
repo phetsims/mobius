@@ -30,7 +30,10 @@
       {
         "files": [
           "**/*.ts"
-        ]
+        ],
+        "rules": {
+          "@typescript-eslint/no-explicit-any": "error"
+        }
       }
     ]
   }
