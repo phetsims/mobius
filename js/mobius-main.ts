@@ -17,7 +17,9 @@ import MobiusDemoScreenView from './MobiusDemoScreenView.js';
 import mobiusStrings from './mobiusStrings.js';
 
 // empty model used for all demo screens
-const MODEL = {};
+const MODEL = {
+  step: () => { /* no stepping */ }
+};
 
 const simOptions: SimOptions = {
   credits: {
