@@ -6,8 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { Display } from '../../scenery/js/imports.js';
-import { Node } from '../../scenery/js/imports.js';
+import { Display, Node } from '../../scenery/js/imports.js';
 import mobius from './mobius.js';
 
 export default class NodeTexture extends THREE.Texture {
