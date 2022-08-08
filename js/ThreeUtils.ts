@@ -247,7 +247,7 @@ const ThreeUtils = {
   /**
    * Shows a warning with a link to more information about PhET simulation webgl compatibility.
    */
-  showWebGLWarning( screenView: ScreenView ) {
+  showWebGLWarning( screenView: ScreenView ): void {
     const warningNode = new HBox( {
       children: [
         new Path( exclamationTriangleSolidShape, {
