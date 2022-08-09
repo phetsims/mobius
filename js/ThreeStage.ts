@@ -18,7 +18,7 @@ import { Color } from '../../scenery/js/imports.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeUtils from './ThreeUtils.js';
 import mobius from './mobius.js';
-import IReadOnlyProperty from '../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
 import IEmitter from '../../axon/js/IEmitter.js';
 
 // hard-coded gamma (assuming the exponential part of the sRGB curve as a simplification)
@@ -26,7 +26,7 @@ const GAMMA = 2.2;
 const INVERSE_GAMMA = 1 / GAMMA;
 
 export type ThreeStageOptions = {
-  backgroundProperty?: IReadOnlyProperty<Color>;
+  backgroundProperty?: TReadOnlyProperty<Color>;
 
   // The initial camera position
   cameraPosition?: Vector3;
@@ -46,7 +46,7 @@ export default class ThreeStage {
 
   private contextLossDialog: ContextLossFailureDialog | null;
 
-  private readonly backgroundProperty: IReadOnlyProperty<Color>;
+  private readonly backgroundProperty: TReadOnlyProperty<Color>;
 
   private readonly colorListener: ( c: Color ) => void;
 

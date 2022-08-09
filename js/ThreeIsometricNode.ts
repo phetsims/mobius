@@ -14,7 +14,7 @@ import { DOM, Node, NodeOptions, Rectangle, Utils } from '../../scenery/js/impor
 import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeStage, { ThreeStageOptions } from './ThreeStage.js';
 import mobius from './mobius.js';
-import IReadOnlyProperty from '../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
 import Ray3 from '../../dot/js/Ray3.js';
@@ -23,7 +23,7 @@ import PhetioObject from '../../tandem/js/PhetioObject.js';
 type MouseHitListener = ( point: Vector2 ) => PhetioObject | null;
 
 type SelfOptions = {
-  parentMatrixProperty?: IReadOnlyProperty<Matrix3>;
+  parentMatrixProperty?: TReadOnlyProperty<Matrix3>;
   fov?: number;
   getPhetioMouseHit?: MouseHitListener | null;
 };
@@ -35,7 +35,7 @@ export default class ThreeIsometricNode extends Node {
   private layoutBounds: Bounds2;
   private _getPhetioMouseHit: MouseHitListener | null;
   public readonly stage: ThreeStage;
-  private parentMatrixProperty: IReadOnlyProperty<Matrix3>;
+  private parentMatrixProperty: TReadOnlyProperty<Matrix3>;
 
   // our target for drags that don't hit other UI components
   public readonly backgroundEventTarget: Rectangle;
