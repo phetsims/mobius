@@ -19,7 +19,7 @@ import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeUtils from './ThreeUtils.js';
 import mobius from './mobius.js';
 import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
-import IEmitter from '../../axon/js/IEmitter.js';
+import TEmitter from '../../axon/js/TEmitter.js';
 
 // hard-coded gamma (assuming the exponential part of the sRGB curve as a simplification)
 const GAMMA = 2.2;
@@ -50,7 +50,7 @@ export default class ThreeStage {
 
   private readonly colorListener: ( c: Color ) => void;
 
-  public readonly dimensionsChangedEmitter: IEmitter;
+  public readonly dimensionsChangedEmitter: TEmitter;
 
   public constructor( providedOptions?: ThreeStageOptions ) {
 
