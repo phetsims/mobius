@@ -25,16 +25,6 @@
     "extends": "../chipper/eslint/sim_eslintrc.js",
     "globals": {
       "THREE": "readonly"
-    },
-    "overrides": [
-      {
-        "files": [
-          "**/*.ts"
-        ],
-        "rules": {
-          "@typescript-eslint/no-explicit-any": "error"
-        }
-      }
-    ]
+    }
   }
 }
