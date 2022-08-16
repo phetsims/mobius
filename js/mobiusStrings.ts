@@ -5,11 +5,13 @@
  */
 /* eslint-disable */
 import getStringModule from '../../chipper/js/getStringModule.js';
+import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
 import mobius from './mobius.js';
 
 type StringsType = {
   'mobius': {
     'title': string;
+    'titleProperty': TReadOnlyProperty<string>;
   }
 };
 
