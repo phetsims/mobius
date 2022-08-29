@@ -11,7 +11,7 @@ import mobius from './mobius.js';
 type StringsType = {
   'mobius': {
     'title': string;
-    'titleProperty': TReadOnlyProperty<string>;
+    'titleStringProperty': TReadOnlyProperty<string>;
   }
 };
 
