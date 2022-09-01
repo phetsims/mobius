@@ -10,7 +10,7 @@ import Property from '../../axon/js/Property.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
 import Matrix3 from '../../dot/js/Matrix3.js';
 import optionize from '../../phet-core/js/optionize.js';
-import { DOM, Node, NodeOptions, Rectangle, Utils } from '../../scenery/js/imports.js';
+import { DOM, Node, NodeOptions, Rectangle } from '../../scenery/js/imports.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeStage, { ThreeStageOptions } from './ThreeStage.js';
 import mobius from './mobius.js';
@@ -87,9 +87,13 @@ export default class ThreeIsometricNode extends Node {
       this.domNode.invalidateDOM();
 
       // support Scenery/Joist 0.2 screenshot (takes extra work to output)
-      this.domNode.renderToCanvasSelf = wrapper => {
+      this.domNode.renderToCanvasSelf = ( wrapper, matrix ) => {
+        console.log( matrix.toString() );
         const context = wrapper.context;
-        const canvas = this.stage.renderToCanvas( MobiusQueryParameters.mobiusCanvasSupersampling, Utils.backingScale( context ) );
+
+        // Guaranteed to be affine, 1:1 aspect ratio and axis-aligned
+        const scale = matrix.timesMatrix( this.getUniqueTrail().getMatrix().inverted() ).m00();
+        const canvas = this.stage.renderToCanvas( MobiusQueryParameters.mobiusCanvasSupersampling, scale );
 
         context.save();
 
