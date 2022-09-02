@@ -30,7 +30,7 @@ const simOptions: SimOptions = {
 
 // Create and start sim
 simLauncher.launch( () => {
-  new Sim( mobiusStrings.mobius.title, [
+  new Sim( mobiusStrings.mobius.titleStringProperty, [
     new Screen(
       () => MODEL,
       () => new MobiusDemoScreenView(),
