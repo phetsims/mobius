@@ -15,8 +15,8 @@ type StringsType = {
   }
 };
 
-const mobiusStrings = getStringModule( 'MOBIUS' ) as StringsType;
+const MobiusStrings = getStringModule( 'MOBIUS' ) as StringsType;
 
-mobius.register( 'mobiusStrings', mobiusStrings );
+mobius.register( 'MobiusStrings', MobiusStrings );
 
-export default mobiusStrings;
+export default MobiusStrings;

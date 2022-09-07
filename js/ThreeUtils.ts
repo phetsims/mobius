@@ -11,12 +11,12 @@ import Vector3 from '../../dot/js/Vector3.js';
 import ScreenView from '../../joist/js/ScreenView.js';
 import asyncLoader from '../../phet-core/js/asyncLoader.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
-import sceneryPhetStrings from '../../scenery-phet/js/sceneryPhetStrings.js';
+import SceneryPhetStrings from '../../scenery-phet/js/SceneryPhetStrings.js';
 import { Color, HBox, openPopup, Path, Text, Utils } from '../../scenery/js/imports.js';
 import exclamationTriangleSolidShape from '../../sherpa/js/fontawesome-5/exclamationTriangleSolidShape.js';
 import mobius from './mobius.js';
 
-const webglWarningBodyString = sceneryPhetStrings.webglWarning.body;
+const webglWarningBodyString = SceneryPhetStrings.webglWarning.body;
 
 // {THREE.TextureLoader|null} - "singleton" for the texture loader
 let textureLoader: THREE.TextureLoader | null = null;

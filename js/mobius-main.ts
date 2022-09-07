@@ -14,7 +14,7 @@ import simLauncher from '../../joist/js/simLauncher.js';
 import { Rectangle } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import MobiusDemoScreenView from './MobiusDemoScreenView.js';
-import mobiusStrings from './mobiusStrings.js';
+import MobiusStrings from './MobiusStrings.js';
 
 // empty model used for all demo screens
 const MODEL = {
@@ -30,7 +30,7 @@ const simOptions: SimOptions = {
 
 // Create and start sim
 simLauncher.launch( () => {
-  new Sim( mobiusStrings.mobius.titleStringProperty, [
+  new Sim( MobiusStrings.mobius.titleStringProperty, [
     new Screen(
       () => MODEL,
       () => new MobiusDemoScreenView(),
