@@ -35,7 +35,7 @@ simLauncher.launch( () => {
       () => MODEL,
       () => new MobiusDemoScreenView(),
       {
-        name: 'Buttons',
+        name: new Property( 'Buttons' ),
         backgroundColorProperty: new Property( 'black' ),
         homeScreenIcon: new ScreenIcon(
           new Rectangle( 0, 0, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.height, {
