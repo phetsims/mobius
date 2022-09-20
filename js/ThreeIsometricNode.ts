@@ -88,7 +88,6 @@ export default class ThreeIsometricNode extends Node {
 
       // support Scenery/Joist 0.2 screenshot (takes extra work to output)
       this.domNode.renderToCanvasSelf = ( wrapper, matrix ) => {
-        console.log( matrix.toString() );
         const context = wrapper.context;
 
         // Guaranteed to be affine, 1:1 aspect ratio and axis-aligned
