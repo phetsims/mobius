@@ -33,7 +33,8 @@ ThreeObject3DPhetioObject.ThreeObject3DIO = new IOType( 'ThreeObject3DIO', {
   valueType: ThreeObject3DPhetioObject,
   toStateObject: () => {
     return {};
-  }
+  },
+  stateSchema: {}
 } );
 
 mobius.register( 'ThreeObject3DPhetioObject', ThreeObject3DPhetioObject );
