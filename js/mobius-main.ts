@@ -18,7 +18,7 @@ import MobiusStrings from './MobiusStrings.js';
 
 // empty model used for all demo screens
 const MODEL = {
-  step: () => { /* no stepping */ }
+  reset: () => { /* nothing to do */ }
 };
 
 const simOptions: SimOptions = {
