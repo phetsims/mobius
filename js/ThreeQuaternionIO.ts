@@ -34,8 +34,8 @@ const ThreeQuaternionIO = new IOType( 'ThreeQuaternionIO', {
     z: NumberIO,
     w: NumberIO
   },
-  fromStateObject: ( obj: ThreeQuaternionStateObject ) => {
-    return new THREE.Quaternion( obj.x, obj.y, obj.z, obj.w );
+  fromStateObject: ( stateObject: ThreeQuaternionStateObject ) => {
+    return new THREE.Quaternion( stateObject.x, stateObject.y, stateObject.z, stateObject.w );
   },
   applyState: ( quaternion: THREE.Quaternion, obj: ThreeQuaternionStateObject ) => {
     quaternion.set( obj.x, obj.y, obj.z, obj.w );
