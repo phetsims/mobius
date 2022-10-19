@@ -312,8 +312,8 @@ export default class ThreeStage {
   }
 
   public setDimensions( width: number, height: number ): void {
-    assert && assert( typeof width === 'number' && width % 1 === 0 );
-    assert && assert( typeof height === 'number' && height % 1 === 0 );
+    assert && assert( width % 1 === 0 );
+    assert && assert( height % 1 === 0 );
 
     this.canvasWidth = width;
     this.canvasHeight = height;
