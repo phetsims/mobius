@@ -16,8 +16,6 @@ import { Color, HBox, openPopup, Path, Text, Utils } from '../../scenery/js/impo
 import exclamationTriangleSolidShape from '../../sherpa/js/fontawesome-5/exclamationTriangleSolidShape.js';
 import mobius from './mobius.js';
 
-const webglWarningBodyString = SceneryPhetStrings.webglWarning.body;
-
 // {THREE.TextureLoader|null} - "singleton" for the texture loader
 let textureLoader: THREE.TextureLoader | null = null;
 
@@ -253,7 +251,7 @@ const ThreeUtils = {
           fill: '#E87600', // "safety orange", according to Wikipedia
           scale: 0.06
         } ),
-        new Text( webglWarningBodyString, {
+        new Text( SceneryPhetStrings.webglWarning.bodyStringProperty, {
           font: new PhetFont( 16 ),
           fill: '#000',
           maxWidth: 600
