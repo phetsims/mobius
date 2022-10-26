@@ -19,7 +19,10 @@
     "supportedBrands": [
       "phet",
       "adapted-from-phet"
-    ]
+    ],
+    "simFeatures": {
+      "supportsDynamicLocale": true
+    }
   },
   "eslintConfig": {
     "extends": "../chipper/eslint/sim_eslintrc.js",

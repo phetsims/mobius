@@ -10,7 +10,6 @@ import mobius from './mobius.js';
 
 type StringsType = {
   'mobius': {
-    'title': string;
     'titleStringProperty': LinkableProperty<string>;
   }
 };
