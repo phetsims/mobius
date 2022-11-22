@@ -26,15 +26,13 @@ export default class ThreeObject3DPhetioObject extends PhetioObject {
     super( options );
   }
 
-  public static ThreeObject3DIO: IOType;
+  public static ThreeObject3DIO = new IOType( 'ThreeObject3DIO', {
+    valueType: ThreeObject3DPhetioObject,
+    toStateObject: () => {
+      return {};
+    },
+    stateSchema: {}
+  } );
 }
-
-ThreeObject3DPhetioObject.ThreeObject3DIO = new IOType( 'ThreeObject3DIO', {
-  valueType: ThreeObject3DPhetioObject,
-  toStateObject: () => {
-    return {};
-  },
-  stateSchema: {}
-} );
 
 mobius.register( 'ThreeObject3DPhetioObject', ThreeObject3DPhetioObject );
