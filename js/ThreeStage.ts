@@ -428,7 +428,7 @@ export default class ThreeStage {
   public dispose(): void {
     this.threeRenderer && this.threeRenderer.dispose();
 
-    // @ts-ignore
+    // @ts-expect-error
     this.threeScene.dispose();
     this.backgroundProperty.unlink( this.colorListener );
   }

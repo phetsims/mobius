@@ -66,7 +66,7 @@ export default class TextureQuad extends THREE.Mesh {
     this.quadGeometry.dispose();
     this.basicMaterial.dispose();
 
-    // @ts-ignore
+    // @ts-expect-error
     super.dispose && super.dispose();
   }
 }

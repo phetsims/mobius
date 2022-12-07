@@ -37,7 +37,7 @@ const ThreeInstrumentable = memoize( <SuperType extends Constructor>( type: Supe
      * Releases references
      */
     public dispose(): void {
-      // @ts-ignore
+      // @ts-expect-error
       super.dispose && super.dispose();
 
       this.phetioObject.dispose();
