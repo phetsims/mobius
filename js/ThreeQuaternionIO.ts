@@ -40,7 +40,7 @@ const ThreeQuaternionIO = new IOType( 'ThreeQuaternionIO', {
   applyState: ( quaternion: THREE.Quaternion, obj: ThreeQuaternionStateObject ) => {
     quaternion.set( obj.x, obj.y, obj.z, obj.w );
   },
-  stateToArgsForConstructor: ( obj: ThreeQuaternionStateObject ) => [ obj.x, obj.y, obj.z, obj.w ]
+  stateObjectToCreateElementArguments: ( obj: ThreeQuaternionStateObject ) => [ obj.x, obj.y, obj.z, obj.w ]
 } );
 
 mobius.register( 'ThreeQuaternionIO', ThreeQuaternionIO );
