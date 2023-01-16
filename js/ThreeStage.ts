@@ -318,7 +318,7 @@ export default class ThreeStage {
     this.canvasWidth = width;
     this.canvasHeight = height;
 
-    this.threeCamera.updateProjectionMatrix(); // TODO: What is this doing?
+    this.threeCamera.updateProjectionMatrix(); // TODO: What is this doing?, https://github.com/phetsims/density/issues/50
     this.threeRenderer && this.threeRenderer.setSize( this.canvasWidth, this.canvasHeight );
 
     this.dimensionsChangedEmitter.emit();
