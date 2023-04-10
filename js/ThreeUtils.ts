@@ -268,7 +268,10 @@ const ThreeUtils = {
 
     warningNode.addInputListener( {
       up: function() {
-        openPopup( `https://phet.colorado.edu/webgl-disabled-page?simLocale=${phet.joist.sim.locale}` );
+        const joistGlobal = _.get( window, 'phet.joist', null ); // returns null if global isn't found
+        const locale = joistGlobal ? joistGlobal.sim.locale : 'en';
+
+        openPopup( `https://phet.colorado.edu/webgl-disabled-page?simLocale=${locale}` );
       }
     } );
   }
