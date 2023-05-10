@@ -95,7 +95,7 @@ export default class ThreeStage {
 
     // For https://github.com/phetsims/density/issues/100, we'll also allow context-restore, and will auto-hide the dialog
     this.threeRenderer && this.threeRenderer.context.canvas.addEventListener( 'webglcontextrestored', event => {
-      this.contextLossDialog!.hideWithoutReload();
+      this.contextLossDialog && this.contextLossDialog.hideWithoutReload();
     } );
 
     this.backgroundProperty = options.backgroundProperty;
