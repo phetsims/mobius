@@ -42,7 +42,7 @@ export default class ThreeStage {
 
   public readonly threeScene: THREE.Scene;
   public readonly threeCamera: THREE.PerspectiveCamera;
-  public threeRenderer: THREE.WebGLRenderer | null;
+  public threeRenderer: THREE.WebGLRenderer | null = null;
 
   private contextLossDialog: ContextLossFailureDialog | null;
 
@@ -71,17 +71,18 @@ export default class ThreeStage {
     this.threeCamera.near = 1;
     this.threeCamera.far = 100;
 
-    try {
-      this.threeRenderer = new THREE.WebGLRenderer( {
-        antialias: true,
-        alpha: true,
-        preserveDrawingBuffer: phet.chipper.queryParameters.preserveDrawingBuffer
-      } );
-    }
-    catch( e ) {
-      // For https://github.com/phetsims/density/issues/105, we'll need to generate the full API without WebGL
-      console.log( e );
-      this.threeRenderer = null;
+    if ( ThreeUtils.isWebGLEnabled() ) {
+      try {
+        this.threeRenderer = new THREE.WebGLRenderer( {
+          antialias: true,
+          alpha: true,
+          preserveDrawingBuffer: phet.chipper.queryParameters.preserveDrawingBuffer
+        } );
+      }
+      catch( e ) {
+        // For https://github.com/phetsims/density/issues/105, we'll need to generate the full API without WebGL
+        console.log( e );
+      }
     }
     this.threeRenderer && this.threeRenderer.setPixelRatio( window.devicePixelRatio || 1 );
 
