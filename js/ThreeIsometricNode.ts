@@ -20,7 +20,7 @@ import Vector3 from '../../dot/js/Vector3.js';
 import Ray3 from '../../dot/js/Ray3.js';
 import PhetioObject from '../../tandem/js/PhetioObject.js';
 
-type MouseHitListener = ( point: Vector2 ) => PhetioObject | null;
+type MouseHitListener = ( point: Vector2 ) => PhetioObject | null | 'phetioNotSelectable';
 
 type SelfOptions = {
   parentMatrixProperty?: TReadOnlyProperty<Matrix3>;
@@ -121,7 +121,7 @@ export default class ThreeIsometricNode extends Node {
   }
 
   // for studio autoselect
-  public override getPhetioMouseHit( point: Vector2 ): PhetioObject | null {
+  public override getPhetioMouseHit( point: Vector2 ): PhetioObject | null | 'phetioNotSelectable' {
     if ( this._getPhetioMouseHit && this.isPhetioMouseHittable( point ) ) {
       return this._getPhetioMouseHit( point );
     }
