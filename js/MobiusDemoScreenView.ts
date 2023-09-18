@@ -40,7 +40,7 @@ export default class MobiusDemoScreenView extends ScreenView {
 
     // Used to display the 3D view
     this.sceneNode = new ThreeIsometricNode( this.layoutBounds, {
-      parentMatrixProperty: animatedPanZoomSingleton.listener!.matrixProperty,
+      parentMatrixProperty: animatedPanZoomSingleton.listener.matrixProperty,
       cameraPosition: new Vector3( 0, 0.4, 2 )
     } );
     this.addChild( this.sceneNode );
