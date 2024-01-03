@@ -1,7 +1,7 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * IO Type for three.js Quaternion type
+ * PhET-iO Type for three.js Quaternion type
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
