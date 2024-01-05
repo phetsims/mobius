@@ -1,5 +1,9 @@
 // Copyright 2022, University of Colorado Boulder
 
+/**
+ * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ */
+
 import mobius from './mobius.js';
 import './MobiusQueryParameters.js';
 import './NodeTexture.js';
