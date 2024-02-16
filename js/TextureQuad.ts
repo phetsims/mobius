@@ -31,6 +31,7 @@ export default class TextureQuad extends THREE.Mesh {
     const basicMaterial = new THREE.MeshBasicMaterial( merge( {
       transparent: true,
       depthTest: false,
+      // TODO: using "combineOptions" here says this isn't a known parameter. how?  https://github.com/phetsims/density-buoyancy-common/issues/95
       map: texture
     }, materialOptions ) );
 
