@@ -77,7 +77,10 @@ export default class MobiusDemoScreenView extends ScreenView {
       top: 1
     } );
     const size = Math.ceil( Math.max( exampleNode.width, exampleNode.height ) ) + 2;
-    const label = new TextureQuad( new NodeTexture( exampleNode, size, size ), 0.2, 0.2 );
+    const label = new TextureQuad( new NodeTexture( exampleNode, {
+      width: size,
+      height: size
+    } ), 0.2, 0.2 );
     label.position.copy( ThreeUtils.vectorToThree( new Vector3( 0, 0, 0.26 ) ) );
     this.cubeMesh.add( label );
   }

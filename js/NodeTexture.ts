@@ -6,26 +6,61 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { Display, Node } from '../../scenery/js/imports.js';
+import { Display, Node, Utils } from '../../scenery/js/imports.js';
 import mobius from './mobius.js';
+import Disposable from '../../axon/js/Disposable.js';
+import optionize from '../../phet-core/js/optionize.js';
+import assertMutuallyExclusiveOptions from '../../phet-core/js/assertMutuallyExclusiveOptions.js';
+
+type NodeTextureOptions = {
+  width?: number;
+  height?: number;
+  calculateDimensionFromNode?: boolean;
+};
+
+const toClosestPowerOf2 = ( size: number ): number => {
+
+  // closest power of 2 is vital for GPU rendering
+  return Utils.toPowerOf2( Math.ceil( size ) );
+};
 
 export default class NodeTexture extends THREE.Texture {
 
   private _display: Display;
   private _scene: Node;
 
+  // This can be mutated as the provided node's dimension changes, see calculateDimensionFromNode
   public _width: number;
   public _height: number;
 
-  public constructor( node: Node, width: number, height: number ) {
+  private disposable = new Disposable();
+
+  public constructor( node: Node, providedOptions?: NodeTextureOptions ) {
+
+    assert && assertMutuallyExclusiveOptions( providedOptions, [ 'width', 'height' ], [ 'calculateDimensionFromNode' ] );
+
+    const options = optionize<NodeTextureOptions>()( {
+      width: -1,
+      height: -1,
+      calculateDimensionFromNode: false
+    }, providedOptions );
+
+    if ( options.calculateDimensionFromNode ) {
+      options.width = toClosestPowerOf2( node.width );
+      options.height = toClosestPowerOf2( node.height );
+    }
+    else {
+      assert && assert( options.width > 0 && options.height > 0, 'specify width/height or calculate from node directly' );
+    }
+
     const scene = new Node( {
       renderer: 'canvas',
       preventFit: true
     } );
     scene.addChild( node );
     const display = new Display( scene, {
-      width: width,
-      height: height,
+      width: options.width,
+      height: options.height,
       accessibility: false
     } );
     display.updateDisplay();
@@ -36,8 +71,27 @@ export default class NodeTexture extends THREE.Texture {
 
     this._display = display;
     this._scene = scene;
-    this._width = width;
-    this._height = height;
+    this._width = options.width;
+    this._height = options.height;
+
+    this.disposable.disposeEmitter.addListener( () => {
+      this._display.dispose();
+      this._scene.dispose();
+    } );
+
+    if ( options.calculateDimensionFromNode ) {
+      const listener = () => {
+        const newWidth = toClosestPowerOf2( node.width );
+        const newHeight = toClosestPowerOf2( node.height );
+        this._display.setWidthHeight( newWidth, newHeight );
+        this._width = newWidth;
+        this._height = newHeight;
+      };
+      node.localBoundsProperty.link( listener );
+      this.disposable.disposeEmitter.addListener( () => {
+        node.localBoundsProperty.unlink( listener );
+      } );
+    }
 
     // tells three.js that the texture needs an update
     this.needsUpdate = true;
@@ -55,8 +109,7 @@ export default class NodeTexture extends THREE.Texture {
    * Releases references.
    */
   public override dispose(): void {
-    this._display.dispose();
-    this._scene.dispose();
+    this.disposable.dispose();
 
     super.dispose();
   }
