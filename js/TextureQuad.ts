@@ -10,6 +10,8 @@
 import merge from '../../phet-core/js/merge.js';
 import mobius from './mobius.js';
 import Quad from './Quad.js';
+import Disposable from '../../axon/js/Disposable.js';
+import TEmitter from '../../axon/js/TEmitter.js';
 
 export default class TextureQuad extends THREE.Mesh {
 
@@ -17,6 +19,9 @@ export default class TextureQuad extends THREE.Mesh {
   private readonly basicMaterial: THREE.MeshBasicMaterial;
   private textureQuadWidth: number;
   private textureQuadHeight: number;
+
+  private disposable = new Disposable();
+  public disposeEmitter: TEmitter;
 
   public constructor( texture: THREE.Texture, width: number, height: number, materialOptions?: THREE.MaterialParameters ) {
 
@@ -41,6 +46,7 @@ export default class TextureQuad extends THREE.Mesh {
     this.basicMaterial = basicMaterial;
     this.textureQuadWidth = width;
     this.textureQuadHeight = height;
+    this.disposeEmitter = this.disposable.disposeEmitter;
   }
 
   public updateTexture( texture: THREE.Texture, width: number = this.textureQuadWidth, height: number = this.textureQuadHeight ): void {
@@ -66,6 +72,7 @@ export default class TextureQuad extends THREE.Mesh {
   public dispose(): void {
     this.quadGeometry.dispose();
     this.basicMaterial.dispose();
+    this.disposable.dispose();
 
     // @ts-expect-error
     super.dispose && super.dispose();
