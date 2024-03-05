@@ -11,7 +11,7 @@ import merge from '../../phet-core/js/merge.js';
 import mobius from './mobius.js';
 import Quad from './Quad.js';
 import Disposable from '../../axon/js/Disposable.js';
-import TEmitter from '../../axon/js/TEmitter.js';
+import { TReadOnlyEmitter } from '../../axon/js/TEmitter.js';
 
 export default class TextureQuad extends THREE.Mesh {
 
@@ -21,7 +21,7 @@ export default class TextureQuad extends THREE.Mesh {
   private textureQuadHeight: number;
 
   private disposable = new Disposable();
-  public disposeEmitter: TEmitter;
+  public disposeEmitter: TReadOnlyEmitter;
 
   public constructor( texture: THREE.Texture, width: number, height: number, materialOptions?: THREE.MaterialParameters ) {
 
