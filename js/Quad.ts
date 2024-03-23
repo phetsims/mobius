@@ -1,4 +1,4 @@
-// Copyright 2019-2022, University of Colorado Boulder
+// Copyright 2019-2024, University of Colorado Boulder
 
 /**
  * Creates a position/normal/uv mapped quad based on vertices in a high-performance way.

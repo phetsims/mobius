@@ -1,4 +1,4 @@
-// Copyright 2019-2022, University of Colorado Boulder
+// Copyright 2019-2024, University of Colorado Boulder
 
 /**
  * Shows three.js content within a rectangle, displayed to be inside of a rectangle in arbitrary places in the scene

@@ -1,4 +1,4 @@
-// Copyright 2019-2023, University of Colorado Boulder
+// Copyright 2019-2024, University of Colorado Boulder
 
 /**
  * Encapsulates the main three.js primitives needed for a stage (scene/camera/renderer).
