@@ -117,6 +117,10 @@ export default class ThreeIsometricNode extends Node {
     };
     this.parentMatrixProperty.lazyLink( this.viewOffsetListener );
 
+    // Set stage to initial dimensions. Note this must be called at least once with nonzero bounds in order for
+    // point projection to be well-defined.
+    this.layout( this.layoutBounds.width, this.layoutBounds.height );
+
     this.mutate( options );
   }
 
@@ -152,12 +156,6 @@ export default class ThreeIsometricNode extends Node {
     // doesn't throw off layout. This may come with a bit of performance cost, since we do typically have some of the
     // canvas hidden by the navigation bar, but the lack of resizes on any pan/zoom presumably makes up for it in
     // usability.
-
-    if ( _.hasIn( window, 'phet.joist.sim' ) ) {
-      const simDimensions = phet.joist.sim.dimensionProperty.value; // eslint-disable-line bad-phet-library-text
-      width = simDimensions.width;
-      height = simDimensions.height;
-    }
 
     this.stage.setDimensions( width, height );
 

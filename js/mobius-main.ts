@@ -13,7 +13,7 @@ import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import { Rectangle } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
-import MobiusDemoScreenView from './MobiusDemoScreenView.js';
+import MobiusDemoScreenView from './demo/MobiusDemoScreenView.js';
 import MobiusStrings from './MobiusStrings.js';
 
 // empty model used for all demo screens

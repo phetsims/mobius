@@ -6,17 +6,17 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Vector3 from '../../dot/js/Vector3.js';
-import ScreenView from '../../joist/js/ScreenView.js';
-import Keypad from '../../scenery-phet/js/keypad/Keypad.js';
-import { animatedPanZoomSingleton } from '../../scenery/js/imports.js';
-import NodeTexture from './NodeTexture.js';
-import TextureQuad from './TextureQuad.js';
-import ThreeIsometricNode from './ThreeIsometricNode.js';
-import ThreeUtils from './ThreeUtils.js';
-import mobius from './mobius.js';
-import Bounds2 from '../../dot/js/Bounds2.js';
-import Tandem from '../../tandem/js/Tandem.js';
+import Vector3 from '../../../dot/js/Vector3.js';
+import ScreenView from '../../../joist/js/ScreenView.js';
+import Keypad from '../../../scenery-phet/js/keypad/Keypad.js';
+import { animatedPanZoomSingleton } from '../../../scenery/js/imports.js';
+import NodeTexture from '../NodeTexture.js';
+import TextureQuad from '../TextureQuad.js';
+import ThreeIsometricNode from '../ThreeIsometricNode.js';
+import ThreeUtils from '../ThreeUtils.js';
+import mobius from '../mobius.js';
+import Bounds2 from '../../../dot/js/Bounds2.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 
 export default class MobiusDemoScreenView extends ScreenView {
 
@@ -93,7 +93,13 @@ export default class MobiusDemoScreenView extends ScreenView {
       return;
     }
 
-    this.sceneNode.layout( viewBounds.width, viewBounds.height );
+    // eslint-disable-next-line bad-phet-library-text
+    const dimension = phet.joist.sim.dimensionProperty.value;
+
+    const sceneWidth = dimension.width || window.innerWidth; // eslint-disable-line bad-sim-text
+    const sceneHeight = dimension.height || window.innerHeight; // eslint-disable-line bad-sim-text
+
+    this.sceneNode.layout( sceneWidth, sceneHeight );
 
     // We need to do an initial render for certain layout-based code to work
     this.sceneNode.render( undefined );
