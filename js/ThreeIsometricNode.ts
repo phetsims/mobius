@@ -3,6 +3,8 @@
 /**
  * Shows three.js content with isometric scaling that takes up the entire viewport in a high-performance way.
  *
+ * Note: When using in a PhET sim, the "entire viewport" is not just the screen view, but includes the nav bar/etc.
+ *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
@@ -139,6 +141,13 @@ export default class ThreeIsometricNode extends Node {
    */
   public projectPoint( point: Vector3 ): Vector2 {
     return this.stage.projectPoint( point );
+  }
+
+  /**
+   * Project a 2d global screen coordinate into 3d global coordinate frame.
+   */
+  public unprojectPoint( point: Vector2 ): Vector3 {
+    return this.stage.unprojectPoint( point );
   }
 
   /**

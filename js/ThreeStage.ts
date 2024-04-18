@@ -304,6 +304,24 @@ export default class ThreeStage {
   }
 
   /**
+   Project a 2d global screen coordinate into 3d global coordinates using THREE/Vector3.unproject()   */
+  public unprojectPoint( point: Vector2 ): Vector3 {
+
+    // Global scenery screen coords into NDC
+    const normalizedThreePoint = new THREE.Vector3(
+      ( point.x * 2 / this.canvasWidth ) - 1,
+      -( point.y * 2 / this.canvasHeight - 1 ),
+      0 // Not sure if we care about the z, but this is what much of the internet recommended
+    );
+
+    const modelPoint = normalizedThreePoint.unproject( this.threeCamera ); // NDC to three global
+
+    const vector3 = Vector3.fromStateObject( modelPoint );
+    assert && assert( vector3.isFinite(), `finite please: ${vector3}` );
+    return vector3;
+  }
+
+  /**
    * Given a screen point, returns a 3D ray representing the camera's position and direction that point would be in the
    * 3D scene.
    */
