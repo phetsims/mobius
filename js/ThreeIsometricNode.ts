@@ -144,10 +144,11 @@ export default class ThreeIsometricNode extends Node {
   }
 
   /**
-   * Project a 2d global screen coordinate into 3d global coordinate frame.
+   * Project a 2d global screen coordinate into 3d global coordinate frame. Defaults to a target model z of 0 (in
+   * model coords)
    */
-  public unprojectPoint( point: Vector2 ): Vector3 {
-    return this.stage.unprojectPoint( point );
+  public unprojectPoint( point: Vector2, modelZ = 0 ): Vector3 {
+    return this.stage.unprojectPoint( point, modelZ );
   }
 
   /**

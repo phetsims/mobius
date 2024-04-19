@@ -333,20 +333,33 @@ export default class ThreeStage {
   }
 
   /**
-   Project a 2d global screen coordinate into 3d global coordinates using THREE/Vector3.unproject()   */
-  public unprojectPoint( point: Vector2 ): Vector3 {
+   * Project a 2d global screen coordinate into 3d global coordinates using THREE/Vector3.unproject()
+   *
+   */
+  public unprojectPoint( point: Vector2, modelZ = 0 ): Vector3 {
 
     // Global scenery screen coords into NDC
-    const normalizedThreePoint = new THREE.Vector3(
-      ( point.x * 2 / this.canvasWidth ) - 1,
+    const threePoint = new THREE.Vector3(
+      point.x * 2 / this.canvasWidth - 1,
       -( point.y * 2 / this.canvasHeight - 1 ),
-      0 // Not sure if we care about the z, but this is what much of the internet recommended
+
+      // It seems, from internet sources, that the Z normalization is [0,1] instead of [-1,1]. But we just need the
+      // direction anyways, distance along the ray is calculated below
+      0.5
     );
 
-    const modelPoint = normalizedThreePoint.unproject( this.threeCamera ); // NDC to three global
+    // NDC to ray pointing towards the right point.
+    threePoint.unproject( this.threeCamera );
 
+    // offset the current camera position
+    threePoint.sub( this.threeCamera.position ).normalize();
+
+    // Distance along the ray. Account for the desired model z dimension.
+    const distance = ( modelZ - this.threeCamera.position.z ) / threePoint.z;
+
+    const modelPoint = new THREE.Vector3().copy( this.threeCamera.position ).add( threePoint.multiplyScalar( distance ) );
     const vector3 = Vector3.fromStateObject( modelPoint );
-    assert && assert( vector3.isFinite(), `finite please: ${vector3}` );
+    assert && assert( vector3.isFinite(), `finite vectors please: ${vector3}` );
     return vector3;
   }
 
