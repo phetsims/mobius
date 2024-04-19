@@ -114,7 +114,7 @@ export default class ThreeStage {
   /**
    * Returns a Canvas containing the displayed content in this scene.
    */
-  public renderToCanvas( supersampleMultiplier = 1, backingMultiplier = 1 ): HTMLCanvasElement {
+  public renderToCanvas( supersampleMultiplier = 1, backingMultiplier = 1, scale = new Vector2( 1, 1 ) ): HTMLCanvasElement {
     assert && assert( Number.isInteger( supersampleMultiplier ) );
 
     const canvasWidth = Math.ceil( this.canvasWidth * backingMultiplier );
@@ -254,6 +254,35 @@ export default class ThreeStage {
 
       target.dispose();
     }
+
+    return scale.equals( new Vector2( 1, 1 ) ) ? canvas : ThreeStage.scaleCanvas( canvas, scale );
+  }
+
+  /**
+   * Scale contents of the provided canvas, returning the same canvas instance (for
+   * chaining). This method is more complicated than just calling context.scale() because we need to ensure that the
+   * scale is applied to the output of `toDataURL()`.
+   *
+   * Help found in:
+   * https://stackoverflow.com/questions/15845334/scale-a-canvas-so-that-the-base64-todataurl-is-scaled-as-well
+   * https://stackoverflow.com/questions/8168217/html-canvas-how-to-draw-a-flipped-mirrored-image
+   */
+  private static scaleCanvas( canvas: HTMLCanvasElement, scale = new Vector2( 1, 1 ) ): HTMLCanvasElement {
+
+    // Create a temp canvas to store our data (because we need to clear the other box after rotation.
+    const tempCanvas = document.createElement( 'canvas' );
+    const tempContext = tempCanvas.getContext( '2d' )!;
+    const context = canvas.getContext( '2d' )!;
+
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    tempContext.drawImage( canvas, 0, 0 );
+
+    context.setTransform( 1, 0, 0, 1, 0, 0 );
+    context.clearRect( 0, 0, canvas.width, canvas.height );
+    context.translate( canvas.width, canvas.height );
+    context.scale( scale.x, scale.y );
+    context.drawImage( tempCanvas, -canvas.width, 0 );
 
     return canvas;
   }
