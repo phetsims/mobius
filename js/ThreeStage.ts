@@ -278,11 +278,10 @@ export default class ThreeStage {
     tempCanvas.height = canvas.height;
     tempContext.drawImage( canvas, 0, 0 );
 
-    context.setTransform( 1, 0, 0, 1, 0, 0 );
     context.clearRect( 0, 0, canvas.width, canvas.height );
-    context.translate( canvas.width, canvas.height );
+    context.translate( canvas.width / 2, canvas.height / 2 );
     context.scale( scale.x, scale.y );
-    context.drawImage( tempCanvas, -canvas.width, 0 );
+    context.drawImage( tempCanvas, -canvas.width / 2, -canvas.height / 2 );
 
     return canvas;
   }
