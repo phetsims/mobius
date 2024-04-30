@@ -303,6 +303,9 @@ export default class ThreeStage {
     const ndcX = 2 * screenPoint.x / this.canvasWidth - 1;
     const ndcY = 2 * ( 1 - ( screenPoint.y / this.canvasHeight ) ) - 1;
 
+
+    // It seems, from internet sources, that the Z normalization is [0,1] instead of [-1,1]. But we just need the
+    // direction anyways.
     const mousePoint = new THREE.Vector3( ndcX, ndcY, 0 );
     const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera( mousePoint, this.threeCamera );
@@ -337,26 +340,12 @@ export default class ThreeStage {
    */
   public unprojectPoint( point: Vector2, modelZ = 0 ): Vector3 {
 
-    // Global scenery screen coords into NDC
-    const threePoint = new THREE.Vector3(
-      point.x * 2 / this.canvasWidth - 1,
-      -( point.y * 2 / this.canvasHeight - 1 ),
-
-      // It seems, from internet sources, that the Z normalization is [0,1] instead of [-1,1]. But we just need the
-      // direction anyways, distance along the ray is calculated below
-      0.5
-    );
-
-    // NDC to ray pointing towards the right point.
-    threePoint.unproject( this.threeCamera );
-
-    // offset the current camera position
-    threePoint.sub( this.threeCamera.position ).normalize();
+    const ray = this.getRayFromScreenPoint( point );
 
     // Distance along the ray. Account for the desired model z dimension.
-    const distance = ( modelZ - this.threeCamera.position.z ) / threePoint.z;
+    const distance = ( modelZ - this.threeCamera.position.z ) / ray.direction.z;
 
-    const modelPoint = new THREE.Vector3().copy( this.threeCamera.position ).add( threePoint.multiplyScalar( distance ) );
+    const modelPoint = new THREE.Vector3().copy( this.threeCamera.position ).add( ThreeUtils.vectorToThree( ray.direction.multiplyScalar( distance ) ) );
     const vector3 = Vector3.fromStateObject( modelPoint );
     assert && assert( vector3.isFinite(), `finite vectors please: ${vector3}` );
     return vector3;
