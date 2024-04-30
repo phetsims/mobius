@@ -15,7 +15,7 @@ import IntentionalAny from '../../phet-core/js/types/IntentionalAny.js';
 /**
  * @param type - Should be THREE.Object3D or a subtype
  */
-const ThreeInstrumentable = memoize( <SuperType extends Constructor>( type: SuperType ) => {
+const ThreeInstrumentable = memoize( <SuperType extends Constructor>( type: SuperType ): SuperType => {
 
   return class ThreeInstrumentableMixin extends type {
 
