@@ -28,6 +28,7 @@ type SelfOptions = {
   parentMatrixProperty?: TReadOnlyProperty<Matrix3>;
   fov?: number;
   getPhetioMouseHit?: MouseHitListener | null;
+  viewOffset?: Vector2;
 };
 
 export type ThreeIsometricNodeOptions = SelfOptions & ThreeStageOptions & NodeOptions;
@@ -58,7 +59,9 @@ export default class ThreeIsometricNode extends Node {
 
       // FOV auto-control on layout?
 
-      getPhetioMouseHit: null // (point:Vector2)=>PhetioObject, for studio autoselect
+      getPhetioMouseHit: null, // (point:Vector2)=>PhetioObject, for studio autoselect
+
+      viewOffset: new Vector2( 0, 0 )
     }, providedOptions );
 
     super();
@@ -113,8 +116,12 @@ export default class ThreeIsometricNode extends Node {
       const screenWidth = this.stage.width;
       const screenHeight = this.stage.height;
 
+      const offsetX = options.viewOffset.x;
+      const offsetY = options.viewOffset.y;
+
       if ( screenWidth && screenHeight ) {
-        this.stage.adjustViewOffset( this.parentToGlobalBounds( new Bounds2( 0, 0, this.layoutBounds.width, this.layoutBounds.height ) ) );
+        this.stage.adjustViewOffset( this.parentToGlobalBounds(
+          new Bounds2( offsetX, offsetY, this.layoutBounds.width + offsetX, this.layoutBounds.height + offsetY ) ) );
       }
     };
     this.parentMatrixProperty.lazyLink( this.viewOffsetListener );
