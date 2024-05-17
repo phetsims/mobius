@@ -467,7 +467,6 @@ export default class ThreeStage {
     if ( this.threeRenderer ) {
       this.threeRenderer.setRenderTarget( target || null );
       this.threeRenderer.render( this.threeScene, this.threeCamera );
-      this.threeRenderer.autoClear = false;
     }
   }
 
