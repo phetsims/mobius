@@ -7,11 +7,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import merge from '../../phet-core/js/merge.js';
 import mobius from './mobius.js';
 import Quad from './Quad.js';
 import Disposable from '../../axon/js/Disposable.js';
 import { TReadOnlyEmitter } from '../../axon/js/TEmitter.js';
+import { combineOptions } from '../../phet-core/js/optionize.js';
 
 export default class TextureQuad extends THREE.Mesh {
 
@@ -33,10 +33,9 @@ export default class TextureQuad extends THREE.Mesh {
       0, 0, 1
     );
 
-    const basicMaterial = new THREE.MeshBasicMaterial( merge( {
+    const basicMaterial = new THREE.MeshBasicMaterial( combineOptions<THREE.MeshBasicMaterialParameters>( {
       transparent: true,
       depthTest: false,
-      // TODO: using "combineOptions" here says this isn't a known parameter. how?  https://github.com/phetsims/density-buoyancy-common/issues/95
       map: texture
     }, materialOptions ) );
 
