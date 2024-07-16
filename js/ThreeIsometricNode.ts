@@ -199,7 +199,7 @@ export default class ThreeIsometricNode extends Node {
    * @param target - undefined for the default target
    */
   public render( target: THREE.WebGLRenderTarget | undefined ): void {
-    this.stage.render( target );
+    this.stage.render( target, true );
   }
 
   /**
