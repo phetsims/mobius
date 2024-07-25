@@ -29,7 +29,7 @@ export default class MobiusDemoScreenView extends ScreenView {
       tandem: Tandem.OPT_OUT
     } );
 
-    // f we detect that we can't use WebGL, we'll set this to false so we can bail out.
+    // if we detect that we can't use WebGL, we'll set this to false so we can bail out.
     this.enabled = true;
 
     if ( !ThreeUtils.isWebGLEnabled() ) {
