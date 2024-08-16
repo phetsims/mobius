@@ -14,7 +14,6 @@ import Bounds2 from '../../dot/js/Bounds2.js';
 import optionize from '../../phet-core/js/optionize.js';
 import ThreeIsometricNode, { ThreeIsometricNodeOptions } from './ThreeIsometricNode.js';
 import Vector2 from '../../dot/js/Vector2.js';
-import { animatedPanZoomSingleton } from '../../scenery/js/imports.js';
 
 export type THREEModelViewTransform = {
   modelToViewPoint: ( modelPoint: Vector3 ) => Vector2;
@@ -79,8 +78,7 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
    * Project a 2d global screen coordinate into 3d global coordinate frame. Default to z distance of 0 (center of masses/pool)
    */
   public viewToModelPoint( point: Vector2, modelZ = 0 ): Vector3 {
-    const viewPoint = animatedPanZoomSingleton.listener.matrixProperty.value.timesVector2( this.localToParentPoint( point ) );
-    return this.sceneNode.unprojectPoint( viewPoint, modelZ );
+    return this.sceneNode.unprojectPoint( this.globalToLocalPoint( point ), modelZ );
   }
 
   /**
