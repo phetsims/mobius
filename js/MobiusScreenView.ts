@@ -7,40 +7,43 @@
  */
 
 import Vector3 from '../../dot/js/Vector3.js';
-import ScreenView from '../../joist/js/ScreenView.js';
-import { animatedPanZoomSingleton } from '../../scenery/js/imports.js';
-import ThreeIsometricNode from 'ThreeIsometricNode.js';
-import ThreeUtils from 'ThreeUtils.js';
-import mobius from 'mobius.js';
+import ScreenView, { ScreenViewOptions } from '../../joist/js/ScreenView.js';
+import ThreeUtils from './ThreeUtils.js';
+import mobius from './mobius.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
-import Tandem from '../../tandem/js/Tandem.js';
+import optionize from '../../phet-core/js/optionize.js';
+import ThreeIsometricNode, { ThreeIsometricNodeOptions } from './ThreeIsometricNode.js';
+
+type SelfOptions = {
+  sceneNodeOptions?: ThreeIsometricNodeOptions;
+};
+
+export type MobiusScreenViewOptions = SelfOptions & ScreenViewOptions;
 
 export default class MobiusScreenView extends ScreenView {
 
-  private readonly sceneNode!: ThreeIsometricNode;
+  protected readonly sceneNode: ThreeIsometricNode;
 
-  public constructor() {
-    super( {
-      preventFit: true,
-      tandem: Tandem.OPT_OUT
-    } );
+  public constructor( providedOptions: MobiusScreenViewOptions ) {
 
-    // if we detect that we can't use WebGL, we'll set this to false so we can bail out.
-    this.enabled = true;
+    const options = optionize<MobiusScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
+      sceneNodeOptions: {
+        cameraPosition: new Vector3( 0, 0.4, 2 )
+      },
+
+      // Fitting isn't too helpful here since we do most rendering in the THREE js stage, https://github.com/phetsims/density-buoyancy-common/commit/92b6b0f85f9341a71673fdb404238983850af4c2
+      preventFit: true
+    }, providedOptions );
+
+    super( options );
+
+    // Used to display the 3D view
+    this.sceneNode = new ThreeIsometricNode( this.layoutBounds, options.sceneNodeOptions );
+    this.addChild( this.sceneNode );
 
     if ( !ThreeUtils.isWebGLEnabled() ) {
       ThreeUtils.showWebGLWarning( this );
-      this.enabled = false;
-      return;
     }
-
-    // Used to display the 3D view
-    this.sceneNode = new ThreeIsometricNode( this.layoutBounds, {
-      parentMatrixProperty: animatedPanZoomSingleton.listener.matrixProperty,
-      cameraPosition: new Vector3( 0, 0.4, 2 )
-    } );
-    this.addChild( this.sceneNode );
-
   }
 
   public override layout( viewBounds: Bounds2 ): void {
@@ -67,6 +70,7 @@ export default class MobiusScreenView extends ScreenView {
    * Steps forward in time.
    */
   public override step( dt: number ): void {
+
     // If the simulation was not able to load for WebGL, bail out
     if ( !this.sceneNode ) {
       return;

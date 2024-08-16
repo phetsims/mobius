@@ -26,7 +26,7 @@ const GAMMA = 2.2;
 const INVERSE_GAMMA = 1 / GAMMA;
 
 export type ThreeStageOptions = {
-  backgroundProperty?: TReadOnlyProperty<Color>;
+  backgroundProperty?: TReadOnlyProperty<Color>; // TODO: Rename to backgroundColorProperty, https://github.com/phetsims/density-buoyancy-common/issues/334
 
   // The initial camera position
   cameraPosition?: Vector3;
