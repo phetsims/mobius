@@ -1,9 +1,12 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * Example Mobius ScreenView
+ * MobiusScreenView extends PhET's ScreenView to include functionality specific to 3D model-to-view and view-to-model
+ * transformations using THREE.js. The MobiusScreenView renders 3D content in an isometric projection and handles the
+ * layout and rendering processes.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
+ * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
 import Vector3 from '../../dot/js/Vector3.js';
