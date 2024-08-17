@@ -101,6 +101,7 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
     super.layout( viewBounds );
 
     // If the simulation was not able to load for WebGL, bail out
+    // TODO: How could sceneNode not exist? Does it throw in the constructor? https://github.com/phetsims/density-buoyancy-common/issues/334
     if ( !this.sceneNode ) {
       return;
     }
@@ -123,6 +124,7 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
   public override step( dt: number ): void {
 
     // If the simulation was not able to load for WebGL, bail out
+    // TODO: How could sceneNode not exist? Does it throw in the constructor? see https://github.com/phetsims/density-buoyancy-common/issues/334
     if ( !this.sceneNode ) {
       return;
     }
