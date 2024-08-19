@@ -26,7 +26,7 @@ const GAMMA = 2.2;
 const INVERSE_GAMMA = 1 / GAMMA;
 
 export type ThreeStageOptions = {
-  backgroundProperty?: TReadOnlyProperty<Color>; // TODO: Rename to backgroundColorProperty, https://github.com/phetsims/density-buoyancy-common/issues/334
+  backgroundColorProperty?: TReadOnlyProperty<Color>;
 
   // The initial camera position
   cameraPosition?: Vector3;
@@ -46,7 +46,7 @@ export default class ThreeStage {
 
   private contextLossDialog: ContextLossFailureDialog | null;
 
-  private readonly backgroundProperty: TReadOnlyProperty<Color>;
+  private readonly backgroundColorProperty: TReadOnlyProperty<Color>;
 
   private readonly colorListener: ( c: Color ) => void;
 
@@ -55,7 +55,7 @@ export default class ThreeStage {
   public constructor( providedOptions?: ThreeStageOptions ) {
 
     const options = optionize<ThreeStageOptions, ThreeStageOptions>()( {
-      backgroundProperty: new Property( Color.BLACK ),
+      backgroundColorProperty: new Property( Color.BLACK ),
       cameraPosition: new Vector3( 0, 0, 10 )
     }, providedOptions );
 
@@ -99,12 +99,12 @@ export default class ThreeStage {
       this.contextLossDialog && this.contextLossDialog.hideWithoutReload();
     } );
 
-    this.backgroundProperty = options.backgroundProperty;
+    this.backgroundColorProperty = options.backgroundColorProperty;
 
     this.colorListener = color => {
       this.threeRenderer && this.threeRenderer.setClearColor( color.toNumber(), color.alpha );
     };
-    this.backgroundProperty.link( this.colorListener );
+    this.backgroundColorProperty.link( this.colorListener );
 
     this.threeCamera.position.copy( ThreeUtils.vectorToThree( options.cameraPosition ) ); // sets the camera's position
 
@@ -482,7 +482,7 @@ export default class ThreeStage {
 
     // @ts-expect-error
     this.threeScene.dispose();
-    this.backgroundProperty.unlink( this.colorListener );
+    this.backgroundColorProperty.unlink( this.colorListener );
   }
 
   /**
