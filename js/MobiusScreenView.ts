@@ -118,8 +118,8 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
 
     this.sceneNode.layout( sceneWidth, sceneHeight );
 
-    // We need to do an initial render for certain layout-based code to work
-    // TODO: Comment why undefined is passed here, see https://github.com/phetsims/density-buoyancy-common/issues/334
+    // We need to do an initial render for certain layout-based code to work.
+    // "undefined" means "use the default target", which will be the rendered provided to the stage during creation.
     this.sceneNode.render( undefined );
   }
 
@@ -133,7 +133,7 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
       return;
     }
 
-    // TODO: Comment why undefined is passed here, see https://github.com/phetsims/density-buoyancy-common/issues/334
+    // "undefined" means "use the default target", which will be the rendered provided to the stage during creation.
     this.sceneNode.render( undefined );
   }
 }
