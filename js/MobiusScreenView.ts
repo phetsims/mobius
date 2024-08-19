@@ -33,6 +33,9 @@ export type MobiusScreenViewOptions = SelfOptions & ScreenViewOptions;
 
 export default class MobiusScreenView extends ScreenView implements THREEModelViewTransform {
 
+  // Whether this ScreenView supports WebGL.
+  protected readonly supportsWebGL: boolean;
+
   // Used to display the 3D view
   protected readonly sceneNode: ThreeIsometricNode;
 
@@ -49,10 +52,12 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
 
     super( options );
 
+    this.supportsWebGL = ThreeUtils.isWebGLEnabled();
+
     this.sceneNode = new ThreeIsometricNode( this.layoutBounds, options.sceneNodeOptions );
     this.addChild( this.sceneNode );
 
-    if ( !ThreeUtils.isWebGLEnabled() ) {
+    if ( !this.supportsWebGL ) {
       ThreeUtils.showWebGLWarning( this );
     }
   }
@@ -101,8 +106,7 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
     super.layout( viewBounds );
 
     // If the simulation was not able to load for WebGL, bail out
-    // TODO: How could sceneNode not exist? Does it throw in the constructor? https://github.com/phetsims/density-buoyancy-common/issues/334
-    if ( !this.sceneNode ) {
+    if ( !this.supportsWebGL ) {
       return;
     }
 
@@ -125,8 +129,7 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
   public override step( dt: number ): void {
 
     // If the simulation was not able to load for WebGL, bail out
-    // TODO: How could sceneNode not exist? Does it throw in the constructor? see https://github.com/phetsims/density-buoyancy-common/issues/334
-    if ( !this.sceneNode ) {
+    if ( !this.supportsWebGL ) {
       return;
     }
 
