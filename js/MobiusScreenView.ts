@@ -120,6 +120,12 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
 
     // We need to do an initial render for certain layout-based code to work.
     // "undefined" means "use the default target", which will be the rendered provided to the stage during creation.
+    this.renderSceneNode();
+  }
+
+  public renderSceneNode(): void {
+
+    // "undefined" means "use the default target", which will be the rendered provided to the stage during creation.
     this.sceneNode.render( undefined );
   }
 
@@ -133,8 +139,7 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
       return;
     }
 
-    // "undefined" means "use the default target", which will be the rendered provided to the stage during creation.
-    this.sceneNode.render( undefined );
+    this.renderSceneNode();
   }
 }
 
