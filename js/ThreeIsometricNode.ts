@@ -31,6 +31,7 @@ type SelfOptions = {
   viewOffset?: Vector2;
 };
 
+// Constructor options are passed directly to ThreeStage as well as used by this Node.
 export type ThreeIsometricNodeOptions = SelfOptions & ThreeStageOptions & NodeOptions;
 
 export default class ThreeIsometricNode extends Node {

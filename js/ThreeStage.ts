@@ -30,6 +30,8 @@ export type ThreeStageOptions = {
 
   // The initial camera position
   cameraPosition?: Vector3;
+  threeRendererOptions?: THREE.WebGLRendererParameters;
+  threeRendererPixelRatio?: number;
 };
 
 export default class ThreeStage {
@@ -56,7 +58,13 @@ export default class ThreeStage {
 
     const options = optionize<ThreeStageOptions, ThreeStageOptions>()( {
       backgroundColorProperty: new Property( Color.BLACK ),
-      cameraPosition: new Vector3( 0, 0, 10 )
+      cameraPosition: new Vector3( 0, 0, 10 ),
+      threeRendererOptions: {
+        antialias: MobiusQueryParameters.threeRendererAntialias,
+        alpha: true,
+        preserveDrawingBuffer: MobiusQueryParameters.threeRendererPreserveDrawingBuffer
+      },
+      threeRendererPixelRatio: MobiusQueryParameters.threeRendererPixelRatio
     }, providedOptions );
 
     this.activeScale = 1;
@@ -73,18 +81,14 @@ export default class ThreeStage {
 
     if ( ThreeUtils.isWebGLEnabled() ) {
       try {
-        this.threeRenderer = new THREE.WebGLRenderer( {
-          antialias: true,
-          alpha: true,
-          preserveDrawingBuffer: phet.chipper.queryParameters.preserveDrawingBuffer
-        } );
+        this.threeRenderer = new THREE.WebGLRenderer( options.threeRendererOptions );
       }
       catch( e ) {
         // For https://github.com/phetsims/density/issues/105, we'll need to generate the full API without WebGL
         console.log( e );
       }
     }
-    this.threeRenderer && this.threeRenderer.setPixelRatio( window.devicePixelRatio || 1 );
+    this.threeRenderer && this.threeRenderer.setPixelRatio( options.threeRendererPixelRatio );
 
     // Dialog shown on context loss, constructed lazily because Dialog requires sim bounds during construction
     this.contextLossDialog = null;
