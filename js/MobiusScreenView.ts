@@ -85,7 +85,7 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
    * Project a 2d global screen coordinate into 3d global coordinate frame. Default to z distance of 0 (center of masses/pool)
    */
   public viewToModelPoint( point: Vector2, modelZ = 0 ): Vector3 {
-    return this.sceneNode.unprojectPoint( this.globalToLocalPoint( point ), modelZ );
+    return this.sceneNode.unprojectPoint( this.localToGlobalPoint( point ), modelZ );
   }
 
   /**
