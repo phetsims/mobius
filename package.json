@@ -27,6 +27,18 @@
     "extends": "../chipper/eslint/phet-library_eslintrc.js",
     "globals": {
       "THREE": "readonly"
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/*.ts"
+        ],
+        "parserOptions": {
+          "project": [
+            "../mobius/tsconfig.json"
+          ]
+        }
+      }
+    ]
   }
 }
