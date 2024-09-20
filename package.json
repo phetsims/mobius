@@ -35,7 +35,7 @@
         ],
         "parserOptions": {
           "project": [
-            "../mobius/tsconfig.json"
+            "../chipper/tsconfig/eslint-all/tsconfig.json"
           ]
         }
       }
