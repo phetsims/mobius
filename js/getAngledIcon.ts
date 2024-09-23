@@ -16,7 +16,7 @@ import Screen from '../../joist/js/Screen.js';
 import ThreeStage from './ThreeStage.js';
 
 export default function getAngledIcon( zoom: number, lookAt: Vector3, setupScene: ( scene: THREE.Scene ) => void,
-  background: THREE.Color | null = new THREE.Color( 0xffffff ) ): Node {
+                                       background: THREE.Color | null = new THREE.Color( 0xffffff ) ): Node {
   const width = Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width;
   const height = Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.height;
 
