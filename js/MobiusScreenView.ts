@@ -110,11 +110,11 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
       return;
     }
 
-    // eslint-disable-next-line bad-phet-library-text
+    // eslint-disable-next-line phet/bad-phet-library-text
     const dimension = phet.joist.sim.dimensionProperty.value;
 
-    const sceneWidth = dimension.width || window.innerWidth; // eslint-disable-line bad-sim-text
-    const sceneHeight = dimension.height || window.innerHeight; // eslint-disable-line bad-sim-text
+    const sceneWidth = dimension.width || window.innerWidth; // eslint-disable-line phet/bad-sim-text
+    const sceneHeight = dimension.height || window.innerHeight; // eslint-disable-line phet/bad-sim-text
 
     this.sceneNode.layout( sceneWidth, sceneHeight );
 
