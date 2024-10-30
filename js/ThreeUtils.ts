@@ -7,13 +7,14 @@
  */
 
 import Bounds2 from '../../dot/js/Bounds2.js';
+import Matrix3 from '../../dot/js/Matrix3.js';
 import Vector3 from '../../dot/js/Vector3.js';
 import ScreenView from '../../joist/js/ScreenView.js';
 import asyncLoader from '../../phet-core/js/asyncLoader.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
 import SceneryPhetStrings from '../../scenery-phet/js/SceneryPhetStrings.js';
 import { Color, HBox, openPopup, Path, Text, Utils } from '../../scenery/js/imports.js';
-import exclamationTriangleSolidShape from '../../sherpa/js/fontawesome-5/exclamationTriangleSolidShape.js';
+import warningSignShape from '../../sherpa/js/fontawesome-4/warningSignShape.js';
 import mobius from './mobius.js';
 
 // {THREE.TextureLoader|null} - "singleton" for the texture loader
@@ -247,13 +248,13 @@ const ThreeUtils = {
   showWebGLWarning( screenView: ScreenView ): void {
     const warningNode = new HBox( {
       children: [
-        new Path( exclamationTriangleSolidShape, {
+        new Path( warningSignShape, {
           fill: '#E87600', // "safety orange", according to Wikipedia
-          scale: 0.06
+          matrix: Matrix3.scale( 0.03, -0.03 )
         } ),
         new Text( SceneryPhetStrings.webglWarning.bodyStringProperty, {
           font: new PhetFont( 16 ),
-          fill: '#000',
+          fill: '#888',
           maxWidth: 600
         } )
       ],
