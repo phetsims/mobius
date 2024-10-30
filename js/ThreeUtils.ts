@@ -7,14 +7,9 @@
  */
 
 import Bounds2 from '../../dot/js/Bounds2.js';
-import Matrix3 from '../../dot/js/Matrix3.js';
 import Vector3 from '../../dot/js/Vector3.js';
-import ScreenView from '../../joist/js/ScreenView.js';
 import asyncLoader from '../../phet-core/js/asyncLoader.js';
-import PhetFont from '../../scenery-phet/js/PhetFont.js';
-import SceneryPhetStrings from '../../scenery-phet/js/SceneryPhetStrings.js';
-import { Color, HBox, openPopup, Path, Text, Utils } from '../../scenery/js/imports.js';
-import warningSignShape from '../../sherpa/js/fontawesome-4/warningSignShape.js';
+import { Color, Utils } from '../../scenery/js/imports.js';
 import mobius from './mobius.js';
 
 // {THREE.TextureLoader|null} - "singleton" for the texture loader
@@ -240,41 +235,6 @@ const ThreeUtils = {
    */
   isWebGLEnabled(): boolean {
     return phet.chipper.queryParameters.webgl && Utils.isWebGLSupported;
-  },
-
-  /**
-   * Shows a warning with a link to more information about PhET simulation webgl compatibility.
-   */
-  showWebGLWarning( screenView: ScreenView ): void {
-    const warningNode = new HBox( {
-      children: [
-        new Path( warningSignShape, {
-          fill: '#E87600', // "safety orange", according to Wikipedia
-          matrix: Matrix3.scale( 0.03, -0.03 )
-        } ),
-        new Text( SceneryPhetStrings.webglWarning.bodyStringProperty, {
-          font: new PhetFont( 16 ),
-          fill: '#888',
-          maxWidth: 600
-        } )
-      ],
-      spacing: 12,
-      align: 'center',
-      cursor: 'pointer',
-      center: screenView.layoutBounds.center
-    } );
-    screenView.addChild( warningNode );
-
-    warningNode.mouseArea = warningNode.touchArea = warningNode.localBounds;
-
-    warningNode.addInputListener( {
-      up: function() {
-        const joistGlobal = _.get( window, 'phet.joist', null ); // returns null if global isn't found
-        const locale = joistGlobal ? joistGlobal.sim.locale : 'en';
-
-        openPopup( `https://phet.colorado.edu/webgl-disabled-page?simLocale=${locale}` );
-      }
-    } );
   }
 };
 

@@ -17,6 +17,12 @@ import Bounds2 from '../../dot/js/Bounds2.js';
 import optionize from '../../phet-core/js/optionize.js';
 import ThreeIsometricNode, { ThreeIsometricNodeOptions } from './ThreeIsometricNode.js';
 import Vector2 from '../../dot/js/Vector2.js';
+import ContextLossFailureDialog from '../../scenery-phet/js/ContextLossFailureDialog.js';
+import { HBox, openPopup, Path, Text } from '../../scenery/js/imports.js';
+import warningSignShape from '../../sherpa/js/fontawesome-4/warningSignShape.js';
+import Matrix3 from '../../dot/js/Matrix3.js';
+import SceneryPhetStrings from '../../scenery-phet/js/SceneryPhetStrings.js';
+import PhetFont from '../../scenery-phet/js/PhetFont.js';
 
 export type THREEModelViewTransform = {
   modelToViewPoint: ( modelPoint: Vector3 ) => Vector2;
@@ -39,6 +45,9 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
   // Used to display the 3D view
   protected readonly sceneNode: ThreeIsometricNode;
 
+  // Dialog shown on context loss, constructed lazily because Dialog requires sim bounds during construction
+  private contextLossDialog: ContextLossFailureDialog | null = null;
+
   public constructor( providedOptions: MobiusScreenViewOptions ) {
 
     const options = optionize<MobiusScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
@@ -57,8 +66,19 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
     this.sceneNode = new ThreeIsometricNode( this.layoutBounds, options.sceneNodeOptions );
     this.addChild( this.sceneNode );
 
+    // Hooks for context loss handling (currently a dialog). Isolated from ThreeStage so we don't need to pull in ALL of joist.
+    this.sceneNode.stage.contextLostEmitter.addListener( () => {
+      if ( !this.contextLossDialog ) {
+        this.contextLossDialog = new ContextLossFailureDialog();
+      }
+      this.contextLossDialog.show();
+    } );
+    this.sceneNode.stage.contextRestoredEmitter.addListener( () => {
+      this.contextLossDialog && this.contextLossDialog.hideWithoutReload();
+    } );
+
     if ( !this.supportsWebGL ) {
-      ThreeUtils.showWebGLWarning( this );
+      MobiusScreenView.showWebGLWarning( this );
     }
   }
 
@@ -140,6 +160,41 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
     }
 
     this.renderSceneNode();
+  }
+
+  /**
+   * Shows a warning with a link to more information about PhET simulation webgl compatibility.
+   */
+  public static showWebGLWarning( screenView: ScreenView ): void {
+    const warningNode = new HBox( {
+      children: [
+        new Path( warningSignShape, {
+          fill: '#E87600', // "safety orange", according to Wikipedia
+          matrix: Matrix3.scale( 0.03, -0.03 )
+        } ),
+        new Text( SceneryPhetStrings.webglWarning.bodyStringProperty, {
+          font: new PhetFont( 16 ),
+          fill: '#888',
+          maxWidth: 600
+        } )
+      ],
+      spacing: 12,
+      align: 'center',
+      cursor: 'pointer',
+      center: screenView.layoutBounds.center
+    } );
+    screenView.addChild( warningNode );
+
+    warningNode.mouseArea = warningNode.touchArea = warningNode.localBounds;
+
+    warningNode.addInputListener( {
+      up: function() {
+        const joistGlobal = _.get( window, 'phet.joist', null ); // returns null if global isn't found
+        const locale = joistGlobal ? joistGlobal.sim.locale : 'en';
+
+        openPopup( `https://phet.colorado.edu/webgl-disabled-page?simLocale=${locale}` );
+      }
+    } );
   }
 }
 

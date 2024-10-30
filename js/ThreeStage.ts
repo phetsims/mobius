@@ -13,7 +13,6 @@ import Ray3 from '../../dot/js/Ray3.js';
 import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
 import optionize from '../../phet-core/js/optionize.js';
-import ContextLossFailureDialog from '../../scenery-phet/js/ContextLossFailureDialog.js';
 import { Color } from '../../scenery/js/imports.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeUtils from './ThreeUtils.js';
@@ -46,13 +45,13 @@ export default class ThreeStage {
   public readonly threeCamera: THREE.PerspectiveCamera;
   public threeRenderer: THREE.WebGLRenderer | null = null;
 
-  private contextLossDialog: ContextLossFailureDialog | null;
-
   private readonly backgroundColorProperty: TReadOnlyProperty<Color>;
 
   private readonly colorListener: ( c: Color ) => void;
 
-  public readonly dimensionsChangedEmitter: TEmitter;
+  public readonly dimensionsChangedEmitter: TEmitter = new TinyEmitter();
+  public readonly contextLostEmitter: TEmitter = new TinyEmitter();
+  public readonly contextRestoredEmitter: TEmitter = new TinyEmitter();
 
   public constructor( providedOptions?: ThreeStageOptions ) {
 
@@ -90,17 +89,14 @@ export default class ThreeStage {
     }
     this.threeRenderer && this.threeRenderer.setPixelRatio( options.threeRendererPixelRatio );
 
-    // Dialog shown on context loss, constructed lazily because Dialog requires sim bounds during construction
-    this.contextLossDialog = null;
-
     // In the event of a context loss, we'll just show a dialog. See https://github.com/phetsims/molecule-shapes/issues/100
     this.threeRenderer && this.threeRenderer.context.canvas.addEventListener( 'webglcontextlost', event => {
-      this.showContextLossDialog();
+      this.contextLostEmitter.emit();
     } );
 
     // For https://github.com/phetsims/density/issues/100, we'll also allow context-restore, and will auto-hide the dialog
     this.threeRenderer && this.threeRenderer.context.canvas.addEventListener( 'webglcontextrestored', event => {
-      this.contextLossDialog && this.contextLossDialog.hideWithoutReload();
+      this.contextRestoredEmitter.emit();
     } );
 
     this.backgroundColorProperty = options.backgroundColorProperty;
@@ -111,8 +107,6 @@ export default class ThreeStage {
     this.backgroundColorProperty.link( this.colorListener );
 
     this.threeCamera.position.copy( ThreeUtils.vectorToThree( options.cameraPosition ) ); // sets the camera's position
-
-    this.dimensionsChangedEmitter = new TinyEmitter();
   }
 
   /**
@@ -289,13 +283,6 @@ export default class ThreeStage {
     context.drawImage( tempCanvas, -canvas.width / 2, -canvas.height / 2 );
 
     return canvas;
-  }
-
-  private showContextLossDialog(): void {
-    if ( !this.contextLossDialog ) {
-      this.contextLossDialog = new ContextLossFailureDialog();
-    }
-    this.contextLossDialog.show();
   }
 
   /**
