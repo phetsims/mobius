@@ -6,11 +6,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import ThreeObject3DPhetioObject from './ThreeObject3DPhetioObject.js';
-import mobius from './mobius.js';
-import Constructor from '../../phet-core/js/types/Constructor.js';
 import memoize from '../../phet-core/js/memoize.js';
+import Constructor from '../../phet-core/js/types/Constructor.js';
 import IntentionalAny from '../../phet-core/js/types/IntentionalAny.js';
+import mobius from './mobius.js';
+import ThreeObject3DPhetioObject from './ThreeObject3DPhetioObject.js';
 
 /**
  * @param type - Should be THREE.Object3D or a subtype

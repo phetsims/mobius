@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import Vector3 from '../../dot/js/Vector3.js';
 import mobius from './mobius.js';
 import TriangleArrayWriter from './TriangleArrayWriter.js';
-import Vector3 from '../../dot/js/Vector3.js';
 
 export default class Quad extends THREE.BufferGeometry {
 

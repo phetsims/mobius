@@ -7,18 +7,18 @@
  */
 
 import Property from '../../axon/js/Property.js';
+import TEmitter from '../../axon/js/TEmitter.js';
 import TinyEmitter from '../../axon/js/TinyEmitter.js';
+import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
 import Ray3 from '../../dot/js/Ray3.js';
 import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
 import optionize from '../../phet-core/js/optionize.js';
 import { Color } from '../../scenery/js/imports.js';
+import mobius from './mobius.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeUtils from './ThreeUtils.js';
-import mobius from './mobius.js';
-import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
-import TEmitter from '../../axon/js/TEmitter.js';
 
 // hard-coded gamma (assuming the exponential part of the sRGB curve as a simplification)
 const GAMMA = 2.2;

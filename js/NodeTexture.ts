@@ -6,11 +6,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import Disposable from '../../axon/js/Disposable.js';
+import assertMutuallyExclusiveOptions from '../../phet-core/js/assertMutuallyExclusiveOptions.js';
+import optionize from '../../phet-core/js/optionize.js';
 import { Display, Node, Utils } from '../../scenery/js/imports.js';
 import mobius from './mobius.js';
-import Disposable from '../../axon/js/Disposable.js';
-import optionize from '../../phet-core/js/optionize.js';
-import assertMutuallyExclusiveOptions from '../../phet-core/js/assertMutuallyExclusiveOptions.js';
 
 type NodeTextureOptions = {
   width?: number;

@@ -9,18 +9,18 @@
  */
 
 import Property from '../../axon/js/Property.js';
+import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
 import Matrix3 from '../../dot/js/Matrix3.js';
-import optionize from '../../phet-core/js/optionize.js';
-import { DOM, Node, NodeOptions, Rectangle } from '../../scenery/js/imports.js';
-import MobiusQueryParameters from './MobiusQueryParameters.js';
-import ThreeStage, { ThreeStageOptions } from './ThreeStage.js';
-import mobius from './mobius.js';
-import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
+import Ray3 from '../../dot/js/Ray3.js';
 import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
-import Ray3 from '../../dot/js/Ray3.js';
+import optionize from '../../phet-core/js/optionize.js';
+import { DOM, Node, NodeOptions, Rectangle } from '../../scenery/js/imports.js';
 import PhetioObject from '../../tandem/js/PhetioObject.js';
+import mobius from './mobius.js';
+import MobiusQueryParameters from './MobiusQueryParameters.js';
+import ThreeStage, { ThreeStageOptions } from './ThreeStage.js';
 
 type MouseHitListener = ( point: Vector2 ) => PhetioObject | null | 'phetioNotSelectable';
 

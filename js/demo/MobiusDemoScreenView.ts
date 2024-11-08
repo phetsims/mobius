@@ -9,12 +9,12 @@
 import Vector3 from '../../../dot/js/Vector3.js';
 import Keypad from '../../../scenery-phet/js/keypad/Keypad.js';
 import { animatedPanZoomSingleton } from '../../../scenery/js/imports.js';
+import Tandem from '../../../tandem/js/Tandem.js';
+import mobius from '../mobius.js';
+import MobiusScreenView from '../MobiusScreenView.js';
 import NodeTexture from '../NodeTexture.js';
 import TextureQuad from '../TextureQuad.js';
 import ThreeUtils from '../ThreeUtils.js';
-import mobius from '../mobius.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import MobiusScreenView from '../MobiusScreenView.js';
 
 export default class MobiusDemoScreenView extends MobiusScreenView {
 

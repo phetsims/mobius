@@ -9,20 +9,20 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import Bounds2 from '../../dot/js/Bounds2.js';
+import Matrix3 from '../../dot/js/Matrix3.js';
+import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
 import ScreenView, { ScreenViewOptions } from '../../joist/js/ScreenView.js';
-import ThreeUtils from './ThreeUtils.js';
-import mobius from './mobius.js';
-import Bounds2 from '../../dot/js/Bounds2.js';
 import optionize from '../../phet-core/js/optionize.js';
-import ThreeIsometricNode, { ThreeIsometricNodeOptions } from './ThreeIsometricNode.js';
-import Vector2 from '../../dot/js/Vector2.js';
 import ContextLossFailureDialog from '../../scenery-phet/js/ContextLossFailureDialog.js';
+import PhetFont from '../../scenery-phet/js/PhetFont.js';
+import SceneryPhetStrings from '../../scenery-phet/js/SceneryPhetStrings.js';
 import { HBox, openPopup, Path, Text } from '../../scenery/js/imports.js';
 import warningSignShape from '../../sherpa/js/fontawesome-4/warningSignShape.js';
-import Matrix3 from '../../dot/js/Matrix3.js';
-import SceneryPhetStrings from '../../scenery-phet/js/SceneryPhetStrings.js';
-import PhetFont from '../../scenery-phet/js/PhetFont.js';
+import mobius from './mobius.js';
+import ThreeIsometricNode, { ThreeIsometricNodeOptions } from './ThreeIsometricNode.js';
+import ThreeUtils from './ThreeUtils.js';
 
 export type THREEModelViewTransform = {
   modelToViewPoint: ( modelPoint: Vector3 ) => Vector2;

@@ -7,18 +7,18 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import Property from '../../axon/js/Property.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
 import Matrix3 from '../../dot/js/Matrix3.js';
+import Ray3 from '../../dot/js/Ray3.js';
 import Vector2 from '../../dot/js/Vector2.js';
 import Vector2Property from '../../dot/js/Vector2Property.js';
+import Vector3 from '../../dot/js/Vector3.js';
+import optionize from '../../phet-core/js/optionize.js';
 import { DOM, Node, NodeOptions, Rectangle, Utils } from '../../scenery/js/imports.js';
+import mobius from './mobius.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeStage, { ThreeStageOptions } from './ThreeStage.js';
-import mobius from './mobius.js';
-import optionize from '../../phet-core/js/optionize.js';
-import Property from '../../axon/js/Property.js';
-import Ray3 from '../../dot/js/Ray3.js';
-import Vector3 from '../../dot/js/Vector3.js';
 
 type SelfOptions = {
   fov?: number;

@@ -7,11 +7,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import mobius from './mobius.js';
-import Quad from './Quad.js';
 import Disposable from '../../axon/js/Disposable.js';
 import { TReadOnlyEmitter } from '../../axon/js/TEmitter.js';
 import { combineOptions } from '../../phet-core/js/optionize.js';
+import mobius from './mobius.js';
+import Quad from './Quad.js';
 
 export default class TextureQuad extends THREE.Mesh {
 

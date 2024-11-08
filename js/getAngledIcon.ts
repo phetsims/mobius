@@ -8,12 +8,12 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Vector3 from '../../dot/js/Vector3.js';
-import ThreeUtils from './ThreeUtils.js';
 import Vector2 from '../../dot/js/Vector2.js';
-import { Image, Node } from '../../scenery/js/imports.js';
+import Vector3 from '../../dot/js/Vector3.js';
 import Screen from '../../joist/js/Screen.js';
+import { Image, Node } from '../../scenery/js/imports.js';
 import ThreeStage from './ThreeStage.js';
+import ThreeUtils from './ThreeUtils.js';
 
 export default function getAngledIcon( zoom: number, lookAt: Vector3, setupScene: ( scene: THREE.Scene ) => void,
                                        background: THREE.Color | null = new THREE.Color( 0xffffff ) ): Node {
