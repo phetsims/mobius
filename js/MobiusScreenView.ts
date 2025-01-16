@@ -19,7 +19,7 @@ import ContextLossFailureDialog from '../../scenery-phet/js/ContextLossFailureDi
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
 import SceneryPhetStrings from '../../scenery-phet/js/SceneryPhetStrings.js';
 import { HBox, openPopup, Path, Text } from '../../scenery/js/imports.js';
-import warningSignShape from '../../sherpa/js/fontawesome-4/warningSignShape.js';
+import warningSignShape from '../../sun/js/shapes/warningSignShape.js';
 import mobius from './mobius.js';
 import ThreeIsometricNode, { ThreeIsometricNodeOptions } from './ThreeIsometricNode.js';
 import ThreeUtils from './ThreeUtils.js';
@@ -170,7 +170,7 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
       children: [
         new Path( warningSignShape, {
           fill: '#E87600', // "safety orange", according to Wikipedia
-          matrix: Matrix3.scale( 0.03, -0.03 )
+          matrix: Matrix3.scale( 1.2, -1.2 )
         } ),
         new Text( SceneryPhetStrings.webglWarning.bodyStringProperty, {
           font: new PhetFont( 16 ),
