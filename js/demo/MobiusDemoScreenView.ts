@@ -8,7 +8,7 @@
 
 import Vector3 from '../../../dot/js/Vector3.js';
 import Keypad from '../../../scenery-phet/js/keypad/Keypad.js';
-import { animatedPanZoomSingleton } from '../../../scenery/js/imports.js';
+import animatedPanZoomSingleton from '../../../scenery/js/listeners/animatedPanZoomSingleton.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import mobius from '../mobius.js';
 import MobiusScreenView from '../MobiusScreenView.js';

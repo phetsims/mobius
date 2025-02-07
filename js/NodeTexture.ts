@@ -9,7 +9,9 @@
 import Disposable from '../../axon/js/Disposable.js';
 import assertMutuallyExclusiveOptions from '../../phet-core/js/assertMutuallyExclusiveOptions.js';
 import optionize from '../../phet-core/js/optionize.js';
-import { Display, Node, Utils } from '../../scenery/js/imports.js';
+import Display from '../../scenery/js/display/Display.js';
+import Node from '../../scenery/js/nodes/Node.js';
+import Utils from '../../scenery/js/util/Utils.js';
 import mobius from './mobius.js';
 
 type NodeTextureOptions = {

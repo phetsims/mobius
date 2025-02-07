@@ -11,7 +11,7 @@ import Screen from '../../joist/js/Screen.js';
 import ScreenIcon from '../../joist/js/ScreenIcon.js';
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
-import { Rectangle } from '../../scenery/js/imports.js';
+import Rectangle from '../../scenery/js/nodes/Rectangle.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import MobiusDemoScreenView from './demo/MobiusDemoScreenView.js';
 import MobiusStrings from './MobiusStrings.js';

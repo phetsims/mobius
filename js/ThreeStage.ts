@@ -15,7 +15,7 @@ import Ray3 from '../../dot/js/Ray3.js';
 import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
 import optionize from '../../phet-core/js/optionize.js';
-import { Color } from '../../scenery/js/imports.js';
+import Color from '../../scenery/js/util/Color.js';
 import mobius from './mobius.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeUtils from './ThreeUtils.js';

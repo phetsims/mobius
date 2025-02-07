@@ -11,7 +11,8 @@
 import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
 import Screen from '../../joist/js/Screen.js';
-import { Image, Node } from '../../scenery/js/imports.js';
+import Image from '../../scenery/js/nodes/Image.js';
+import Node from '../../scenery/js/nodes/Node.js';
 import ThreeStage from './ThreeStage.js';
 import ThreeUtils from './ThreeUtils.js';
 
