@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * Returns an icon for selection, given a scene setup callback. In general this is best used for a screen icon, but
