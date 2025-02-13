@@ -134,9 +134,9 @@ export default class ThreeNode extends Node {
   /**
    * Renders the simulation to a specific rendering target
    *
-   * @param target - undefined for the default target
+   * @param [target] - undefined for the default target
    */
-  public render( target: THREE.WebGLRenderTarget | undefined ): void {
+  public render( target?: THREE.WebGLRenderTarget ): void {
     this.stage.render( target, true );
   }
 
