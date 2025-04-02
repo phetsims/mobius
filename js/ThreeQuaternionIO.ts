@@ -6,6 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import IntentionalAny from '../../phet-core/js/types/IntentionalAny.js';
 import IOType from '../../tandem/js/types/IOType.js';
 import NumberIO from '../../tandem/js/types/NumberIO.js';
 import mobius from './mobius.js';
@@ -17,7 +18,7 @@ type ThreeQuaternionStateObject = {
   w: number;
 };
 
-const ThreeQuaternionIO = new IOType( 'ThreeQuaternionIO', {
+const ThreeQuaternionIO = new IOType<IntentionalAny, IntentionalAny>( 'ThreeQuaternionIO', {
   valueType: THREE.Quaternion,
   documentation: 'A numerical object representing a quaternion',
   toStateObject: ( quaternion: THREE.Quaternion ): ThreeQuaternionStateObject => {

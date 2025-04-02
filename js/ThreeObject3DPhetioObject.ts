@@ -7,6 +7,7 @@
  */
 
 import optionize, { EmptySelfOptions } from '../../phet-core/js/optionize.js';
+import IntentionalAny from '../../phet-core/js/types/IntentionalAny.js';
 import PhetioObject, { PhetioObjectOptions } from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import IOType from '../../tandem/js/types/IOType.js';
@@ -26,7 +27,7 @@ export default class ThreeObject3DPhetioObject extends PhetioObject {
     super( options );
   }
 
-  public static ThreeObject3DIO = new IOType( 'ThreeObject3DIO', {
+  public static ThreeObject3DIO = new IOType<IntentionalAny, IntentionalAny>( 'ThreeObject3DIO', {
     valueType: ThreeObject3DPhetioObject,
     toStateObject: () => {
       return {};
