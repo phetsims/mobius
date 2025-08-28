@@ -9,7 +9,7 @@
 import Property from '../../axon/js/Property.js';
 import TEmitter from '../../axon/js/TEmitter.js';
 import TinyEmitter from '../../axon/js/TinyEmitter.js';
-import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../dot/js/Bounds2.js';
 import Ray3 from '../../dot/js/Ray3.js';
 import Vector2 from '../../dot/js/Vector2.js';
