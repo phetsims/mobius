@@ -36,7 +36,7 @@ export default class ThreeNode extends Node {
   private layoutHeight: number;
   private offsetProperty: Property<Vector2>;
   public readonly backgroundEventTarget: Node;
-  private domNode!: DOM;
+  declare private domNode: DOM;
 
   public constructor( width: number, height: number, providedOptions?: ThreeNodeOptions ) {
 

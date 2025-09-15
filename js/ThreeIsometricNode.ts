@@ -46,7 +46,7 @@ export default class ThreeIsometricNode extends Node {
   // our target for drags that don't hit other UI components
   public readonly backgroundEventTarget: Rectangle;
 
-  private domNode!: DOM;
+  declare private domNode: DOM;
   private viewOffsetListener: () => void;
 
   public constructor( layoutBounds: Bounds2, providedOptions?: ThreeIsometricNodeOptions ) {

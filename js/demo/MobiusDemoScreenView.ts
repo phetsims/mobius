@@ -18,7 +18,7 @@ import ThreeUtils from '../ThreeUtils.js';
 
 export default class MobiusDemoScreenView extends MobiusScreenView {
 
-  private readonly cubeMesh!: THREE.Mesh;
+  declare private readonly cubeMesh: THREE.Mesh;
 
   public constructor() {
     super( {
