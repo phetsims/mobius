@@ -90,12 +90,12 @@ export default class ThreeStage {
     this.threeRenderer && this.threeRenderer.setPixelRatio( options.threeRendererPixelRatio );
 
     // In the event of a context loss, we'll just show a dialog. See https://github.com/phetsims/molecule-shapes/issues/100
-    this.threeRenderer && this.threeRenderer.context.canvas.addEventListener( 'webglcontextlost', event => {
+    this.threeRenderer && ( this.threeRenderer.context ?? this.threeRenderer.getContext() ).canvas.addEventListener( 'webglcontextlost', event => {
       this.contextLostEmitter.emit();
     } );
 
     // For https://github.com/phetsims/density/issues/100, we'll also allow context-restore, and will auto-hide the dialog
-    this.threeRenderer && this.threeRenderer.context.canvas.addEventListener( 'webglcontextrestored', event => {
+    this.threeRenderer && ( this.threeRenderer.context ?? this.threeRenderer.getContext() ).canvas.addEventListener( 'webglcontextrestored', event => {
       this.contextRestoredEmitter.emit();
     } );
 
