@@ -26,9 +26,16 @@ export default class Quad extends THREE.BufferGeometry {
 
     Quad.updateArrays( positionArray, normalArray, uvArray, p0x, p0y, p0z, p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, nx, ny, nz );
 
-    this.addAttribute( 'position', new THREE.BufferAttribute( positionArray, 3 ) );
-    this.addAttribute( 'normal', new THREE.BufferAttribute( normalArray, 3 ) );
-    this.addAttribute( 'uv', new THREE.BufferAttribute( uvArray, 2 ) );
+    if ( this.addAttribute ) {
+      this.addAttribute( 'position', new THREE.BufferAttribute( positionArray, 3 ) );
+      this.addAttribute( 'normal', new THREE.BufferAttribute( normalArray, 3 ) );
+      this.addAttribute( 'uv', new THREE.BufferAttribute( uvArray, 2 ) );
+    }
+    else {
+      this.setAttribute( 'position', new THREE.BufferAttribute( positionArray, 3 ) );
+      this.setAttribute( 'normal', new THREE.BufferAttribute( normalArray, 3 ) );
+      this.setAttribute( 'uv', new THREE.BufferAttribute( uvArray, 2 ) );
+    }
 
     this._update = ( p0x: number, p0y: number, p0z: number, p1x: number, p1y: number, p1z: number, p2x: number, p2y: number, p2z: number, p3x: number, p3y: number, p3z: number, nx: number, ny: number, nz: number ) => {
       Quad.updateArrays( positionArray, normalArray, uvArray, p0x, p0y, p0z, p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z, nx, ny, nz );
