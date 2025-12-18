@@ -17,7 +17,7 @@ import ScreenView, { ScreenViewOptions } from '../../joist/js/ScreenView.js';
 import optionize from '../../phet-core/js/optionize.js';
 import ContextLossFailureDialog from '../../scenery-phet/js/ContextLossFailureDialog.js';
 import PhetFont from '../../scenery-phet/js/PhetFont.js';
-import SceneryPhetStrings from '../../scenery-phet/js/SceneryPhetStrings.js';
+import SceneryPhetFluent from '../../scenery-phet/js/SceneryPhetFluent.js';
 import HBox from '../../scenery/js/layout/nodes/HBox.js';
 import Path from '../../scenery/js/nodes/Path.js';
 import Text from '../../scenery/js/nodes/Text.js';
@@ -175,7 +175,7 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
           fill: '#E87600', // "safety orange", according to Wikipedia
           matrix: Matrix3.scale( 1.2, -1.2 )
         } ),
-        new Text( SceneryPhetStrings.webglWarning.bodyStringProperty, {
+        new Text( SceneryPhetFluent.webglWarning.bodyStringProperty, {
           font: new PhetFont( 16 ),
           fill: '#888',
           maxWidth: 600
