@@ -18,27 +18,27 @@ let textureLoader: THREE.TextureLoader | null = null;
 
 const scratchFloatArray = new Float32Array( 128 );
 
-const ThreeUtils = {
+export default class ThreeUtils {
   /**
    * Converts a Vector3 to a THREE.Vector3
    */
-  vectorToThree( vector: Vector3 ): THREE.Vector3 {
+  public static vectorToThree( vector: Vector3 ): THREE.Vector3 {
     return new THREE.Vector3( vector.x, vector.y, vector.z );
-  },
+  }
 
   /**
    * Converts a THREE.Vector3 to a Vector3
    */
-  threeToVector( vector: THREE.Vector3 ): Vector3 {
+  public static threeToVector( vector: THREE.Vector3 ): Vector3 {
     return new Vector3( vector.x, vector.y, vector.z );
-  },
+  }
 
   /**
    * Converts a Color to a THREE.Color
    */
-  colorToThree( color: Color ): THREE.Color {
+  public static colorToThree( color: Color ): THREE.Color {
     return new THREE.Color( color.toNumber() );
-  },
+  }
 
   /**
    * Returns an array of [ x, y, z, ... ] vertices for a quad pointed towards the camera.
@@ -46,9 +46,9 @@ const ThreeUtils = {
    * @param bounds2 - x,y
    * @param z
    */
-  frontVertices( bounds2: Bounds2, z: number ): Float32Array {
+  public static frontVertices( bounds2: Bounds2, z: number ): Float32Array {
     return scratchFloatArray.slice( 0, ThreeUtils.writeFrontVertices( scratchFloatArray, 0, bounds2, z ) );
-  },
+  }
 
   /**
    * Returns an array of [ x, y, z, ... ] vertices for a quad pointed up.
@@ -56,9 +56,9 @@ const ThreeUtils = {
    * @param bounds2 - x,z
    * @param y
    */
-  topVertices( bounds2: Bounds2, y: number ): Float32Array {
+  public static topVertices( bounds2: Bounds2, y: number ): Float32Array {
     return scratchFloatArray.slice( 0, ThreeUtils.writeTopVertices( scratchFloatArray, 0, bounds2, y ) );
-  },
+  }
 
   /**
    * Returns an array of [ x, y, z, ... ] vertices for a quad pointed towards the right.
@@ -66,9 +66,9 @@ const ThreeUtils = {
    * @param bounds2 - z,y
    * @param x
    */
-  rightVertices( bounds2: Bounds2, x: number ): Float32Array {
+  public static rightVertices( bounds2: Bounds2, x: number ): Float32Array {
     return scratchFloatArray.slice( 0, ThreeUtils.writeRightVertices( scratchFloatArray, 0, bounds2, x ) );
-  },
+  }
 
   /**
    * Returns an array of [ x, y, z, ... ] vertices for a quad pointed towards the left.
@@ -76,9 +76,9 @@ const ThreeUtils = {
    * @param Bounds2 bounds2 - z,y
    * @param number x
    */
-  leftVertices( bounds2: Bounds2, x: number ): Float32Array {
+  public static leftVertices( bounds2: Bounds2, x: number ): Float32Array {
     return scratchFloatArray.slice( 0, ThreeUtils.writeLeftVertices( scratchFloatArray, 0, bounds2, x ) );
-  },
+  }
 
   /**
    * Writes a single triangle into a buffer, returning the new index location. Assumes vertices in counterclockwise
@@ -88,7 +88,7 @@ const ThreeUtils = {
    *
    * @returns - The index for the next write
    */
-  writeTriangle( array: Float32Array | Float64Array, index: number, x0: number, y0: number, z0: number, x1: number, y1: number, z1: number, x2: number, y2: number, z2: number ): number {
+  public static writeTriangle( array: Float32Array | Float64Array, index: number, x0: number, y0: number, z0: number, x1: number, y1: number, z1: number, x2: number, y2: number, z2: number ): number {
     array[ index + 0 ] = x0;
     array[ index + 1 ] = y0;
     array[ index + 2 ] = z0;
@@ -100,7 +100,7 @@ const ThreeUtils = {
     array[ index + 8 ] = z2;
 
     return index + 9;
-  },
+  }
 
   /**
    * Writes a single quad into a buffer, returning the new index location. Assumes verties in counterclockwise order.
@@ -109,7 +109,7 @@ const ThreeUtils = {
    *
    * @returns - The index for the next write
    */
-  writeQuad( array: Float32Array | Float64Array, index: number, x0: number, y0: number, z0: number, x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, x3: number, y3: number, z3: number ): number {
+  public static writeQuad( array: Float32Array | Float64Array, index: number, x0: number, y0: number, z0: number, x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, x3: number, y3: number, z3: number ): number {
     index = ThreeUtils.writeTriangle(
       array, index,
       x0, y0, z0,
@@ -123,7 +123,7 @@ const ThreeUtils = {
       x3, y3, z3
     );
     return index;
-  },
+  }
 
   /**
    * Writes a single front-facing quad into a buffer, returning the new index location. Assumes verties in
@@ -133,7 +133,7 @@ const ThreeUtils = {
    *
    * @returns - The index for the next write
    */
-  writeFrontVertices( array: Float32Array | Float64Array, index: number, bounds2: Bounds2, z: number ): number {
+  public static writeFrontVertices( array: Float32Array | Float64Array, index: number, bounds2: Bounds2, z: number ): number {
     return ThreeUtils.writeQuad(
       array, index,
       bounds2.minX, bounds2.maxY, z,
@@ -141,7 +141,7 @@ const ThreeUtils = {
       bounds2.maxX, bounds2.minY, z,
       bounds2.maxX, bounds2.maxY, z
     );
-  },
+  }
 
   /**
    * Writes a single up-facing quad into a buffer, returning the new index location. Assumes verties in
@@ -155,7 +155,7 @@ const ThreeUtils = {
    * @param y
    * @returns - The index for the next write
    */
-  writeTopVertices( array: Float32Array | Float64Array, index: number, bounds2: Bounds2, y: number ): number {
+  public static writeTopVertices( array: Float32Array | Float64Array, index: number, bounds2: Bounds2, y: number ): number {
     return ThreeUtils.writeQuad(
       array, index,
       bounds2.minX, y, bounds2.maxY,
@@ -163,7 +163,7 @@ const ThreeUtils = {
       bounds2.maxX, y, bounds2.minY,
       bounds2.minX, y, bounds2.minY
     );
-  },
+  }
 
   /**
    * Writes a single right-facing quad into a buffer, returning the new index location. Assumes verties in
@@ -177,7 +177,7 @@ const ThreeUtils = {
    * @param x
    * @returns - The index for the next write
    */
-  writeRightVertices( array: Float32Array | Float64Array, index: number, bounds2: Bounds2, x: number ): number {
+  public static writeRightVertices( array: Float32Array | Float64Array, index: number, bounds2: Bounds2, x: number ): number {
     return ThreeUtils.writeQuad(
       array, index,
       x, bounds2.minY, bounds2.maxX,
@@ -185,7 +185,7 @@ const ThreeUtils = {
       x, bounds2.maxY, bounds2.minX,
       x, bounds2.maxY, bounds2.maxX
     );
-  },
+  }
 
   /**
    * Writes a single left-facing quad into a buffer, returning the new index location. Assumes verties in
@@ -199,7 +199,7 @@ const ThreeUtils = {
    * @param x
    * @returns - The index for the next write
    */
-  writeLeftVertices( array: Float32Array | Float64Array, index: number, bounds2: Bounds2, x: number ): number {
+  public static writeLeftVertices( array: Float32Array | Float64Array, index: number, bounds2: Bounds2, x: number ): number {
     return ThreeUtils.writeQuad(
       array, index,
       x, bounds2.minY, bounds2.maxX,
@@ -207,37 +207,36 @@ const ThreeUtils = {
       x, bounds2.maxY, bounds2.minX,
       x, bounds2.minY, bounds2.minX
     );
-  },
+  }
 
   /**
    * Returns a THREE.TextureLoader instance (using a singleton so we don't create more than we need).
    */
-  get textureLoader(): THREE.TextureLoader {
+  public static get textureLoader(): THREE.TextureLoader {
     if ( !textureLoader ) {
       textureLoader = new THREE.TextureLoader();
     }
     return textureLoader;
-  },
+  }
 
   /**
    * Returns a THREE.Texture for a given HTMLImageElement.
    */
-  imageToTexture( image: HTMLImageElement, waitForLoad?: boolean ): THREE.Texture {
+  public static imageToTexture( image: HTMLImageElement, waitForLoad?: boolean ): THREE.Texture {
     if ( waitForLoad ) {
       return ThreeUtils.textureLoader.load( image.src, asyncLoader.createLock() );
     }
     else {
       return ThreeUtils.textureLoader.load( image.src );
     }
-  },
+  }
 
   /**
    * Checks if webgl is enabled by the browser.
    */
-  isWebGLEnabled(): boolean {
+  public static isWebGLEnabled(): boolean {
     return phet.chipper.queryParameters.webgl && Utils.isWebGLSupported;
   }
-};
+}
 
 mobius.register( 'ThreeUtils', ThreeUtils );
-export default ThreeUtils;
