@@ -29,8 +29,12 @@ export type ThreeStageOptions = {
 
   // The initial camera position
   cameraPosition?: Vector3;
+
   threeRendererOptions?: THREE.WebGLRendererParameters;
   threeRendererPixelRatio?: number;
+
+  // Allow overriding the render call (if needed for e.g. passes)
+  renderOverride?: ( ( target: THREE.WebGLRenderTarget | undefined, autoClear?: boolean ) => void ) | null;
 };
 
 export default class ThreeStage {
@@ -53,6 +57,8 @@ export default class ThreeStage {
   public readonly contextLostEmitter: TEmitter = new TinyEmitter();
   public readonly contextRestoredEmitter: TEmitter = new TinyEmitter();
 
+  private renderOverride: ( ( target: THREE.WebGLRenderTarget | undefined, autoClear?: boolean ) => void ) | null;
+
   public constructor( providedOptions?: ThreeStageOptions ) {
 
     const options = optionize<ThreeStageOptions, ThreeStageOptions>()( {
@@ -63,13 +69,15 @@ export default class ThreeStage {
         alpha: true,
         preserveDrawingBuffer: MobiusQueryParameters.threeRendererPreserveDrawingBuffer
       },
-      threeRendererPixelRatio: MobiusQueryParameters.threeRendererPixelRatio
+      threeRendererPixelRatio: MobiusQueryParameters.threeRendererPixelRatio,
+      renderOverride: null
     }, providedOptions );
 
     this.activeScale = 1;
     this.canvasWidth = 0;
     this.canvasHeight = 0;
     this.threeScene = new THREE.Scene();
+    this.renderOverride = options.renderOverride;
 
     // will set the projection parameters on layout
     this.threeCamera = new THREE.PerspectiveCamera();
@@ -459,9 +467,16 @@ export default class ThreeStage {
   public render( target: THREE.WebGLRenderTarget | undefined, autoClear = false ): void {
     // render the 3D scene first
     if ( this.threeRenderer ) {
-      this.threeRenderer.setRenderTarget( target || null );
-      this.threeRenderer.render( this.threeScene, this.threeCamera );
-      this.threeRenderer.autoClear = autoClear;
+      if ( this.renderOverride ) {
+        // Separate the call to not override `this` value
+        const override = this.renderOverride;
+        override( target, autoClear );
+      }
+      else {
+        this.threeRenderer.setRenderTarget( target || null );
+        this.threeRenderer.render( this.threeScene, this.threeCamera );
+        this.threeRenderer.autoClear = autoClear;
+      }
     }
   }
 
