@@ -147,9 +147,16 @@ export default class ThreeStage {
         format: THREE.RGBAFormat
       } );
 
-      // render our screen content into the framebuffer
-      // autoClear:false makes sure to keep the transparent pixels from the background for the icon
-      this.render( target, false );
+      if ( this.renderOverride ) {
+        // Separate the call to not override `this` value
+        const override = this.renderOverride;
+        override( target, false );
+      }
+      else {
+        // render our screen content into the framebuffer
+        // autoClear:false makes sure to keep the transparent pixels from the background for the icon
+        this.render( target, false );
+      }
 
       // set up a buffer for pixel data, in the exact typed formats we will need
       const buffer = new window.ArrayBuffer( width * height * 4 );
