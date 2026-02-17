@@ -5,7 +5,7 @@
  *
  * Note: When using in a PhET sim, the "entire viewport" is not just the screen view, but includes the nav bar/etc.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Property from '../../axon/js/Property.js';

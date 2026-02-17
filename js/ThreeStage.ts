@@ -3,7 +3,7 @@
 /**
  * Encapsulates the main three.js primitives needed for a stage (scene/camera/renderer).
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Property from '../../axon/js/Property.js';

@@ -4,7 +4,7 @@
  * Creates a quad for a given texture with a specific width and height, in the 3d space
  * with x: [0,width] and y: [0,height].
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Disposable from '../../axon/js/Disposable.js';

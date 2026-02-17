@@ -3,7 +3,7 @@
 /**
  * Exports three.js (if embedded) in the mobius namespace.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import mobius from './mobius.js';

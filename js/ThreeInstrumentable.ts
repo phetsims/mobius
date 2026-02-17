@@ -3,7 +3,7 @@
 /**
  * Mixin for THREE.Object3D types that handles instrumentation details.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import memoize from '../../phet-core/js/memoize.js';

@@ -7,7 +7,7 @@
  * The returned mobius object namespace may be incomplete if not all modules are listed as
  * dependencies. Please use the 'main' module for that purpose if all of Scenery is desired.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Namespace from '../../phet-core/js/Namespace.js';

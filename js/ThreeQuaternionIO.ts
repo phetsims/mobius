@@ -3,7 +3,7 @@
 /**
  * PhET-iO Type for three.js Quaternion type
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import IntentionalAny from '../../phet-core/js/types/IntentionalAny.js';

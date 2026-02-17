@@ -4,7 +4,7 @@
  * Shows three.js content within a rectangle, displayed to be inside of a rectangle in arbitrary places in the scene
  * graph.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Property from '../../axon/js/Property.js';
