@@ -23,7 +23,6 @@ import Path from '../../scenery/js/nodes/Path.js';
 import Text from '../../scenery/js/nodes/Text.js';
 import openPopup from '../../scenery/js/util/openPopup.js';
 import warningSignShape from '../../sun/js/shapes/warningSignShape.js';
-import mobius from './mobius.js';
 import ThreeIsometricNode, { ThreeIsometricNodeOptions } from './ThreeIsometricNode.js';
 import ThreeUtils from './ThreeUtils.js';
 
@@ -200,5 +199,3 @@ export default class MobiusScreenView extends ScreenView implements THREEModelVi
     } );
   }
 }
-
-mobius.register( 'MobiusScreenView', MobiusScreenView );

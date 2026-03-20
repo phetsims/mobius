@@ -19,7 +19,6 @@ import DOM from '../../scenery/js/nodes/DOM.js';
 import Node, { NodeOptions } from '../../scenery/js/nodes/Node.js';
 import Rectangle from '../../scenery/js/nodes/Rectangle.js';
 import Utils from '../../scenery/js/util/Utils.js';
-import mobius from './mobius.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeStage, { ThreeStageOptions } from './ThreeStage.js';
 
@@ -149,5 +148,3 @@ export default class ThreeNode extends Node {
     this.stage.dispose();
   }
 }
-
-mobius.register( 'ThreeNode', ThreeNode );

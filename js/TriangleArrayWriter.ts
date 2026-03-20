@@ -7,7 +7,6 @@
  */
 
 import Vector3 from '../../dot/js/Vector3.js';
-import mobius from './mobius.js';
 
 export default class TriangleArrayWriter {
 
@@ -82,5 +81,3 @@ export default class TriangleArrayWriter {
     return this.offset;
   }
 }
-
-mobius.register( 'TriangleArrayWriter', TriangleArrayWriter );

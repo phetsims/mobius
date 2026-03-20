@@ -16,7 +16,6 @@ import Vector2 from '../../dot/js/Vector2.js';
 import Vector3 from '../../dot/js/Vector3.js';
 import optionize from '../../phet-core/js/optionize.js';
 import Color from '../../scenery/js/util/Color.js';
-import mobius from './mobius.js';
 import MobiusQueryParameters from './MobiusQueryParameters.js';
 import ThreeUtils from './ThreeUtils.js';
 
@@ -514,5 +513,3 @@ export default class ThreeStage {
     return sx > sy ? fov : Math.atan( Math.tan( fov * Math.PI / 360 ) * sy / sx ) * 360 / Math.PI;
   }
 }
-
-mobius.register( 'ThreeStage', ThreeStage );

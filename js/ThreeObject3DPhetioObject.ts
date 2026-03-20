@@ -11,7 +11,6 @@ import IntentionalAny from '../../phet-core/js/types/IntentionalAny.js';
 import PhetioObject, { PhetioObjectOptions } from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import IOType from '../../tandem/js/types/IOType.js';
-import mobius from './mobius.js';
 
 type SelfOptions = EmptySelfOptions;
 type ThreeObject3DPhetioObjectOptions = SelfOptions & PhetioObjectOptions;
@@ -35,5 +34,3 @@ export default class ThreeObject3DPhetioObject extends PhetioObject {
     stateSchema: {}
   } );
 }
-
-mobius.register( 'ThreeObject3DPhetioObject', ThreeObject3DPhetioObject );

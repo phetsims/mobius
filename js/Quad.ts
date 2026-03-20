@@ -7,7 +7,6 @@
  */
 
 import Vector3 from '../../dot/js/Vector3.js';
-import mobius from './mobius.js';
 import TriangleArrayWriter from './TriangleArrayWriter.js';
 
 export default class Quad extends THREE.BufferGeometry {
@@ -98,5 +97,3 @@ export default class Quad extends THREE.BufferGeometry {
     return writer.getOffset();
   }
 }
-
-mobius.register( 'Quad', Quad );

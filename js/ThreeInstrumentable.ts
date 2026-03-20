@@ -9,7 +9,6 @@
 import memoize from '../../phet-core/js/memoize.js';
 import Constructor from '../../phet-core/js/types/Constructor.js';
 import IntentionalAny from '../../phet-core/js/types/IntentionalAny.js';
-import mobius from './mobius.js';
 import ThreeObject3DPhetioObject from './ThreeObject3DPhetioObject.js';
 
 /**
@@ -45,5 +44,4 @@ const ThreeInstrumentable = memoize( <SuperType extends Constructor>( type: Supe
   };
 } );
 
-mobius.register( 'ThreeInstrumentable', ThreeInstrumentable );
 export default ThreeInstrumentable;

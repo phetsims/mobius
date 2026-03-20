@@ -12,7 +12,6 @@ import optionize from '../../phet-core/js/optionize.js';
 import Display from '../../scenery/js/display/Display.js';
 import Node from '../../scenery/js/nodes/Node.js';
 import Utils from '../../scenery/js/util/Utils.js';
-import mobius from './mobius.js';
 
 type NodeTextureOptions = {
   width?: number;
@@ -116,5 +115,3 @@ export default class NodeTexture extends THREE.Texture {
     super.dispose();
   }
 }
-
-mobius.register( 'NodeTexture', NodeTexture );

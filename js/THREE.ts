@@ -6,7 +6,4 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import mobius from './mobius.js';
-
 export default THREE;
-mobius.register( 'THREE', THREE );

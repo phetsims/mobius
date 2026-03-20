@@ -9,7 +9,6 @@
 import IntentionalAny from '../../phet-core/js/types/IntentionalAny.js';
 import IOType from '../../tandem/js/types/IOType.js';
 import NumberIO from '../../tandem/js/types/NumberIO.js';
-import mobius from './mobius.js';
 
 type ThreeQuaternionStateObject = {
   x: number;
@@ -44,5 +43,4 @@ const ThreeQuaternionIO = new IOType<IntentionalAny, IntentionalAny>( 'ThreeQuat
   stateObjectToCreateElementArguments: ( obj: ThreeQuaternionStateObject ) => [ obj.x, obj.y, obj.z, obj.w ]
 } );
 
-mobius.register( 'ThreeQuaternionIO', ThreeQuaternionIO );
 export default ThreeQuaternionIO;

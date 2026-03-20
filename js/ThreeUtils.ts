@@ -11,7 +11,6 @@ import Vector3 from '../../dot/js/Vector3.js';
 import asyncLoader from '../../phet-core/js/asyncLoader.js';
 import Color from '../../scenery/js/util/Color.js';
 import Utils from '../../scenery/js/util/Utils.js';
-import mobius from './mobius.js';
 
 // {THREE.TextureLoader|null} - "singleton" for the texture loader
 let textureLoader: THREE.TextureLoader | null = null;
@@ -238,5 +237,3 @@ export default class ThreeUtils {
     return phet.chipper.queryParameters.webgl && Utils.isWebGLSupported;
   }
 }
-
-mobius.register( 'ThreeUtils', ThreeUtils );
