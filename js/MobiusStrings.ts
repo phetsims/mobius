@@ -19,4 +19,6 @@ type StringsType = {
 
 const MobiusStrings = getStringModule( 'MOBIUS' ) as StringsType;
 
+mobius.register( 'MobiusStrings', MobiusStrings );
+
 export default MobiusStrings;
